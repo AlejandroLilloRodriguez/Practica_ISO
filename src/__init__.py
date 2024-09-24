@@ -12,11 +12,11 @@ url = "https://www.compraonline.alcampo.es/categories?source=navigation"
 def parse_html(url, palabra_filtro, productos_totales):
     try:
         chrome_options = Options()
-        # chrome_options.add_argument("--headless")
-        #chrome_options.add_argument("--disable-gpu")
-        # chrome_options.add_argument("--no-sandbox")
-        #chrome_options.add_argument("--disable-dev-shm-usage")
-        #chrome_options.add_argument("--window-size=1920x1080")
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--window-size=1920x1080")
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         driver.get(url)
         time.sleep(7)
@@ -42,6 +42,7 @@ def parse_html(url, palabra_filtro, productos_totales):
             nombre_producto = producto.get_text(strip=True)
             if palabra_filtro.lower() in nombre_producto.lower():
                 productos_totales.append(nombre_producto)
+                
 
 
 
