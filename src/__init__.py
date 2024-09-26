@@ -5,7 +5,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import time
 from webdriver_manager.chrome import ChromeDriverManager
-
 url = "https://www.compraonline.alcampo.es/categories?source=navigation"
 
 def parse_html(url, palabra_filtro, productos_totales):
@@ -122,4 +121,5 @@ def analisis_url_carrefour (urls, palabra_filtro):
 
 urls_a_analizar_carrefour = ["https://www.carrefour.es/supermercado/productos-frescos/cat20002/c","https://www.carrefour.es/supermercado/la-despensa/cat20001/c",
                              "https://www.carrefour.es/supermercado/congelados/cat21449123/c","https://www.carrefour.es/supermercado/congelados/cat21449123/c"]
+#prueba#
 
