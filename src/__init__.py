@@ -121,5 +121,5 @@ def analisis_url_carrefour (urls, palabra_filtro):
 
 urls_a_analizar_carrefour = ["https://www.carrefour.es/supermercado/productos-frescos/cat20002/c","https://www.carrefour.es/supermercado/la-despensa/cat20001/c",
                              "https://www.carrefour.es/supermercado/congelados/cat21449123/c","https://www.carrefour.es/supermercado/congelados/cat21449123/c"]
-#prueba#
+
 
