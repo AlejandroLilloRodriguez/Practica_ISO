@@ -246,7 +246,7 @@
                 return;
             }
             
-            if(!email.includes('@') && !email.includes('.')) {
+            if(!email.includes('@') || !email.includes('.')) {
                 message.textContent = 'El correo electrónico debe tener al menos un punto y un arroba.';
                 message.classList.add('error');
                 message.classList.remove('success');
