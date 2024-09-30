@@ -5,7 +5,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import time
 from webdriver_manager.chrome import ChromeDriverManager
-'''
+
 def parse_html(url, palabra_filtro, productos_totales):
     try:
         chrome_options = Options()
@@ -46,7 +46,7 @@ def parse_html(url, palabra_filtro, productos_totales):
         driver.quit()
     except:
         print(f"error")
-'''
+
 def get_total_pages(soup):
     """Extrae el número total de páginas desde el HTML."""
     pagination_div = soup.find('div', class_='pagination__main')
@@ -115,7 +115,7 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales):
             driver.quit() ## cerramos el navegador    
     except:
         print(f"error")
-'''
+
 def html_eroski(url,palabra_filtro,productos_totales):
     try:
         chrome_options = Options()
@@ -153,25 +153,25 @@ def html_eroski(url,palabra_filtro,productos_totales):
             driver.quit()
     except:
         print(f"error")
-'''
 
-def analisis_supermercados(urls_carrefour, palabra_filtro):
+
+def analisis_supermercados(urls_alcampo, urls_carrefour, urls_eroski, palabra_filtro):
     productos_totales = []
     
     # Analizar Alcampo
-    '''
+    
     for url in urls_alcampo:
         print(f"\nAnalizando URL de Alcampo: {url}\n")
         parse_html(url, palabra_filtro, productos_totales)
-    '''
+    
     # Analizar Carrefour
     for url in urls_carrefour:
         print(f"\nAnalizando URL de Carrefour: {url}\n")
         hlml_carrefour(url, palabra_filtro, productos_totales)
-    '''
+    
     for url in urls_eroski : 
        print(f"\nAnalizando URL de Eroski: {url}\n")
-       html_eroski(url,palabra_filtro,productos_totales)'''
+       html_eroski(url,palabra_filtro,productos_totales)
     productos_unicos = list(set(productos_totales))
     return productos_unicos
 urls_a_analizar_alcampo= [
@@ -238,8 +238,8 @@ urls_a_analizar_eroski = ["https://supermercado.eroski.es/es/supermercado/205980
 palabra = input("Seleccione el alimento que desea buscar: ")
 
 # Ejecutar el análisis
-#productos_filtrados = analisis_supermercados(urls_a_analizar_alcampo, urls_a_analizar_carrefour,urls_a_analizar_eroski , palabra)
-productos_filtrados = analisis_supermercados(urls_a_analizar_carrefour, palabra)
+productos_filtrados = analisis_supermercados(urls_a_analizar_alcampo, urls_a_analizar_carrefour,urls_a_analizar_eroski , palabra)
+
 
 
 # Mostrar los productos encontrados
