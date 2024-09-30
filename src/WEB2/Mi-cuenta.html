@@ -238,16 +238,16 @@
             const password = document.getElementById('register-password').value;
             const confirmPassword = document.getElementById('register-confirm-password').value;
             const message = document.getElementById('register-message');
-
-            if (password !== confirmPassword) {
-                message.textContent = 'Las contraseñas no coinciden';
+            
+            if(!email.includes('@') || !email.includes('.')) {
+                message.textContent = 'El correo electrónico debe tener al menos un punto y un arroba.';
                 message.classList.add('error');
                 message.classList.remove('success');
                 return;
             }
             
-            if(!email.includes('@') || !email.includes('.')) {
-                message.textContent = 'El correo electrónico debe tener al menos un punto y un arroba.';
+            if (password !== confirmPassword) {
+                message.textContent = 'Las contraseñas no coinciden';
                 message.classList.add('error');
                 message.classList.remove('success');
                 return;
