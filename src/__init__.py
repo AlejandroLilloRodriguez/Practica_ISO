@@ -60,34 +60,38 @@ def hlml_carrefour(url, palabra_filtro, productos_totales):
         time.sleep(7)
 
     
-       
-        while True:
-            last_height = driver.execute_script("return document.body.scrollHeight")
-            while True:
+        tiempo_maximo_scroll = 30
+        tiempo_inicial = time.time()
+        while (time.time() - tiempo_inicial)< tiempo_maximo_scroll:
+            ##last_height = driver.execute_script("return document.body.scrollHeight")
+            
                 
             # Desplazarse hacia abajo
-                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(2)  # Esperar unos segundos para que carguen los nuevos productos
+                
+            driver.execute_script("window.scrollBy(0, 500);")
+            time.sleep(3)  # Esperar unos segundos para que carguen los nuevos productos
 
             # Calcular nueva altura después de desplazarse
-                new_height = driver.execute_script("return document.body.scrollHeight")
-                if new_height == last_height:
-                    break  # Si no hay más contenido, salir del bucle
-                last_height = new_height
+            #new_height = driver.execute_script("return document.body.scrollHeight")
+            #if new_height == last_height:
+            #    break  # Si no hay más contenido, salir del bucle
+            #last_height = new_height
 
             soup= BeautifulSoup(driver.page_source, 'html.parser')                  ## guardamos en la variable soup el contenido de la pagina
             productos2 = soup.find_all('a', class_='product-card__title-link track-click')          ## buscamos todos los productos de la pagina
             for bucle in productos2:                ## recorremos los datos obtenidos de la lista de productos
-                nombre_producto = bucle.get_text(strip=True)        ## Separamos la etiqueta html para poder obtener solo el texto
+                nombre_producto = bucle.get_text(strip=True)## Separamos la etiqueta html para poder obtener solo el texto
+                nombre_producto = nombre_producto.lower().strip()
+                print(nombre_producto)        
                 if palabra_filtro.lower() in nombre_producto.lower():       ## comparamos si la palabra que buscamos esta en el nombre del producto
                     productos_totales.append(nombre_producto)       ## si esta la añadimos a la lista de productos totales
-            try:
-                boton_siguiente = driver.find_element_by_xpath("//a[span[@class='pagination__next icon-right-arrow-thin']]")
-                driver.execute_script("arguments[0].click();", boton_siguiente)
-                time.sleep(3)  # Esperar que cargue la siguiente página
-            except:
-                print("No se pudo encontrar el botón 'Siguiente'.")
-                break
+        try:
+            boton_siguiente = driver.find_element_by_xpath("//a[span[@class='pagination__next icon-right-arrow-thin']]")
+            driver.execute_script("arguments[0].click();", boton_siguiente)
+            time.sleep(3)  # Esperar que cargue la siguiente página
+        except:
+            print("No se pudo encontrar el botón 'Siguiente'.")
+                
         driver.quit() ## cerramos el navegador
     except:
         print(f"error")
@@ -131,7 +135,7 @@ def html_eroski(url,palabra_filtro,productos_totales):
         print(f"error")
 
 
-def analisis_supermercados(urls_alcampo, urls_carrefour, urls_eroski,palabra_filtro):
+def analisis_supermercados(urls_alcampo, urls_carrefour, urls_eroski, palabra_filtro):
     productos_totales = []
     
     # Analizar Alcampo
@@ -145,10 +149,10 @@ def analisis_supermercados(urls_alcampo, urls_carrefour, urls_eroski,palabra_fil
         hlml_carrefour(url, palabra_filtro, productos_totales)
     
     for url in urls_eroski : 
-        print(f"\nAnalizando URL de Eroski: {url}\n")
-        html_eroski(url,palabra_filtro,productos_totales)
-
-    return productos_totales
+       print(f"\nAnalizando URL de Eroski: {url}\n")
+       html_eroski(url,palabra_filtro,productos_totales)
+    productos_unicos = list(set(productos_totales))
+    return productos_unicos
 urls_a_analizar_alcampo= [
     "https://www.compraonline.alcampo.es/categories/frescos/OC2112?source=navigation",
     "https://www.compraonline.alcampo.es/categories/leche-huevos-l%C3%A1cteos-yogures-y-bebidas-vegetales/OC16?source=navigation",
@@ -208,6 +212,8 @@ palabra = input("Seleccione el alimento que desea buscar: ")
 
 # Ejecutar el análisis
 productos_filtrados = analisis_supermercados(urls_a_analizar_alcampo, urls_a_analizar_carrefour,urls_a_analizar_eroski , palabra)
+
+
 
 # Mostrar los productos encontrados
 print("\nProductos encontrados:")
