@@ -245,7 +245,14 @@
                 message.classList.remove('success');
                 return;
             }
-
+            
+            if(!email.includes('@') && !password.includes('.')) {
+                message.textContent = 'El correo electrónico y la contraseña deben tener al menos un punto y un arroba.';
+                message.classList.add('error');
+                message.classList.remove('success');
+                return;
+            }
+            
             // Simulación de registro exitoso
             message.textContent = 'Registro exitoso. Puedes iniciar sesión ahora.';
             message.classList.add('success');
