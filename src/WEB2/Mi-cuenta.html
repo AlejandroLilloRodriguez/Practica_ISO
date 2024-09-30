@@ -246,8 +246,8 @@
                 return;
             }
             
-            if(!email.includes('@') && !password.includes('.')) {
-                message.textContent = 'El correo electrónico y la contraseña deben tener al menos un punto y un arroba.';
+            if(!email.includes('@') && !email.includes('.')) {
+                message.textContent = 'El correo electrónico debe tener al menos un punto y un arroba.';
                 message.classList.add('error');
                 message.classList.remove('success');
                 return;
