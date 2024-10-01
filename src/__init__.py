@@ -33,12 +33,21 @@ def parse_html(url, palabra_filtro, productos_totales):
 
         soup= BeautifulSoup(driver.page_source, 'html.parser')
 
-        productos = soup.find_all('h3', class_='_text_f6lbl_1 _text--m_f6lbl_23')
+        productos = soup.find_all('div', class_='product-card-container')
 
         for producto in productos:
-            nombre_producto = producto.get_text(strip=True)
+            nombre_producto = producto.find('h3', class_='_text_f6lbl_1 _text--m_f6lbl_23').get_text(strip=True)
+            precio_producto = producto.find('span', class_ ='_text_f6lbl_1 _text--m_f6lbl_23 sc-1fkdssq-0 eVdlkb').get_text(strip = True)
+            precio_kg = producto.find('span', class_= '_text_f6lbl_1 _text--m_f6lbl_23 sc-1vpsrpe-2 sc-bnzhts-0 VJkMO jIzHwa').get_text(strip = True)
+            link_get = producto.find('div', class_ ='image-container').find('img')
+            link_imagen = link_get['src'] if link_get else None
+            print(nombre_producto, precio_producto, precio_kg, link_imagen)
             if palabra_filtro.lower() in nombre_producto.lower():
-                productos_totales.append(nombre_producto)
+                productos_totales.append({
+                            'nombre' : nombre_producto,
+                            'precio' : precio_producto,
+                            'precio/kg' : precio_kg,
+                            'imagen' : link_imagen })
                 
 
 
@@ -46,7 +55,7 @@ def parse_html(url, palabra_filtro, productos_totales):
         driver.quit()
     except:
         print(f"error")
-
+'''
 def get_total_pages(soup):
     """Extrae el número total de páginas desde el HTML."""
     pagination_div = soup.find('div', class_='pagination__main')
@@ -144,12 +153,29 @@ def html_eroski(url,palabra_filtro,productos_totales):
                 if new_height == last_height:
                     break  # Si no hay más contenido, salir del bucle
                 last_height = new_height
+
             soup = BeautifulSoup(driver.page_source, 'html.parser')#guardamos el contenido de la pagina en la variable
-            productos3 = soup.select('h2.product-title a')#selecciona directamente la etiqueta a de la clase h2 con la etiqueta a 
+            productos3 = soup.find_all('div', class_= 'col border-0 product-item-lineal item-type-1 product-with-picto col-xs-12 col-sm-12 col-md-6 col-lg-4')#selecciona directamente la etiqueta a de la clase h2 con la etiqueta a 
+            
             for producto in productos3:
-                nombre_producto = producto.get_text(strip=True)
+
+                nombre_producto = producto.find('h2', class_= 'product-title').find('a').get_text(strip =True)
+                precio_producto = producto.find('span', class_= 'price-offer-now').get_text(strip=True)
+                precio_por_kg = producto.find('span', class_= 'price-product')
+                if precio_por_kg:
+                    precio_por_kg = precio_por_kg.get_text(strip = True)
+                else:
+                    precio_por_kg = "no disponible"
+
+                #link_tag = producto.find('span', class_ = 'product-image product-image-15923279 actionZoom').find('img')
+                #link_imagen = link_tag['src'] if link_tag else None
+
+                print(nombre_producto, precio_producto, precio_por_kg)
                 if palabra_filtro.lower() in nombre_producto.lower():
-                    productos_totales.append(nombre_producto)
+                    productos_totales.append({'nombre' : nombre_producto,
+                            'precio' : precio_producto,
+                            
+                            })
                 
                 # Cuando estamos buscando los productos, los comparamos con nombreproducto y si es el indicado, se guarda en la lista 
 
@@ -158,8 +184,8 @@ def html_eroski(url,palabra_filtro,productos_totales):
     except:
         print(f"error")
 
-
-def analisis_supermercados(urls_alcampo, urls_carrefour, urls_eroski, palabra_filtro):
+'''
+def analisis_supermercados(urls_alcampo, palabra_filtro):
     productos_totales = []
     
     # Analizar Alcampo
@@ -167,7 +193,7 @@ def analisis_supermercados(urls_alcampo, urls_carrefour, urls_eroski, palabra_fi
     for url in urls_alcampo:
         print(f"\nAnalizando URL de Alcampo: {url}\n")
         parse_html(url, palabra_filtro, productos_totales)
-    
+    '''
     # Analizar Carrefour
     for url in urls_carrefour:
         print(f"\nAnalizando URL de Carrefour: {url}\n")
@@ -176,7 +202,9 @@ def analisis_supermercados(urls_alcampo, urls_carrefour, urls_eroski, palabra_fi
     for url in urls_eroski : 
        print(f"\nAnalizando URL de Eroski: {url}\n")
        html_eroski(url,palabra_filtro,productos_totales)
+       '''
     productos_unicos = list(set(productos_totales))
+    
     return productos_unicos
 urls_a_analizar_alcampo= [
     "https://www.compraonline.alcampo.es/categories/frescos/OC2112?source=navigation",
@@ -242,8 +270,8 @@ urls_a_analizar_eroski = ["https://supermercado.eroski.es/es/supermercado/205980
 palabra = input("Seleccione el alimento que desea buscar: ")
 
 # Ejecutar el análisis
-productos_filtrados = analisis_supermercados(urls_a_analizar_alcampo, urls_a_analizar_carrefour,urls_a_analizar_eroski , palabra)
-
+productos_filtrados = analisis_supermercados(urls_a_analizar_alcampo , palabra)
+#productos_filtrados = analisis_supermercados(urls_a_analizar_alcampo, urls_a_analizar_carrefour,urls_a_analizar_eroski , palabra)
 
 
 # Mostrar los productos encontrados
