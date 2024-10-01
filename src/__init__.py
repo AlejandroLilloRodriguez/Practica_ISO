@@ -100,13 +100,17 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales):
                     precio_producto = precio_producto.lower().strip()
                     precio_kg = bucle.find('span', class_= 'product-card__price-per-unit').get_text(strip=True)
                     precio_kg = precio_kg.lower().strip()
+                    imagen_tag = bucle.find('a', class_='product-card__media-link track-click').find('img')
+                    link_imagen = imagen_tag['src'] if imagen_tag else None
 
-                    print(nombre_producto, precio_kg, precio_producto)        
+
+                    print(nombre_producto, precio_kg, precio_producto, link_imagen)        
                     if palabra_filtro.lower() in nombre_producto.lower():       ## comparamos si la palabra que buscamos esta en el nombre del producto
                         productos_totales.append({
                             'nombre' : nombre_producto,
                             'precio' : precio_producto,
-                            'precio/kg' : precio_kg
+                            'precio/kg' : precio_kg,
+                            'imagen' : link_imagen
                         })      ## si esta la añadimos a la lista de productos totales
             numero_paginas= get_total_pages(soup)
             print(numero_paginas)
