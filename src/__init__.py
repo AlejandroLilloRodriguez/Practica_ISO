@@ -3,9 +3,12 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
 from webdriver_manager.chrome import ChromeDriverManager
-
+'''
 def parse_html(url, palabra_filtro, productos_totales):
     try:
         chrome_options = Options()
@@ -65,7 +68,15 @@ def get_total_pages(soup):
         return total_pages
     return 1  
 
-
+def aceptar_cookies(driver):
+    try:
+        # Localizamos el botón de aceptar cookies usando el ID
+        boton_cookies = driver.find_element(By.ID, 'onetrust-accept-btn-handler')  
+        boton_cookies.click()
+        print("Cookies aceptadas.")
+        time.sleep(2)  # Esperamos unos segundos para asegurarnos de que desaparece la ventana de cookies
+    except Exception as e:
+        print("No se encontró la ventana de cookies o ya fue aceptada.", e)
 
 def hlml_carrefour(url_base, palabra_filtro, productos_totales):
     try:
@@ -75,7 +86,7 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales):
         numero_paginas = 30
         for page in range(numero_paginas):
             chrome_options = Options()
-            ##chrome_options.add_argument("--headless")
+            #chrome_options.add_argument("--headless")
             #chrome_options.add_argument("--disable-gpu")
             #chrome_options.add_argument("--no-sandbox")
             #chrome_options.add_argument("--disable-dev-shm-usage")
@@ -84,9 +95,10 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales):
 
             current_url = f"{url_base}?offset={offset}"
             driver.get(current_url)
-            time.sleep(7)
+            time.sleep(15)
 
-        
+            aceptar_cookies(driver)
+
             tiempo_maximo_scroll = 30
             tiempo_inicial = time.time()
             while (time.time() - tiempo_inicial)< tiempo_maximo_scroll:
@@ -96,31 +108,58 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales):
                 # Desplazarse hacia abajo
                     
                 driver.execute_script("window.scrollBy(0, 500);")
-                time.sleep(3)  # Esperar unos segundos para que carguen los nuevos productos
+                time.sleep(5)  # Esperar unos segundos para que carguen los nuevos productos
 
+                print('scrolling')
+                try:
+                    # Esperar hasta que los productos estén presentes en el DOM
+                    WebDriverWait(driver, 10).until(
+                        EC.presence_of_all_elements_located((By.CLASS_NAME, 'product-card'))
+                    )
+
+                    soup= BeautifulSoup(driver.page_source, 'html.parser')                  ## guardamos en la variable soup el contenido de la pagina
                 
+                    productos2 = soup.find_all('div', class_='product-card')          ## buscamos todos los productos de la pagina
+                    for bucle in productos2:                ## recorremos los datos obtenidos de la lista de productos
+                        nombre_producto = bucle.find('a', class_='product-card__title-link track-click').get_text(strip=True).lower().strip()## Separamos la etiqueta html para poder obtener solo el texto
+                        print (nombre_producto)
+                        precios_div = bucle.find('div', class_='product-card__prices')
+                        precio_normal_tag = precios_div.find('span', class_='product-card__price--strikethrough')
+                        precio_rebajado_tag = precios_div.find('span', class_='product-card__price--current')
 
-                soup= BeautifulSoup(driver.page_source, 'html.parser')                  ## guardamos en la variable soup el contenido de la pagina
-                productos2 = soup.find_all('div', class_='product-card__detail')          ## buscamos todos los productos de la pagina
-                for bucle in productos2:                ## recorremos los datos obtenidos de la lista de productos
-                    nombre_producto = bucle.find('a', class_='product-card__title-link track-click').get_text(strip=True)## Separamos la etiqueta html para poder obtener solo el texto
-                    nombre_producto = nombre_producto.lower().strip()
-                    precio_producto = bucle.find('span', class_= 'product-card__price').get_text(strip=True)
-                    precio_producto = precio_producto.lower().strip()
-                    precio_kg = bucle.find('span', class_= 'product-card__price-per-unit').get_text(strip=True)
-                    precio_kg = precio_kg.lower().strip()
-                    imagen_tag = bucle.find('a', class_='product-card__media-link track-click').find('img')
-                    link_imagen = imagen_tag['src'] if imagen_tag else None
+                        if precio_rebajado_tag:
+                            precio_producto = precio_rebajado_tag.get_text(strip=True).lower().strip()
+                            print(precio_producto)
+                        else :
+                            precio_producto = precios_div.find('span', class_='product-card__price').get_text(strip=True).lower().strip()
+                            print(precio_producto)
+                        
+
+                        precio_kg_div = bucle.find('div', class_='product-card__price-per-unit--container')
+                        precio_kg_rebajado = precio_kg_div.find('span', class_= 'product-card__price-per-unit')
+                        if precio_kg_rebajado:
+                            precio_kg = precio_kg_rebajado.get_text(strip=True).lower().strip()
+                            print(precio_kg)
+                        else:
+                            precios_div.find('div', class_='product-card__price')
+                            print(precio_kg)
+                        #imagen_tag = bucle.find('a', class_='product-card__media-link track-click').find('img')
+                        #link_imagen = imagen_tag['src'] if imagen_tag else None
 
 
-                    print(nombre_producto, precio_kg, precio_producto, link_imagen)        
-                    if palabra_filtro.lower() in nombre_producto.lower():       ## comparamos si la palabra que buscamos esta en el nombre del producto
-                        productos_totales.append({
-                            'nombre' : nombre_producto,
-                            'precio' : precio_producto,
-                            'precio/kg' : precio_kg,
-                            'imagen' : link_imagen
-                        })      ## si esta la añadimos a la lista de productos totales
+                               
+                        '''
+                        if palabra_filtro.lower() in nombre_producto.lower():       ## comparamos si la palabra que buscamos esta en el nombre del producto
+                            productos_totales.append({
+                                'nombre' : nombre_producto,
+                                'precio' : precio_producto,
+                                'precio/kg' : precio_kg
+                                
+                            })
+                            '''
+                            
+                except Exception as e:
+                    print(f"Error en el scraping: {e}")     ## si esta la añadimos a la lista de productos totales
             numero_paginas= get_total_pages(soup)
             print(numero_paginas)
             offset = offset + 24
@@ -128,7 +167,7 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales):
             driver.quit() ## cerramos el navegador    
     except:
         print(f"error")
-
+'''
 def html_eroski(url,palabra_filtro,productos_totales):
     try:
         chrome_options = Options()
@@ -185,11 +224,11 @@ def html_eroski(url,palabra_filtro,productos_totales):
         print(f"error")
 
 '''
-def analisis_supermercados(urls_alcampo, palabra_filtro):
+def analisis_supermercados(urls_carrefour, palabra_filtro):
     productos_totales = []
     
     # Analizar Alcampo
-    
+    '''
     for url in urls_alcampo:
         print(f"\nAnalizando URL de Alcampo: {url}\n")
         parse_html(url, palabra_filtro, productos_totales)
@@ -198,7 +237,7 @@ def analisis_supermercados(urls_alcampo, palabra_filtro):
     for url in urls_carrefour:
         print(f"\nAnalizando URL de Carrefour: {url}\n")
         hlml_carrefour(url, palabra_filtro, productos_totales)
-    
+    '''
     for url in urls_eroski : 
        print(f"\nAnalizando URL de Eroski: {url}\n")
        html_eroski(url,palabra_filtro,productos_totales)
@@ -270,7 +309,7 @@ urls_a_analizar_eroski = ["https://supermercado.eroski.es/es/supermercado/205980
 palabra = input("Seleccione el alimento que desea buscar: ")
 
 # Ejecutar el análisis
-productos_filtrados = analisis_supermercados(urls_a_analizar_alcampo , palabra)
+productos_filtrados = analisis_supermercados(urls_a_analizar_carrefour , palabra)
 #productos_filtrados = analisis_supermercados(urls_a_analizar_alcampo, urls_a_analizar_carrefour,urls_a_analizar_eroski , palabra)
 
 
