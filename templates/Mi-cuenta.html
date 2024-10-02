@@ -136,6 +136,10 @@
                 border-radius: 0;
             }
         }
+
+
+
+
     </style>
 </head>
 <body>
@@ -212,15 +216,20 @@
             // Simulación de autenticación
             const validUsername = 'admin';
             const validPassword = '1234';
+            const email = 'admin@example.com'; // Simulación de un correo del usuario
 
             if (username === validUsername && password === validPassword) {
                 message.textContent = 'Inicio de sesión exitoso';
                 message.classList.add('success');
                 message.classList.remove('error');
 
+                // Guardar la información del usuario en localStorage
+                sessionStorage.setItem('username', username);
+                sessionStorage.setItem('email', email);
+
                 // Redirigir a otra página después de iniciar sesión
                 setTimeout(() => {
-                    window.location.href = 'dashboard.html'; // Cambia a la página deseada
+                    window.location.href = 'index.html'; // Redirigir a la página de inicio
                 }, 1000);
             } else {
                 message.textContent = 'Usuario o contraseña incorrectos';
@@ -228,6 +237,7 @@
                 message.classList.remove('success');
             }
         });
+
 
         // Formulario de Registro
         registerForm.addEventListener('submit', function(event) {
