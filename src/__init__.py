@@ -8,8 +8,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from webdriver_manager.chrome import ChromeDriverManager
-'''
-def parse_html(url, palabra_filtro, productos_totales):
+import mysql.connector
+
+def parse_html(url, palabra_filtro, productos_totales_alcampo):
     try:
         chrome_options = Options()
         #chrome_options.add_argument("--headless")
@@ -40,13 +41,29 @@ def parse_html(url, palabra_filtro, productos_totales):
 
         for producto in productos:
             nombre_producto = producto.find('h3', class_='_text_f6lbl_1 _text--m_f6lbl_23').get_text(strip=True)
-            precio_producto = producto.find('span', class_ ='_text_f6lbl_1 _text--m_f6lbl_23 sc-1fkdssq-0 eVdlkb').get_text(strip = True)
-            precio_kg = producto.find('span', class_= '_text_f6lbl_1 _text--m_f6lbl_23 sc-1vpsrpe-2 sc-bnzhts-0 VJkMO jIzHwa').get_text(strip = True)
+            
+            
+            precios_div = producto.find('div', class_='price-pack-size-container')
+            
+            precio_rebajado_tag = precios_div.find('span', class_='_text_f6lbl_1 _text--m_f6lbl_23 sc-1fkdssq-0 kVIDwa')
+
+            if precio_rebajado_tag:
+                precio_producto = precio_rebajado_tag.get_text(strip=True).strip()
+                
+            else :
+                precio_producto = precios_div.find('span', class_='_text_f6lbl_1 _text--m_f6lbl_23 sc-1fkdssq-0 eVdlkb').get_text(strip=True).strip()
+                
+            precios_kg_tag=producto.find('span',class_='_text_f6lbl_1 _text--m_f6lbl_23 sc-1vpsrpe-2 sc-bnzhts-0 cOeicp jIzHwa')
+
+            if precios_kg_tag:
+                precio_kg = precios_kg_tag.get_text().strip()
+            else: 
+                precio_kg = producto.find('span', class_ = '_text_f6lbl_1 _text--m_f6lbl_23 sc-1vpsrpe-2 sc-bnzhts-0 VJkMO jIzHwa').get_text(strip = True).strip()
+            
             link_get = producto.find('div', class_ ='image-container').find('img')
             link_imagen = link_get['src'] if link_get else None
-            print(nombre_producto, precio_producto, precio_kg, link_imagen)
-            if palabra_filtro.lower() in nombre_producto.lower():
-                productos_totales.append({
+            print (nombre_producto, precio_producto, precio_kg, link_imagen )
+            productos_totales_alcampo.append({
                             'nombre' : nombre_producto,
                             'precio' : precio_producto,
                             'precio/kg' : precio_kg,
@@ -58,7 +75,7 @@ def parse_html(url, palabra_filtro, productos_totales):
         driver.quit()
     except:
         print(f"error")
-'''
+
 def get_total_pages(soup):
     """Extrae el número total de páginas desde el HTML."""
     pagination_div = soup.find('div', class_='pagination__main')
@@ -67,7 +84,7 @@ def get_total_pages(soup):
         total_pages = int(text.split('de')[-1].strip())  # Extraer el número después de "de"
         return total_pages
     return 1  
-
+'''
 def aceptar_cookies(driver):
     try:
         # Localizamos el botón de aceptar cookies usando el ID
@@ -148,7 +165,7 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales):
 
 
                                
-                        '''
+                        
                         if palabra_filtro.lower() in nombre_producto.lower():       ## comparamos si la palabra que buscamos esta en el nombre del producto
                             productos_totales.append({
                                 'nombre' : nombre_producto,
@@ -156,7 +173,7 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales):
                                 'precio/kg' : precio_kg
                                 
                             })
-                            '''
+                            
                             
                 except Exception as e:
                     print(f"Error en el scraping: {e}")     ## si esta la añadimos a la lista de productos totales
@@ -223,26 +240,39 @@ def html_eroski(url,palabra_filtro,productos_totales):
     except:
         print(f"error")
 
-'''
-def analisis_supermercados(urls_carrefour, palabra_filtro):
-    productos_totales = []
+
+def analisis_supermercados(urls_alcampo, palabra_filtro):
+    productos_totales_alcampo = []
     
     # Analizar Alcampo
-    '''
+    
     for url in urls_alcampo:
         print(f"\nAnalizando URL de Alcampo: {url}\n")
-        parse_html(url, palabra_filtro, productos_totales)
+        parse_html(url, palabra_filtro, productos_totales_alcampo)
+    productos_unicos_set = set()
+    productos_unicos = []
+
+    for producto in productos_totales_alcampo:
+        # Convertir el diccionario en una tupla de tuplas (clave, valor)
+        producto_tuple = tuple(sorted(producto.items()))  # ordenar para evitar problemas de orden
+
+        # Agregar al conjunto solo si no está ya presente
+        if producto_tuple not in productos_unicos_set:
+            productos_unicos_set.add(producto_tuple)  # Añadir a set para controlar duplicados
+            productos_unicos.append(producto)  # Agregar el diccionario original a la lista de productos únicos
+
+    
     '''
     # Analizar Carrefour
     for url in urls_carrefour:
         print(f"\nAnalizando URL de Carrefour: {url}\n")
         hlml_carrefour(url, palabra_filtro, productos_totales)
-    '''
+    
     for url in urls_eroski : 
        print(f"\nAnalizando URL de Eroski: {url}\n")
        html_eroski(url,palabra_filtro,productos_totales)
        '''
-    productos_unicos = list(set(productos_totales))
+    
     
     return productos_unicos
 urls_a_analizar_alcampo= [
@@ -306,15 +336,47 @@ urls_a_analizar_eroski = ["https://supermercado.eroski.es/es/supermercado/205980
                           "https://supermercado.eroski.es/es/supermercado/2059919-congelados/2059934-marisco/","https://supermercado.eroski.es/es/supermercado/2059919-congelados/2059977-salteados-y-revueltos/",
                           ]
 # Pedir la palabra de búsqueda
+def conectar_mysql():
+    db = mysql.connector.connect(
+        host = '212.47.235.212',
+        user = 'remoto',
+        password = '1234',
+        database = 'ISO'
+
+    )
+    return db
+
+def insertar_producto(db, producto):
+    try:
+        cursor = db.cursor()
+        sql = """
+        INSERT INTO productos (nombre, precio, precio_por_kg, link_imagen) 
+        VALUES (%s, %s, %s, %s)
+        """
+        valores = (producto['nombre'], producto['precio'], producto.get('precio/kg', None), producto.get('imagen', None))
+        cursor.execute(sql, valores)
+        db.commit()
+        print(f"Producto '{producto['nombre']}' insertado correctamente.")
+    except mysql.connector.Error as err:
+        print(f"Error al insertar el producto: {err}")
+
+def almacenar_productos(productos):
+    conexion = conectar_mysql()
+    if conexion:
+        for producto in productos:
+            insertar_producto(conexion, producto)
+        conexion.close()
+    else:
+        print("No se pudo conectar a la base de datos.")      
 palabra = input("Seleccione el alimento que desea buscar: ")
 
 # Ejecutar el análisis
-productos_filtrados = analisis_supermercados(urls_a_analizar_carrefour , palabra)
+productos_unicos = analisis_supermercados(urls_a_analizar_alcampo, palabra)
+almacenar_productos(productos_unicos)
 #productos_filtrados = analisis_supermercados(urls_a_analizar_alcampo, urls_a_analizar_carrefour,urls_a_analizar_eroski , palabra)
 
 
+
 # Mostrar los productos encontrados
-print("\nProductos encontrados:")
-for producto in productos_filtrados:
-    print(producto)
+
 
