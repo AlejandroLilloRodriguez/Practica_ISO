@@ -62,12 +62,14 @@ def parse_html(url, palabra_filtro, productos_totales_alcampo):
             
             link_get = producto.find('div', class_ ='image-container').find('img')
             link_imagen = link_get['src'] if link_get else None
+            nombre_supermercado = "alcampo"
             print (nombre_producto, precio_producto, precio_kg, link_imagen )
             productos_totales_alcampo.append({
                             'nombre' : nombre_producto,
                             'precio' : precio_producto,
                             'precio/kg' : precio_kg,
-                            'imagen' : link_imagen })
+                            'imagen' : link_imagen, 
+                            'supermercado ' : nombre_supermercado })
                 
 
 
@@ -160,6 +162,8 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales):
                         else:
                             precios_div.find('div', class_='product-card__price')
                             print(precio_kg)
+                        
+                        nombre_supermercado = 'carrefour'
                         #imagen_tag = bucle.find('a', class_='product-card__media-link track-click').find('img')
                         #link_imagen = imagen_tag['src'] if imagen_tag else None
 
@@ -170,7 +174,8 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales):
                             productos_totales.append({
                                 'nombre' : nombre_producto,
                                 'precio' : precio_producto,
-                                'precio/kg' : precio_kg
+                                'precio/kg' : precio_kg,
+                                'supermercado' : nombre_supermercado
                                 
                             })
                             
@@ -222,16 +227,19 @@ def html_eroski(url,palabra_filtro,productos_totales):
                     precio_por_kg = precio_por_kg.get_text(strip = True)
                 else:
                     precio_por_kg = "no disponible"
+                nombre_supermercado = 'eroski'
 
                 #link_tag = producto.find('span', class_ = 'product-image product-image-15923279 actionZoom').find('img')
                 #link_imagen = link_tag['src'] if link_tag else None
 
                 print(nombre_producto, precio_producto, precio_por_kg)
-                if palabra_filtro.lower() in nombre_producto.lower():
-                    productos_totales.append({'nombre' : nombre_producto,
+                productos_totales.append({'nombre' : nombre_producto,
+                            'nombre' : nombre_producto,
                             'precio' : precio_producto,
+                            'precio/kg' : precio_por_kg,
+                            'supermercado ' : nombre_supermercado 
                             
-                            })
+                        })
                 
                 # Cuando estamos buscando los productos, los comparamos con nombreproducto y si es el indicado, se guarda en la lista 
 
@@ -349,8 +357,16 @@ def conectar_mysql():
 def insertar_producto(db, producto):
     try:
         cursor = db.cursor()
+       
+        if producto['supermercado'] == 'alcampo':
+            tabla = 'productos_alcampo'
+        elif producto['supermercado'] == 'carrefour':
+            tabla = 'productos_carrefour'
+        elif producto['supermercado'] == 'eroski':
+            tabla = 'productos_eroski'
+        
         sql = """
-        INSERT INTO productos (nombre, precio, precio_por_kg, link_imagen) 
+        INSERT INTO {tabla} (nombre, precio, precio_por_kg, link_imagen) 
         VALUES (%s, %s, %s, %s)
         """
         valores = (producto['nombre'], producto['precio'], producto.get('precio/kg', None), producto.get('imagen', None))
@@ -359,6 +375,8 @@ def insertar_producto(db, producto):
         print(f"Producto '{producto['nombre']}' insertado correctamente.")
     except mysql.connector.Error as err:
         print(f"Error al insertar el producto: {err}")
+    
+
 
 def almacenar_productos(productos):
     conexion = conectar_mysql()
