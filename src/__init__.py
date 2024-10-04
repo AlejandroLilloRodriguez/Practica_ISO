@@ -237,7 +237,7 @@ def html_eroski(url,palabra_filtro,productos_totales):
                             'nombre' : nombre_producto,
                             'precio' : precio_producto,
                             'precio/kg' : precio_por_kg,
-                            'supermercado ' : nombre_supermercado 
+                            'supermercado' : nombre_supermercado 
                             
                         })
                 
@@ -364,6 +364,9 @@ def insertar_producto(db, producto):
             tabla = 'productos_carrefour'
         elif producto['supermercado'] == 'eroski':
             tabla = 'productos_eroski'
+
+        sql_delete = f"DELETE FROM {tabla}" #vaciado del contenido de la base de datos
+        cursor.execute(sql_delete)
         
         sql = f"""
         INSERT INTO {tabla} (nombre, precio, precio_por_kg, link_imagen) 
