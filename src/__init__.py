@@ -69,7 +69,7 @@ def parse_html(url, palabra_filtro, productos_totales_alcampo):
                             'precio' : precio_producto,
                             'precio/kg' : precio_kg,
                             'imagen' : link_imagen, 
-                            'supermercado ' : nombre_supermercado })
+                            'supermercado' : nombre_supermercado })
                 
 
 
@@ -353,7 +353,7 @@ def conectar_mysql():
 
     )
     return db
-
+  
 def insertar_producto(db, producto):
     try:
         cursor = db.cursor()
@@ -365,7 +365,7 @@ def insertar_producto(db, producto):
         elif producto['supermercado'] == 'eroski':
             tabla = 'productos_eroski'
         
-        sql = """
+        sql = f"""
         INSERT INTO {tabla} (nombre, precio, precio_por_kg, link_imagen) 
         VALUES (%s, %s, %s, %s)
         """
