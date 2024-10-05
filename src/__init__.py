@@ -315,15 +315,15 @@ def analisis_supermercados(urls_alcampo, urls_carrefour, urls_eroski, palabra_fi
 
 urls_a_analizar_alcampo= [
     "https://www.compraonline.alcampo.es/categories/frescos/OC2112?source=navigation",
-    "https://www.compraonline.alcampo.es/categories/leche-huevos-l%C3%A1cteos-yogures-y-bebidas-vegetales/OC16?source=navigation",
-    "https://www.compraonline.alcampo.es/categories/alimentaci%C3%B3n/OCC10?source=navigation",
-    "https://www.compraonline.alcampo.es/categories/desayuno-y-merienda/OC10?source=navigation",
-    "https://www.compraonline.alcampo.es/categories/congelados/OC200220183?source=navigation",
-    "https://www.compraonline.alcampo.es/categories/comida-preparada/OC20022018?source=navigation",
-    "https://www.compraonline.alcampo.es/categories/bebidas/OCC11?source=navigation",
-    "https://www.compraonline.alcampo.es/categories/supermercado-ecol%C3%B3gico/OC26112021?source=navigation",
-    "https://www.compraonline.alcampo.es/categories/sin-gluten-sin-lactosa-y-otras-dietas-espec%C3%ADficas/OCSINGSINL?source=navigation",
-    "https://www.compraonline.alcampo.es/categories/veganos/OC09112021?source=navigation",
+    #"https://www.compraonline.alcampo.es/categories/leche-huevos-l%C3%A1cteos-yogures-y-bebidas-vegetales/OC16?source=navigation",
+    #"https://www.compraonline.alcampo.es/categories/alimentaci%C3%B3n/OCC10?source=navigation",
+    #"https://www.compraonline.alcampo.es/categories/desayuno-y-merienda/OC10?source=navigation",
+    #"https://www.compraonline.alcampo.es/categories/congelados/OC200220183?source=navigation",
+    #"https://www.compraonline.alcampo.es/categories/comida-preparada/OC20022018?source=navigation",
+    #"https://www.compraonline.alcampo.es/categories/bebidas/OCC11?source=navigation",
+    #"https://www.compraonline.alcampo.es/categories/supermercado-ecol%C3%B3gico/OC26112021?source=navigation",
+    #"https://www.compraonline.alcampo.es/categories/sin-gluten-sin-lactosa-y-otras-dietas-espec%C3%ADficas/OCSINGSINL?source=navigation",
+    #"https://www.compraonline.alcampo.es/categories/veganos/OC09112021?source=navigation",
 ]
 
 urls_a_analizar_carrefour = [
@@ -373,6 +373,7 @@ urls_a_analizar_eroski = ["https://supermercado.eroski.es/es/supermercado/205980
                           "https://supermercado.eroski.es/es/supermercado/2059919-congelados/2059920-pizzas/","https://supermercado.eroski.es/es/supermercado/2059919-congelados/2059964-platos-preparados/",
                           "https://supermercado.eroski.es/es/supermercado/2059919-congelados/2059934-marisco/","https://supermercado.eroski.es/es/supermercado/2059919-congelados/2059977-salteados-y-revueltos/",
                           ]
+
 # Pedir la palabra de búsqueda
 def conectar_mysql():
     db = mysql.connector.connect(
@@ -383,7 +384,17 @@ def conectar_mysql():
 
     )
     return db
-  
+
+def vaciar_tabla(db, tabla):
+    try:
+        cursor = db.cursor()
+        sql_delete = f"DELETE FROM {tabla}"
+        cursor.execute(sql_delete)
+        db.commit()
+        print(f"Tabla {tabla} vaciada correctamente.")
+    except mysql.connector.Error as err:
+        print(f"Error al vaciar la tabla {tabla}: {err}") 
+
 def insertar_producto(db, producto):
     try:
         cursor = db.cursor()
@@ -395,8 +406,7 @@ def insertar_producto(db, producto):
         elif producto['supermercado'] == 'eroski':
             tabla = 'productos_eroski'
 
-        sql_delete = f"DELETE FROM {tabla}" #vaciado del contenido de la base de datos
-        cursor.execute(sql_delete)
+        
         
         sql = f"""
         INSERT INTO {tabla} (nombre, precio, precio_por_kg, link_imagen) 
@@ -411,11 +421,15 @@ def insertar_producto(db, producto):
     
 
 
-def almacenar_productos(productos):
+def almacenar_productos(productos_dict):
     conexion = conectar_mysql()
     if conexion:
-        for producto in productos:
-            insertar_producto(conexion, producto)
+        vaciar_tabla(conexion, 'productos_alcampo')
+        vaciar_tabla(conexion, 'productos_carrefour')
+        vaciar_tabla(conexion, 'productos_eroski')
+        for supermercado, productos in productos_dict.items():
+            for producto in productos:
+                insertar_producto(conexion, producto)
         conexion.close()
     else:
         print("No se pudo conectar a la base de datos.")      
