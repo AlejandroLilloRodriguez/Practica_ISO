@@ -86,7 +86,7 @@ def get_total_pages(soup):
         total_pages = int(text.split('de')[-1].strip())  # Extraer el número después de "de"
         return total_pages
     return 1  
-'''
+
 def aceptar_cookies(driver):
     try:
         # Localizamos el botón de aceptar cookies usando el ID
@@ -97,7 +97,7 @@ def aceptar_cookies(driver):
     except Exception as e:
         print("No se encontró la ventana de cookies o ya fue aceptada.", e)
 
-def hlml_carrefour(url_base, palabra_filtro, productos_totales):
+def hlml_carrefour(url_base, palabra_filtro, productos_totales_carrefour):
     try:
         
         
@@ -170,8 +170,8 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales):
 
                                
                         
-                        if palabra_filtro.lower() in nombre_producto.lower():       ## comparamos si la palabra que buscamos esta en el nombre del producto
-                            productos_totales.append({
+                               ## comparamos si la palabra que buscamos esta en el nombre del producto
+                        productos_totales_carrefour.append({
                                 'nombre' : nombre_producto,
                                 'precio' : precio_producto,
                                 'precio/kg' : precio_kg,
@@ -189,8 +189,8 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales):
             driver.quit() ## cerramos el navegador    
     except:
         print(f"error")
-'''
-def html_eroski(url,palabra_filtro,productos_totales):
+
+def html_eroski(url,palabra_filtro,productos_totales_eroski):
     try:
         chrome_options = Options()
         ##chrome_options.add_argument("--headless")
@@ -233,7 +233,7 @@ def html_eroski(url,palabra_filtro,productos_totales):
                 #link_imagen = link_tag['src'] if link_tag else None
 
                 print(nombre_producto, precio_producto, precio_por_kg)
-                productos_totales.append({'nombre' : nombre_producto,
+                productos_totales_eroski.append({'nombre' : nombre_producto,
                             'nombre' : nombre_producto,
                             'precio' : precio_producto,
                             'precio/kg' : precio_por_kg,
@@ -249,40 +249,70 @@ def html_eroski(url,palabra_filtro,productos_totales):
         print(f"error")
 
 
-def analisis_supermercados(urls_alcampo, palabra_filtro):
+def analisis_supermercados(urls_alcampo, urls_carrefour, urls_eroski, palabra_filtro):
     productos_totales_alcampo = []
+    productos_totales_carrefour = []
+    productos_totales_eroski = []
     
     # Analizar Alcampo
-    
     for url in urls_alcampo:
         print(f"\nAnalizando URL de Alcampo: {url}\n")
         parse_html(url, palabra_filtro, productos_totales_alcampo)
-    productos_unicos_set = set()
-    productos_unicos = []
+    
+    productos_unicos_set_alcampo = set()
+    productos_unicos_alcampo = []
 
     for producto in productos_totales_alcampo:
         # Convertir el diccionario en una tupla de tuplas (clave, valor)
         producto_tuple = tuple(sorted(producto.items()))  # ordenar para evitar problemas de orden
 
         # Agregar al conjunto solo si no está ya presente
-        if producto_tuple not in productos_unicos_set:
-            productos_unicos_set.add(producto_tuple)  # Añadir a set para controlar duplicados
-            productos_unicos.append(producto)  # Agregar el diccionario original a la lista de productos únicos
+        if producto_tuple not in productos_unicos_set_alcampo:
+            productos_unicos_set_alcampo.add(producto_tuple)  # Añadir a set para controlar duplicados
+            productos_unicos_alcampo.append(producto)  # Agregar el diccionario original a la lista de productos únicos
 
-    
-    '''
-    # Analizar Carrefour
+    #  Carrefour
     for url in urls_carrefour:
         print(f"\nAnalizando URL de Carrefour: {url}\n")
-        hlml_carrefour(url, palabra_filtro, productos_totales)
+        hlml_carrefour(url, palabra_filtro, productos_totales_carrefour)
     
-    for url in urls_eroski : 
-       print(f"\nAnalizando URL de Eroski: {url}\n")
-       html_eroski(url,palabra_filtro,productos_totales)
-       '''
+    productos_unicos_set_carrefour = set()
+    productos_unicos_carrefour = []
+
+    for producto in productos_totales_carrefour:
+        # Convertir el diccionario en una tupla de tuplas (clave, valor)
+        producto_tuple = tuple(sorted(producto.items()))
+
+        # Agregar al conjunto solo si no está ya presente
+        if producto_tuple not in productos_unicos_set_carrefour:
+            productos_unicos_set_carrefour.add(producto_tuple)
+            productos_unicos_carrefour.append(producto)
+
+    #  Eroski
     
-    
-    return productos_unicos
+    for url in urls_eroski:
+        print(f"\nAnalizando URL de Eroski: {url}\n")
+        html_eroski(url, palabra_filtro, productos_totales_eroski)
+
+    productos_unicos_set_eroski = set()
+    productos_unicos_eroski = []
+
+    for producto in productos_totales_eroski:
+        # Convertir el diccionario en una tupla de tuplas (clave, valor)
+        producto_tuple = tuple(sorted(producto.items()))
+
+        # Agregar al conjunto solo si no está ya presente
+        if producto_tuple not in productos_unicos_set_eroski:
+            productos_unicos_set_eroski.add(producto_tuple)
+            productos_unicos_eroski.append(producto)
+
+    # Retornar los diccionarios o listas de productos únicos para cada supermercado
+    return {
+        'alcampo': productos_unicos_alcampo,
+        'carrefour': productos_unicos_carrefour,
+        'eroski': productos_unicos_eroski
+    }
+
 urls_a_analizar_alcampo= [
     "https://www.compraonline.alcampo.es/categories/frescos/OC2112?source=navigation",
     "https://www.compraonline.alcampo.es/categories/leche-huevos-l%C3%A1cteos-yogures-y-bebidas-vegetales/OC16?source=navigation",
@@ -392,7 +422,7 @@ def almacenar_productos(productos):
 palabra = input("Seleccione el alimento que desea buscar: ")
 
 # Ejecutar el análisis
-productos_unicos = analisis_supermercados(urls_a_analizar_alcampo, palabra)
+productos_unicos = analisis_supermercados(urls_a_analizar_alcampo, urls_a_analizar_carrefour,urls_a_analizar_eroski,palabra)
 almacenar_productos(productos_unicos)
 #productos_filtrados = analisis_supermercados(urls_a_analizar_alcampo, urls_a_analizar_carrefour,urls_a_analizar_eroski , palabra)
 
