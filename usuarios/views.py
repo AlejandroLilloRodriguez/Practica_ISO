@@ -55,6 +55,3 @@ def mi_cuenta(request):
         'login_form': login_form,
         'registro_form': registro_form,
     })
-
-def inicio(request):
-    return render(request, 'index.html')
