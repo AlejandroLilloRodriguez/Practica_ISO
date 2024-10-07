@@ -45,6 +45,7 @@ def mi_cuenta(request):
                 messages.success(request, "Registro exitoso")
                 return redirect('inicio')  # Redirige a la página de inicio
             else:
+                print(registro_form.errors)
                 messages.error(request, "Error en el registro. Inténtalo de nuevo.")
     else:
         # Si la solicitud es GET
