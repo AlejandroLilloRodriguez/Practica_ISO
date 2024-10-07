@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión / Registrarse</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
     <!-- Puedes incluir tus otras hojas de estilo aquí -->
     <style>
         /* Estilos específicos para este archivo */
@@ -150,7 +150,7 @@
         </div>
         <div class="form-container">
             <!-- Formulario de Iniciar Sesión -->
-            <form id="login-form" class="active">
+            <form id="login-form" method="POST" class="active" action="{% url 'mi_cuenta' %}">
                 <label for="login-username">Usuario:</label>
                 <input type="text" id="login-username" name="username" required>
 
@@ -162,7 +162,7 @@
             </form>
 
             <!-- Formulario de Registrarse -->
-            <form id="register-form">
+            <form id="register-form" method="POST" action="{% url 'mi_cuenta' %}">
                 <label for="register-username">Usuario:</label>
                 <input type="text" id="register-username" name="username" required>
 
