@@ -187,46 +187,53 @@
         const registerTab = document.getElementById('register-tab');
         const loginForm = document.getElementById('login-form');
         const registerForm = document.getElementById('register-form');
-
+    
         loginTab.addEventListener('click', () => {
             loginTab.classList.add('active');
             registerTab.classList.remove('active');
             loginForm.classList.add('active');
             registerForm.classList.remove('active');
         });
-
+    
         registerTab.addEventListener('click', () => {
             registerTab.classList.add('active');
             loginTab.classList.remove('active');
             registerForm.classList.add('active');
             loginForm.classList.remove('active');
         });
-
-        // JavaScript para manejar el envío de formularios (Simulación)
-        // En producción, debes manejar esto en el servidor
-
+    
+        // Simulación de base de datos de usuarios
+        function getUsers() {
+            const users = localStorage.getItem('users');
+            return users ? JSON.parse(users) : [];
+        }
+    
+        function saveUser(user) {
+            const users = getUsers();
+            users.push(user);
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+    
         // Formulario de Inicio de Sesión
         loginForm.addEventListener('submit', function(event) {
             event.preventDefault();
-
+    
             const username = document.getElementById('login-username').value;
             const password = document.getElementById('login-password').value;
             const message = document.getElementById('login-message');
-
-            // Simulación de autenticación
-            const validUsername = 'admin';
-            const validPassword = '1234';
-            const email = 'admin@example.com'; // Simulación de un correo del usuario
-
-            if (username === validUsername && password === validPassword) {
+    
+            const users = getUsers();
+            const user = users.find(u => u.username === username && u.password === password);
+    
+            if (user) {
                 message.textContent = 'Inicio de sesión exitoso';
                 message.classList.add('success');
                 message.classList.remove('error');
-
-                // Guardar la información del usuario en localStorage
-                sessionStorage.setItem('username', username);
-                sessionStorage.setItem('email', email);
-
+    
+                // Guardar la información del usuario en sessionStorage
+                sessionStorage.setItem('username', user.username);
+                sessionStorage.setItem('email', user.email);
+    
                 // Redirigir a otra página después de iniciar sesión
                 setTimeout(() => {
                     window.location.href = 'index.html'; // Redirigir a la página de inicio
@@ -237,40 +244,53 @@
                 message.classList.remove('success');
             }
         });
-
-
+    
         // Formulario de Registro
         registerForm.addEventListener('submit', function(event) {
             event.preventDefault();
-
+    
             const username = document.getElementById('register-username').value;
             const email = document.getElementById('register-email').value;
             const password = document.getElementById('register-password').value;
             const confirmPassword = document.getElementById('register-confirm-password').value;
             const message = document.getElementById('register-message');
-            
-            if(!email.includes('@') || !email.includes('.')) {
+    
+            if (!email.includes('@') || !email.includes('.')) {
                 message.textContent = 'El correo electrónico debe tener al menos un punto y un arroba.';
                 message.classList.add('error');
                 message.classList.remove('success');
                 return;
             }
-            
+    
             if (password !== confirmPassword) {
                 message.textContent = 'Las contraseñas no coinciden';
                 message.classList.add('error');
                 message.classList.remove('success');
                 return;
             }
-            
+    
+            // Verificar si el usuario ya existe
+            const users = getUsers();
+            const existingUser = users.find(u => u.username === username || u.email === email);
+    
+            if (existingUser) {
+                message.textContent = 'El nombre de usuario o el correo ya están registrados.';
+                message.classList.add('error');
+                message.classList.remove('success');
+                return;
+            }
+    
             // Simulación de registro exitoso
+            const newUser = { username, email, password };
+            saveUser(newUser);
+    
             message.textContent = 'Registro exitoso. Puedes iniciar sesión ahora.';
             message.classList.add('success');
             message.classList.remove('error');
-
+    
             // Limpiar el formulario
             registerForm.reset();
-
+    
             // Opcional: Cambiar a la pestaña de inicio de sesión
             setTimeout(() => {
                 loginTab.click();
@@ -278,5 +298,4 @@
             }, 2000);
         });
     </script>
-</body>
-</html>
+    
