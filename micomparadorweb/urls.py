@@ -30,5 +30,6 @@ urlpatterns = [
     path('productos/', productos_views.producto, name='productos'),
     path('reset-password/', usuario_views.reset_password, name='reset_password'),
     path('buscador/', include('buscador.urls')), 
+    path('cart/', include('cart.urls'))
     
 ]
