@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 
 # Definir el formulario de registro dentro de la vista
 class RegistroForm(UserCreationForm):
@@ -14,6 +15,13 @@ class RegistroForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+    # Solo puede haber un usuario por correo
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("Este correo electrónico ya está registrado.")
+        return email
 
 # Vista que maneja el inicio de sesión y registro
 def mi_cuenta(request):
