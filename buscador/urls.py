@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import buscador_productos
+from . import views
 
 urlpatterns = [
-    path('buscar/', buscador_productos, name='buscar_productos'), #para llevarlo al html
+    path('buscar/', views.buscador_productos, name='buscar_productos'), #para llevarlo al html
 ]
