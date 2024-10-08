@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Cuenta</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column; /* Para alinear el botón arriba */
+        }
+
+        /* Botón para volver al inicio */
+        .back-btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px; /* Espacio entre el botón y el contenedor */
+            transition: background-color 0.3s ease;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .back-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Contenedor principal */
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        /* Título */
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Texto general */
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Estilos para las credenciales */
+        .credentials p {
+            font-size: 18px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .credentials span {
+            font-weight: bold;
+            color: #478ac9; /* Color del texto destacado */
+        }
+
+        /* Botón de cierre de sesión */
+        .logout-btn {
+            display: inline-block;
+            background-color: #478ac9;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #367bb7;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botón para volver al inicio -->
+    <a href="index.html" class="back-btn">Volver al inicio</a>
+
+    <div class="container">
+        <h1>Esta es tu cuenta</h1>
+        <p>Aquí puedes ver la información de tu cuenta registrada:</p>
+
+        <div class="credentials">
+            <p><strong>Usuario:</strong> <span id="username"></span></p>
+            <p><strong>Correo:</strong> <span id="email"></span></p>
+        </div>
+
+        <!-- Botón de cierre de sesión -->
+        <a href="mi-cuenta.html" class="logout-btn" id="logout-btn">Cerrar sesión</a>
+    </div>
+
+    <script>
+        // Recuperar las credenciales almacenadas en sessionStorage
+        const sessionUsername = sessionStorage.getItem('username');
+        const sessionEmail = sessionStorage.getItem('email');
+
+        // Mostrar las credenciales en los elementos correspondientes
+        if (sessionUsername && sessionEmail) {
+            document.getElementById('username').textContent = sessionUsername;
+            document.getElementById('email').textContent = sessionEmail;
+        } else {
+            // Si no hay información, redirigir al inicio de sesión
+            window.location.href = 'mi-cuenta.html';
+        }
+
+        // Cerrar sesión
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            sessionStorage.clear(); // Limpiar toda la información de sessionStorage
+        });
+    </script>
+</body>
+</html>
