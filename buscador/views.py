@@ -3,7 +3,7 @@ from .models import ProductoTablaAlcampo, ProductoTablaCarrefour, ProductoTablaE
 # Create your views here.
 def buscador_productos(request):
     print("La vista buscar_productos se ha llamado")
-    query= request.GET.get('search', '').strip()
+    query= request.GET.get('s', '').strip()
     print(f"Consulta de búsqueda: {query}")
     resultados = []
 
