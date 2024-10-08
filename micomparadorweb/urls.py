@@ -29,6 +29,7 @@ urlpatterns = [
     path('supermercados/', supermercados_views.supermercado, name='supermercados'),
     path('productos/', productos_views.producto, name='productos'),
     path('reset-password/', usuario_views.reset_password, name='reset_password'),
-    path('buscador/',buscar_views.buscador_productos, name='buscar_productos'), 
+    path('buscador/',buscar_views.buscador_productos, name='buscar_productos'),
+    path('cart/', include('cart.urls')),
     
 ]
