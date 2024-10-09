@@ -12,19 +12,26 @@ def buscador_productos(request):
 
     if query:
         # Dividir la búsqueda en palabras para buscar cada una por separado
-        palabras_buscadas = query.split()
+        palabras = query.split()
 
-        # Crear una consulta con Q objects para que cada palabra se busque en el nombre
-        consulta = Q()
-        for palabra in palabras_buscadas:
-            consulta &= (
-                Q(nombre__icontains=palabra)
-            )
+        productos_encontrados = set()
 
-    if query:
-        resultados += list(ProductoTablaAlcampo.objects.filter(consulta))
-        resultados +=list(ProductoTablaCarrefour.objects.filter(consulta))
-        resultados +=list(ProductoTablaEroski.objects.filter(consulta))
+        # Función para filtrar productos
+        def filtrar_productos(productos):
+            for producto in productos:
+                # Obtener el nombre del producto en minúsculas
+                nombre_producto = producto.nombre.lower()
+                # Verificar si todas las palabras están en el nombre del producto
+                if all(palabra in nombre_producto.split() for palabra in palabras):
+                    productos_encontrados.add(producto)
+
+        # Filtrar productos de cada tabla
+        filtrar_productos(ProductoTablaAlcampo.objects.all())
+        filtrar_productos(ProductoTablaCarrefour.objects.all())
+        filtrar_productos(ProductoTablaEroski.objects.all())
+
+        resultados = list(productos_encontrados)
+
     print(f"Resultados encontrados: {resultados}") 
     
     if ordenar_por == 'precio':

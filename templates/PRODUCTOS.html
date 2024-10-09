@@ -55,7 +55,15 @@
           </div>
           <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
         </div>
-      </nav><form action="#" class="u-border-1 u-border-grey-30 u-search u-search-left u-white u-search-1" data-href="{% url 'buscar_productos'%}">
+      </nav>
+      <form action="#" class="u-border-1 u-border-grey-30 u-search u-search-left u-white u-search-1" data-href="{% url 'buscar_productos'%}">
+        <label for="orden">Ordenar por:</label>
+        <select name="orden">
+            <option value="precio_asc">Precio (menor a mayor)</option>
+            <option value="precio_desc">Precio (mayor a menor)</option>
+            <option value="precio_kg_asc">Precio por kg (menor a mayor)</option>
+            <option value="precio_kg_desc">Precio por kg (mayor a menor)</option>
+        </select>
         <button class="u-search-button" type="submit">
           <span class="u-search-icon u-spacing-10">
             <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966"><use xlink:href="#svg-5d34"></use></svg>
@@ -67,7 +75,36 @@
     <section class="u-clearfix u-section-1" id="sec-0423">
       <div class="u-clearfix u-sheet u-sheet-1"></div>
     </section>
+    <h1>Todos los Productos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Precio por kg</th>
+                <th>Imagen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto.nombre }}</td>
+                <td>{{ producto.precio }}</td>
+                <td>{{ producto.precio_por_kg }}</td>
+                <td>
+                    <img src="{{ producto.link_imagen }}" alt="{{ producto.nombre }}" style="width: 100px; height: auto;">
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No hay productos disponibles.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
     <section class="u-align-center u-clearfix u-container-align-center u-grey-5 u-section-2" id="sec-94fc">
+    
       
       
       
@@ -151,4 +188,5 @@
       </p>
     </section>
   
-</body></html>
+</body>
+</html>
