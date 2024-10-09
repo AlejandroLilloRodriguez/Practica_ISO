@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'supermercados',
     'productos',
     'buscador',
-    'cart'
+    'carrito',
 ]
 
 MIDDLEWARE = [
