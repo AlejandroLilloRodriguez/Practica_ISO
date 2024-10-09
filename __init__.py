@@ -118,7 +118,7 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales_carrefour):
 
             aceptar_cookies(driver)
 
-            tiempo_maximo_scroll = 30
+            tiempo_maximo_scroll = 50
             tiempo_inicial = time.time()
             while (time.time() - tiempo_inicial)< tiempo_maximo_scroll:
                 
@@ -133,7 +133,9 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales_carrefour):
                 try:
                     # Esperar hasta que los productos estén presentes en el DOM
                     WebDriverWait(driver, 10).until(
-                        EC.presence_of_all_elements_located((By.CLASS_NAME, 'product-card'))
+                        EC.presence_of_all_elements_located((By.CLASS_NAME, 'product-card')),
+                        EC.presence_of_element_located((By.XPATH, "//img[starts-with(@src, 'http')]"))
+
                     )
 
                     soup= BeautifulSoup(driver.page_source, 'html.parser')                  ## guardamos en la variable soup el contenido de la pagina
@@ -164,20 +166,33 @@ def hlml_carrefour(url_base, palabra_filtro, productos_totales_carrefour):
                             print(precio_kg)
                         
                         nombre_supermercado = 'carrefour'
-                        #imagen_tag = bucle.find('a', class_='product-card__media-link track-click').find('img')
-                        #link_imagen = imagen_tag['src'] if imagen_tag else None
+                        imagen_tag = bucle.find('a', class_='product-card__media-link track-click').find('img')
+                        if imagen_tag:
+                            link_imagen = imagen_tag.get('src', None)
+                            
+                            if link_imagen:
+                                if link_imagen.startswith('http'):
+                                    # Imagen normal con URL
+                                    print(f"Link de la imagen: {link_imagen}")
+                                    productos_totales_carrefour.append({
+                                        'nombre' : nombre_producto,
+                                        'precio' : precio_producto,
+                                        'precio/kg' : precio_kg,
+                                        'link_imagen' : link_imagen,
+                                        'supermercado' : nombre_supermercado
+                                
+                                        })
+                                elif link_imagen.startswith('data:image'):
+                                    # Imagen es un marcador de posición temporal
+                                    print("La imagen está en base64 (posiblemente no cargada completamente)")
+                                else:
+                                    print("Formato de imagen no reconocido.")
 
 
                                
                         
                                ## comparamos si la palabra que buscamos esta en el nombre del producto
-                        productos_totales_carrefour.append({
-                                'nombre' : nombre_producto,
-                                'precio' : precio_producto,
-                                'precio/kg' : precio_kg,
-                                'supermercado' : nombre_supermercado
-                                
-                            })
+                        
                             
                             
                 except Exception as e:

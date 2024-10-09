@@ -27,7 +27,7 @@ urlpatterns = [
     path('mi-cuenta/', usuario_views.mi_cuenta, name='mi_cuenta'),
     path('', principal_views.inicio, name='inicio'),
     path('supermercados/', supermercados_views.supermercado, name='supermercados'),
-    path('productos/', productos_views.producto, name='productos'),
+    path('productos/', productos_views.mostrar_productos, name='productos'),
     path('reset-password/', usuario_views.reset_password, name='reset_password'),
     path('buscador/',buscar_views.buscador_productos, name='buscar_productos'),
     path('cart/', include('cart.urls')),
