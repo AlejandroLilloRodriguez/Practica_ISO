@@ -244,19 +244,29 @@ def html_eroski(url,palabra_filtro,productos_totales_eroski):
                     precio_por_kg = "no disponible"
                 nombre_supermercado = 'eroski'
 
-                #link_tag = producto.find('span', class_ = 'product-image product-image-15923279 actionZoom').find('img')
-                #link_imagen = link_tag['src'] if link_tag else None
-
-                print(nombre_producto, precio_producto, precio_por_kg)
-                productos_totales_eroski.append({'nombre' : nombre_producto,
-                            'nombre' : nombre_producto,
-                            'precio' : precio_producto,
-                            'precio/kg' : precio_por_kg,
-                            'supermercado' : nombre_supermercado 
+                link_tag = producto.find('a', class_='product-image').find('img')
+                if link_tag:
+                            link_imagen = link_tag.get('src', None)
                             
-                        })
+                            if link_imagen:
+                                if link_imagen.startswith('http'):
+                                    # Imagen normal con URL
+                                    print(f"Link de la imagen: {link_imagen}")
+                                    productos_totales_eroski.append({
+                                        'nombre' : nombre_producto,
+                                        'precio' : precio_producto,
+                                        'precio/kg' : precio_por_kg,
+                                        'link_imagen' : link_imagen,
+                                        'supermercado' : nombre_supermercado
+                                
+                                        })
+                                elif link_imagen.startswith('data:image'):
+                                    # Imagen es un marcador de posición temporal
+                                    print("La imagen está en base64 (posiblemente no cargada completamente)")
+                                else:
+                                    print("Formato de imagen no reconocido.")
                 
-                # Cuando estamos buscando los productos, los comparamos con nombreproducto y si es el indicado, se guarda en la lista 
+                                # Cuando estamos buscando los productos, los comparamos con nombreproducto y si es el indicado, se guarda en la lista 
 
 
             driver.quit()
