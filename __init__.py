@@ -219,10 +219,15 @@ def html_eroski(url,palabra_filtro,productos_totales_eroski):
         while True: #este metodo sirve para cargar todos los datos de la url
             last_height = driver.execute_script("return document.body.scrollHeight")
             while True:
-                
-            # Desplazarse hacia abajo
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(2)  # Esperar unos segundos para que carguen los nuevos productos
+                time.sleep(4)
+                try:
+                    WebDriverWait(driver, 10).until(
+                        EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'img.product-img'))
+                    )
+                except:
+                    print("No se han encontrado más imágenes o ha habido un error.")
+                    
 
             # Calcular nueva altura después de desplazarse
                 new_height = driver.execute_script("return document.body.scrollHeight")
@@ -244,7 +249,7 @@ def html_eroski(url,palabra_filtro,productos_totales_eroski):
                     precio_por_kg = "no disponible"
                 nombre_supermercado = 'eroski'
 
-                link_tag = producto.find('a', class_='product-image').find('img')
+                link_tag = producto.find('img', class_='product-img')
                 if link_tag:
                             link_imagen = link_tag.get('src', None)
                             
