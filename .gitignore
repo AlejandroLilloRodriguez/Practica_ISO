@@ -6,4 +6,5 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-micomparadorweb/settings_local.py
+micomparadorweb/settings_local.py*.pyc
+__pycache__/

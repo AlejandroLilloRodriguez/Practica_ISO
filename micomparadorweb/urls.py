@@ -21,6 +21,7 @@ from principal import views as principal_views
 from supermercados import views as supermercados_views
 from productos import views as productos_views
 from buscador import views as buscar_views
+from carrito import views as carrito_views
 from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +31,6 @@ urlpatterns = [
     path('productos/', productos_views.mostrar_productos, name='productos'),
     path('reset-password/', usuario_views.reset_password, name='reset_password'),
     path('buscador/',buscar_views.buscador_productos, name='buscar_productos'),
-    path('cart/', include('cart.urls')),
+    path('carrito/', carrito_views.vista_carrito, name='carrito'),
     
 ]
