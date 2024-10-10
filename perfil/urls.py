@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import views
+from .views import perfil
 
 urlpatterns = [
-    path('perfil/', views.perfil , name='perfil'),
+    path('', perfil, name='perfil'),  # Ruta para la vista de perfil
 ]

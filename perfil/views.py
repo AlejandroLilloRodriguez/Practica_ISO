@@ -4,14 +4,14 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django import forms
 
-# Si deseas permitir que el usuario edite su perfil, puedes crear un formulario personalizado
+# Formulario para editar el perfil
 class PerfilForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
 
 # Vista para ver o editar el perfil
-@login_required  # Asegura que solo los usuarios autenticados puedan acceder
+@login_required
 def perfil(request):
     user = request.user
 
