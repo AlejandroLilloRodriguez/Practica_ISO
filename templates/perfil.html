@@ -3,10 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de {{ usuario.username }}</title>
+    <title>Perfil de usuario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .success {
+            background-color: #4CAF50;
+        }
+
+        .error {
+            background-color: #f44336;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box; /* Asegura que el padding esté incluido en el width */
+        }
+
+        button {
+            background-color: #478ac9;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #367bb7;
+        }
+
+        .logout-btn {
+            background-color: #f44336;
+        }
+
+        .logout-btn:hover {
+            background-color: #c62828;
+        }
+
+        a {
+            margin-top: 20px;
+            display: inline-block;
+            text-decoration: none;
+            color: #478ac9;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Perfil de {{ usuario.username }}</h1> <!-- Aquí se muestra el nombre del usuario -->
+
+<div class="container">
+    <h1>Perfil de {{ usuario.username }}</h1>
 
     {% if messages %}
         {% for message in messages %}
@@ -16,15 +111,22 @@
 
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}  <!-- Este debería mostrar el campo de entrada -->
-        <button type="submit">Actualizar Perfil</button>
+        <label for="{{ form.username.id_for_label }}">Username:</label>
+        <input type="text" name="username" id="{{ form.username.id_for_label }}" value="{{ form.username.value|default:'' }}" required>
+
+        <label for="{{ form.email.id_for_label }}">Email address:</label>
+        <input type="email" name="email" id="{{ form.email.id_for_label }}" value="{{ form.email.value|default:'' }}" required>
+
+        <button type="submit">Guardar cambios</button>
     </form>
 
     <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+        <button type="submit" class="logout-btn">Cerrar Sesión</button>
     </form>
 
     <p><a href="{% url 'inicio' %}">Volver al inicio</a></p>
+</div>
+
 </body>
 </html>
