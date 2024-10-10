@@ -57,7 +57,7 @@ def mi_cuenta(request):
                 if user is not None:
                     login(request, user)
                     messages.success(request, "Inicio de sesión realizado exitosamente.")
-                    return redirect('perfil')  # Redirige a la página de perfil
+                    return redirect('inicio')  # Redirige a la página de perfil
                 else:
                     messages.error(request, "Usuario o contraseña incorrectos")  # Solo se muestra si no se autentica
             else:
