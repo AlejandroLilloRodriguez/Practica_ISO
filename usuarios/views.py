@@ -84,21 +84,18 @@ def mi_cuenta(request):
     })
 
 # Vista para restablecer contraseña
+@login_required
 def reset_password(request):
     if request.method == 'POST':
         form = ResetPasswordForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
             new_password = form.cleaned_data.get('new_password')
-
-            try:
-                user = User.objects.get(username=username)
-                user.password = make_password(new_password)  # Encriptar la nueva contraseña
-                user.save()
-                messages.success(request, f'La contraseña ha sido restablecida para el usuario {username}.')
-                return redirect('inicio')  # Redirigir a la página de inicio u otra página
-            except User.DoesNotExist:
-                messages.error(request, 'El nombre de usuario no existe.')
+            
+            # Actualizar la contraseña del usuario actual
+            request.user.password = make_password(new_password)
+            request.user.save()
+            messages.success(request, 'Contraseña actualizada con éxito.')
+            return redirect('perfil')  # Redirigir al perfil después de la actualización
     else:
         form = ResetPasswordForm()
 

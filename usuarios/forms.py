@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 
 
 class ResetPasswordForm(forms.Form):
-    username = forms.CharField(max_length=150, required=True, label="Nombre de usuario")
     new_password = forms.CharField(widget=forms.PasswordInput, required=True, label="Nueva contraseña")
     confirm_password = forms.CharField(widget=forms.PasswordInput, required=True, label="Confirmar nueva contraseña")
 

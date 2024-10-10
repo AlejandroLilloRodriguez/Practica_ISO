@@ -55,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+
 
 ]
 
@@ -131,4 +133,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Nos aseguramos de que las sesiones expiren al cerrar el navegador
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+LOGIN_URL = '/mi-cuenta/'  # Asegúrate de que coincida con tu ruta de inicio de sesión
 
