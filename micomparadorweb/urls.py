@@ -23,6 +23,8 @@ from productos import views as productos_views
 from buscador import views as buscar_views
 from carrito import views as carrito_views
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('mi-cuenta/', usuario_views.mi_cuenta, name='mi_cuenta'),
@@ -32,5 +34,8 @@ urlpatterns = [
     path('reset-password/', usuario_views.reset_password, name='reset_password'),
     path('buscador/',buscar_views.buscador_productos, name='buscar_productos'),
     path('carrito/', carrito_views.manejar_carrito, name='carrito'),
+    path('perfil/', include('perfil.urls')),
+    path('logout/', auth_views.LogoutView.as_view(next_page='inicio'), name='logout'),
+
     
 ]
