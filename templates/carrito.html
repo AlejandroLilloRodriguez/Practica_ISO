@@ -7,6 +7,32 @@
     <title>Carrito</title>
 </head>
 <body>
-    <h1>Bienvenido al carrito</h1>
+    <h1>Carrito de Compras</h1>
+
+    <ul>
+        {% for item in carrito_items %}
+        <li>
+            {{ item.producto.nombre }} - {{ item.cantidad }} x {{ item.producto.precio }} €
+            <form method="POST" action="{% url 'manejar_carrito' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="eliminar">
+                <input type="hidden" name="producto_id" value="{{ item.producto.id }}">
+                <button type="submit">Eliminar</button>
+            </form>
+            <form method="POST" action="{% url 'manejar_carrito' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="modificar">
+                <input type="hidden" name="producto_id" value="{{ item.producto.id }}">
+                <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1">
+                <button type="submit">Modificar</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    
+    <p>Total: {{ total }} €</p>
+    
+    <a href="{% url 'productos' %}">Seguir comprando</a>
+    
 </body>
 </html>

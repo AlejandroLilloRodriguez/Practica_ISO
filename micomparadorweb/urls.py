@@ -31,6 +31,6 @@ urlpatterns = [
     path('productos/', productos_views.mostrar_productos, name='productos'),
     path('reset-password/', usuario_views.reset_password, name='reset_password'),
     path('buscador/',buscar_views.buscador_productos, name='buscar_productos'),
-    path('carrito/', carrito_views.vista_carrito, name='carrito'),
+    path('carrito/', carrito_views.manejar_carrito, name='carrito'),
     
 ]
