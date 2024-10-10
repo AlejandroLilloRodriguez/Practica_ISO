@@ -37,17 +37,21 @@ def mi_cuenta(request):
         if 'login' in request.POST:
             login_form = AuthenticationForm(request, data=request.POST)
             registro_form = RegistroForm()  # Mantener el formulario de registro vacío
+            
             if login_form.is_valid():
                 username = login_form.cleaned_data.get('username')
                 password = login_form.cleaned_data.get('password')
                 user = authenticate(username=username, password=password)
+
+                # Verificar si el usuario se autentica correctamente
                 if user is not None:
                     login(request, user)
-                    messages.success(request, f"Bienvenido, {username}")
                     return redirect('inicio')  # Redirige a la página de inicio
                 else:
-                    messages.error(request, "Usuario o contraseña incorrectos")
-        
+                    messages.error(request, "Usuario o contraseña incorrectos")  # Solo se muestra si no se autentica
+            else:
+                messages.error(request, "Formulario de inicio de sesión inválido. Verifica los campos.")  # Mensaje de error si el formulario no es válido
+
         # Manejo del formulario de registro
         elif 'register' in request.POST:
             registro_form = RegistroForm(request.POST)
@@ -67,6 +71,8 @@ def mi_cuenta(request):
         'login_form': login_form,
         'registro_form': registro_form,
     })
+
+
 
 
 # Vista para restablecer contraseña
