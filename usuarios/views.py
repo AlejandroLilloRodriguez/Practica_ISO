@@ -10,7 +10,6 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
 from .forms import ResetPasswordForm
 
-
 # Definir el formulario de registro dentro de la vista
 class RegistroForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -26,6 +25,17 @@ class RegistroForm(UserCreationForm):
             raise ValidationError("Este correo electrónico ya está registrado.")
         return email
 
+# Formulario para cambiar usuario y email
+class CambiarUsuarioForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']  # Campos a actualizar
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Este nombre de usuario ya está en uso.")
+        return username
 
 # Vista que maneja el inicio de sesión y registro
 def mi_cuenta(request):
@@ -46,7 +56,8 @@ def mi_cuenta(request):
                 # Verificar si el usuario se autentica correctamente
                 if user is not None:
                     login(request, user)
-                    return redirect('inicio')  # Redirige a la página de inicio
+                    messages.success(request, "Inicio de sesión realizado exitosamente.")
+                    return redirect('perfil')  # Redirige a la página de perfil
                 else:
                     messages.error(request, "Usuario o contraseña incorrectos")  # Solo se muestra si no se autentica
             else:
@@ -72,9 +83,6 @@ def mi_cuenta(request):
         'registro_form': registro_form,
     })
 
-
-
-
 # Vista para restablecer contraseña
 def reset_password(request):
     if request.method == 'POST':
@@ -96,40 +104,21 @@ def reset_password(request):
 
     return render(request, 'reset_password.html', {'form': form})
 
-
 # Vista para editar perfil (accesible solo si está autenticado)
 @login_required
 def editar_perfil(request):
     if request.method == 'POST':
-        # Obtener el usuario actual
         usuario = request.user
+        form = CambiarUsuarioForm(request.POST, instance=usuario)  # Usar el nuevo formulario
 
-        # Obtener los nuevos datos enviados por el formulario
-        nuevo_username = request.POST.get('username')
-        nueva_password = request.POST.get('password')
-        nueva_password_confirm = request.POST.get('password_confirm')
-
-        # Verificar si el nombre de usuario cambió
-        if nuevo_username and nuevo_username != usuario.username:
-            # Actualizar el nombre de usuario
-            if User.objects.filter(username=nuevo_username).exists():
-                messages.error(request, "El nombre de usuario ya está en uso.")
-            else:
-                usuario.username = nuevo_username
-                messages.success(request, "Nombre de usuario actualizado.")
-
-        # Verificar si la contraseña cambió y es válida
-        if nueva_password and nueva_password == nueva_password_confirm:
-            usuario.password = make_password(nueva_password)
-            messages.success(request, "Contraseña actualizada con éxito.")
-        elif nueva_password and nueva_password != nueva_password_confirm:
-            messages.error(request, "Las contraseñas no coinciden.")
-
-        # Guardar los cambios en el usuario
-        usuario.save()
-
-        return redirect('perfil')
+        if form.is_valid():
+            form.save()  # Guarda el nuevo nombre de usuario y email
+            messages.success(request, "Perfil actualizado con éxito.")
+            return redirect('perfil')  # Redirigir a la página del perfil
+    else:
+        form = CambiarUsuarioForm(instance=request.user)  # Cargar el formulario con el usuario actual
 
     return render(request, 'perfil.html', {
+        'form': form,
         'usuario': request.user  # Pasamos el usuario autenticado al template
     })

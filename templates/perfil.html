@@ -3,23 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de usuario</title>
+    <title>Perfil de {{ usuario.username }}</title>
 </head>
 <body>
-    <h1>Perfil de {{ user.username }}</h1>
+    <h1>Perfil de {{ usuario.username }}</h1> <!-- Aquí se muestra el nombre del usuario -->
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
 
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Actualizar perfil</button>
+        {{ form.as_p }}  <!-- Este debería mostrar el campo de entrada -->
+        <button type="submit">Actualizar Perfil</button>
     </form>
 
-    <!-- Botón de cerrar sesión -->
     <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
     </form>
-
 
     <p><a href="{% url 'inicio' %}">Volver al inicio</a></p>
 </body>
