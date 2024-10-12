@@ -24,7 +24,52 @@
     <meta name="theme-color" content="#478ac9">
     <meta property="og:title" content="PRODUCTOS">
     <meta property="og:type" content="website">
-  <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
+  <meta data-intl-tel-input-cdn-path="intlTelInput/">
+
+  <style>
+    /* Estilos para centrar y estilizar la tabla */
+    table {
+        width: 80%;
+        margin: 0 auto;
+        border-collapse: collapse;
+        text-align: center;
+    }
+
+    th, td {
+        padding: 15px;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    img {
+        width: 100px;
+        height: auto;
+    }
+
+    button {
+        padding: 10px 15px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    /* Estilo de la tabla cuando no hay productos */
+    td[colspan="5"] {
+        text-align: center;
+        color: #666;
+    }
+</style>
+
+</head>
   <body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="es"><header class="u-clearfix u-header u-header" id="sec-95a3"><a href="#" class="u-image u-logo u-image-1">
         <img src="../static/images/default-logo.png" class="u-logo-image u-logo-image-1">
       </a><nav class="u-menu u-menu-one-level u-offcanvas u-menu-1">
@@ -77,7 +122,9 @@
     <section class="u-clearfix u-section-1" id="sec-0423">
       <div class="u-clearfix u-sheet u-sheet-1"></div>
     </section>
-    <h1>Todos los Productos</h1>
+
+
+    <h1 style="text-align: center;">Todos los Productos</h1>
     <table>
         <thead>
             <tr>
@@ -85,6 +132,7 @@
                 <th>Precio</th>
                 <th>Precio por kg</th>
                 <th>Imagen</th>
+                <th>Añadir al carrito</th>
             </tr>
         </thead>
         <tbody>
@@ -94,17 +142,25 @@
                 <td>{{ producto.precio }}</td>
                 <td>{{ producto.precio_por_kg }}</td>
                 <td>
-                    <img src="{{ producto.link_imagen }}" alt="{{ producto.nombre }}" style="width: 100px; height: auto;">
+                    <img src="{{ producto.link_imagen }}" alt="{{ producto.nombre }}">
+                </td>
+                <td>
+                    <form action="{% url 'carrito' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="producto_nombre" value="{{ producto.nombre }}">
+                        <input type="hidden" name="producto_precio" value="{{ producto.precio }}">
+                        <input type="hidden" name="action" value="agregar">
+                        <button type="submit">Añadir al carrito</button>
+                    </form>
                 </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="4">No hay productos disponibles.</td>
+                <td colspan="5">No hay productos disponibles.</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-
     <section class="u-align-center u-clearfix u-container-align-center u-grey-5 u-section-2" id="sec-94fc">
     
       
@@ -181,14 +237,7 @@
     <footer class="u-align-center u-clearfix u-container-align-center u-footer u-grey-80 u-footer" id="sec-f02f"><div class="u-clearfix u-sheet u-sheet-1">
         <p class="u-small-text u-text u-text-variant u-text-1">Texto de muestra. Haz click para seleccionar el elemento de Texto.</p>
       </div></footer>
-    <section class="u-backlink u-clearfix u-grey-80">
-      <p class="u-text">
-        <span>This site was created with the </span>
-        <a class="u-link" href="https://nicepage.com/" target="_blank" rel="nofollow">
-          <span>Nicepage</span>
-        </a>
-      </p>
-    </section>
+   
   
 </body>
 </html>

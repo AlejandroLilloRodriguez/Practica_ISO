@@ -8,31 +8,42 @@
 </head>
 <body>
     <h1>Carrito de Compras</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre del Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Precio por kg</th>
+                <th>Imagen</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in carrito_items %}
+            {% load custom_filters %}
 
-    <ul>
-        {% for item in carrito_items %}
-        <li>
-            {{ item.producto.nombre }} - {{ item.cantidad }} x {{ item.producto.precio }} €
-            <form method="POST" action="{% url 'manejar_carrito' %}">
-                {% csrf_token %}
-                <input type="hidden" name="action" value="eliminar">
-                <input type="hidden" name="producto_id" value="{{ item.producto.id }}">
-                <button type="submit">Eliminar</button>
-            </form>
-            <form method="POST" action="{% url 'manejar_carrito' %}">
-                {% csrf_token %}
-                <input type="hidden" name="action" value="modificar">
-                <input type="hidden" name="producto_id" value="{{ item.producto.id }}">
-                <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1">
-                <button type="submit">Modificar</button>
-            </form>
-        </li>
-        {% endfor %}
-    </ul>
+            <tr>
+                <td>{{ item.producto.nombre }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>{{ item.precio|floatformat:2 }}</td>
+                <td>{{ item.precio_por_kg }}</td>
+                <td>
+                    <img src="{{ item.imagen }}" alt="{{ item.nombre }}" style="width: 100px; height: auto;">
+                </td>
+ 
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No hay productos en el carrito.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     
-    <p>Total: {{ total }} €</p>
+    <p>Total a pagar: {{ total|floatformat:2 }}</p>
     
-    <a href="{% url 'productos' %}">Seguir comprando</a>
+    <a href="{% url 'productos' %}">Seguir Comprando</a>
     
 </body>
 </html>
