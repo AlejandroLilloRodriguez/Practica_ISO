@@ -42,20 +42,20 @@ def manejar_carrito(request):
         
         carrito = request.session['carrito']
 
-
         if action == 'agregar':
             if producto_id in carrito:
                 carrito[producto_id]['cantidad'] += 1
             else:
                 # Añadir producto con cantidad 1
-                carrito[producto_id] = {'nombre': producto_nombre, 
-                                        'precio': producto_precio_float, 
-                                        'cantidad': 1, 
-                                        'imagen': producto_imagen, 
-                                        'precio_por_kg': producto_precio_por_kg}
-            
-            print(f"Carrito actualizado: {carrito}")
+                carrito[producto_id] = {
+                    'nombre': producto_nombre,
+                    'precio': producto_precio_float,  # Ya está limpio
+                    'cantidad': 1,
+                    'imagen': producto_imagen,
+                    'precio_por_kg': producto_precio_por_kg
+                }
 
+            print(f"Carrito actualizado: {carrito}")
 
         elif action == 'eliminar':
             if producto_id in carrito:
@@ -79,16 +79,17 @@ def manejar_carrito(request):
     for item in carrito_items.values():
         # Asegúrate de que 'precio' y 'cantidad' están en el item
         if 'precio' in item and 'cantidad' in item:
-            # Limpiar el precio antes de convertirlo
-            item_precio = limpiar_precio(item['precio'])  # Limpiar el precio aquí
+            # El precio ya está limpio, no es necesario limpiarlo de nuevo
+            item_precio = item['precio']  # Ya debería ser float
             item_cantidad = int(item['cantidad'])  # Asegúrate de que sea un entero
             item_total = item_precio * item_cantidad  # Calcular el total por item
             total += item_total  # Acumular el total
-        print(item)  # Para verificar el contenido de cada item en el carrito
 
-
-    print(f"Precio: {item['precio']}, Tipo: {type(item['precio'])}")
-    print(f"Cantidad: {item['cantidad']}, Tipo: {type(item['cantidad'])}")
+            # Imprimir dentro del bucle para evitar errores
+            print(f"Precio: {item['precio']}, Tipo: {type(item['precio'])}")
+            print(f"Cantidad: {item['cantidad']}, Tipo: {type(item['cantidad'])}")
+        else:
+            print(f"Item no válido: {item}")
 
     # Redirige a la página donde se muestra el carrito con los productos añadidos
     return render(request, 'carrito.html', {'carrito_items': carrito_items, 'total': total})
