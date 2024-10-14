@@ -85,7 +85,7 @@
                 <th>Precio</th>
                 <th>Precio por kg</th>
                 <th>Imagen</th>
-                <th>Total</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -97,6 +97,17 @@
                 <td>{{ item.precio_por_kg }}</td>
                 <td>
                     <img src="{{ item.imagen }}" alt="{{ item.nombre }}">
+                </td>
+                <td>
+                    <form method="POST" action="{% url 'carrito' %}">                        
+                        {% csrf_token %}
+                        <input type="hidden" name="producto_nombre" value="{{ item.nombre }}">
+                        <input type="hidden" name="producto_precio" value="{{ item.precio }}">
+                        <input type="hidden" name="producto_precio_por_kg" value="{{ item.precio_por_kg }}">
+                        <input type="hidden" name="producto_imagen" value="{{ item.imagen }}">
+                        <input type="hidden" name="action" value="eliminar">
+                        <button type="submit" class="btn-eliminar">Eliminar</button>
+                    </form>
                 </td>
                
             </tr>
