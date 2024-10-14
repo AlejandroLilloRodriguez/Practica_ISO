@@ -7,6 +7,7 @@
     <title>Carrito</title>
 </head>
 <body>
+    {% load custom_filters %}
     <h1>Carrito de Compras</h1>
     <table>
         <thead>
@@ -21,8 +22,6 @@
         </thead>
         <tbody>
             {% for item in carrito_items %}
-            {% load custom_filters %}
-
             <tr>
                 <td>{{ item.producto.nombre }}</td>
                 <td>{{ item.cantidad }}</td>
@@ -31,11 +30,11 @@
                 <td>
                     <img src="{{ item.imagen }}" alt="{{ item.nombre }}" style="width: 100px; height: auto;">
                 </td>
- 
+                
             </tr>
-            {% empty %}
+                {% empty %}
             <tr>
-                <td colspan="4">No hay productos en el carrito.</td>
+                <td colspan="6">No hay productos en el carrito.</td>
             </tr>
             {% endfor %}
         </tbody>
