@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión / Registrarse</title>
     <link rel="stylesheet" href="../static/css/styles.css">
-    <!-- Puedes incluir tus otras hojas de estilo aquí -->
     <style>
         /* Estilos específicos para este archivo */
 
@@ -68,6 +67,12 @@
             font-weight: bold;
         }
 
+        .password-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
         input[type="text"],
         input[type="email"],
         input[type="password"] {
@@ -76,6 +81,12 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
         }
 
         button {
@@ -113,7 +124,6 @@
             to {opacity: 1;}
         }
 
-        /* Mensajes de error o éxito */
         .message {
             margin-top: 10px;
             font-size: 14px;
@@ -128,7 +138,6 @@
             color: red;
         }
 
-        /* Responsive */
         @media (max-width: 500px) {
             .container {
                 width: 100%;
@@ -136,10 +145,6 @@
                 border-radius: 0;
             }
         }
-
-
-
-
     </style>
 </head>
 <body>
@@ -156,7 +161,10 @@
                 <input type="text" id="login-username" name="username" required>
 
                 <label for="login-password">Contraseña:</label>
-                <input type="password" id="login-password" name="password" required>
+                <div class="password-container">
+                    <input type="password" id="login-password" name="password" required>
+                    <span class="show-password" onclick="togglePasswordVisibility()">👁️</span>
+                </div>
 
                 <button type="submit" name="login">Iniciar Sesión</button>
                 <p class="message" id="login-message"></p>
@@ -183,6 +191,7 @@
                 <button type="submit" name="register">Registrarse</button>
                 <p class="message" id="register-message"></p>
             </form>
+
             <!-- Mostrar mensajes de Django -->
             {% if messages %}
             {% for message in messages %}
@@ -199,13 +208,8 @@
                 {{ registro_form.errors }}
             </div>
             {% endif %}
-
-
         </div>
     </div>
-
-    
-
 
     <script>
         // JavaScript para alternar entre formularios
@@ -228,7 +232,15 @@
             loginForm.classList.remove('active');
         });
 
-       
+        // Función para mostrar/ocultar la contraseña
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById('login-password');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
+            }
+        }
     </script>
 </body>
 </html>
