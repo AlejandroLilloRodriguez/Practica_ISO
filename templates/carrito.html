@@ -88,6 +88,7 @@
     <table>
         <thead>
             <tr>
+                <th>Supermercado</th>
                 <th>Nombre del Producto</th>
                 <th>Cantidad</th>
                 <th>Precio</th>
@@ -99,6 +100,7 @@
         <tbody>
             {% for producto_id, item in carrito_items.items %}
             <tr>
+                <td>{{ item.supermercado }}</td>
                 <td>{{ item.nombre }}</td>
                 <td>{{ item.cantidad }}</td>
                 <td>{{ item.precio|floatformat:2 }}€</td>
@@ -109,6 +111,7 @@
                 <td>
                     <form method="POST" action="{% url 'carrito' %}">                        
                         {% csrf_token %}
+                        <input type="hidden" name="producto_supermercado" value="{{ item.supermercado }}">
                         <input type="hidden" name="producto_nombre" value="{{ item.nombre }}">
                         <input type="hidden" name="producto_precio" value="{{ item.precio }}">
                         <input type="hidden" name="producto_precio_por_kg" value="{{ item.precio_por_kg }}">

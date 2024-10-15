@@ -29,6 +29,7 @@ def manejar_carrito(request):
         producto_precio = request.POST.get('producto_precio')
         producto_precio_por_kg = request.POST.get('producto_precio_por_kg')  # Añadido
         producto_imagen = request.POST.get('producto_imagen')  # Añadido
+        producto_supermercado = request.POST.get('producto_supermercado')  # Añadido
 
         # Limpiar el precio y convertirlo en float
         producto_precio_float = limpiar_precio(producto_precio)
@@ -48,6 +49,7 @@ def manejar_carrito(request):
             else:
                 # Añadir producto con cantidad 1
                 carrito[producto_id] = {
+                    'supermercado': producto_supermercado,
                     'nombre': producto_nombre,
                     'precio': producto_precio_float,  # Ya está limpio
                     'cantidad': 1,

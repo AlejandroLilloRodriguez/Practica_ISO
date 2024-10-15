@@ -401,10 +401,10 @@ def insertar_producto(db, producto):
         
         
         sql = f"""
-        INSERT INTO {tabla} (nombre, precio, precio_por_kg, link_imagen) 
+        INSERT INTO {tabla} (nombre, precio, precio_por_kg, link_imagen, supermercado) 
         VALUES (%s, %s, %s, %s)
         """
-        valores = (producto['nombre'], producto['precio'], producto.get('precio/kg', None), producto.get('imagen', None))
+        valores = (producto['nombre'], producto['precio'], producto.get('precio/kg', None), producto.get('imagen', None), producto['supermercado'])
         cursor.execute(sql, valores)
         db.commit()
         print(f"Producto '{producto['nombre']}' insertado correctamente.")

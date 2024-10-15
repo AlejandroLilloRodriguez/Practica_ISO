@@ -6,6 +6,7 @@ class ProductoBase(models.Model):
     precio = models.CharField(max_length=50)  # Precio del producto
     precio_por_kg = models.CharField(max_length=50)  # Precio por kg
     link_imagen = models.CharField(max_length=500)
+    supermercado = models.CharField(max_length=50)  # Supermercado
     class Meta: 
         abstract = True
 
