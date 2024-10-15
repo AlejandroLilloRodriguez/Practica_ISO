@@ -135,9 +135,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 LOGIN_URL = '/mi-cuenta/'  # Asegúrate de que coincida con tu ruta de inicio de sesión
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.office365.com'  # Servidor SMTP de Outlook/Office365
-EMAIL_PORT = 587  # El puerto SMTP
-EMAIL_USE_TLS = True  # Habilitar TLS
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'in-v3.mailjet.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '67c791219612534fec0c14d5c5bdb3ea'  # API Key de Mailjet
+EMAIL_HOST_PASSWORD = 'eceda6c2103450fd10a4027896bc8e9f'  # Secret Key de Mailjet
+DEFAULT_FROM_EMAIL = 'comparadorsupermercados@gmail.com'
