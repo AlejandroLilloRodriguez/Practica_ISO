@@ -8,7 +8,19 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.utils.encoding import force_bytes
 from .forms import ResetPasswordForm
+
+
+email_template_name = "password_reset_email.html"
+
+
+
 
 # Definir el formulario de registro dentro de la vista
 class RegistroForm(UserCreationForm):
@@ -18,7 +30,6 @@ class RegistroForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
-    # Solo puede haber un usuario por correo
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
@@ -29,7 +40,7 @@ class RegistroForm(UserCreationForm):
 class CambiarUsuarioForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email']  # Campos a actualizar
+        fields = ['username', 'email']
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
@@ -46,32 +57,31 @@ def mi_cuenta(request):
         # Manejo del formulario de inicio de sesión
         if 'login' in request.POST:
             login_form = AuthenticationForm(request, data=request.POST)
-            registro_form = RegistroForm()  # Mantener el formulario de registro vacío
+            registro_form = RegistroForm()
             
             if login_form.is_valid():
                 username = login_form.cleaned_data.get('username')
                 password = login_form.cleaned_data.get('password')
                 user = authenticate(username=username, password=password)
 
-                # Verificar si el usuario se autentica correctamente
                 if user is not None:
                     login(request, user)
                     messages.success(request, "Inicio de sesión realizado exitosamente.")
-                    return redirect('inicio')  # Redirige a la página de perfil
+                    return redirect('inicio')
                 else:
-                    messages.error(request, "Usuario o contraseña incorrectos")  # Solo se muestra si no se autentica
+                    messages.error(request, "Usuario o contraseña incorrectos.")
             else:
-                messages.error(request, "Formulario de inicio de sesión inválido. Verifica los campos.")  # Mensaje de error si el formulario no es válido
+                messages.error(request, "Formulario de inicio de sesión inválido.")
 
         # Manejo del formulario de registro
         elif 'register' in request.POST:
             registro_form = RegistroForm(request.POST)
-            login_form = AuthenticationForm()  # Mantener el formulario de inicio de sesión vacío
+            login_form = AuthenticationForm()
             if registro_form.is_valid():
-                user = registro_form.save()  # Crea el nuevo usuario
-                login(request, user)  # Inicia la sesión automáticamente después del registro
+                user = registro_form.save()
+                login(request, user)
                 messages.success(request, "Registro exitoso")
-                return redirect('inicio')  # Redirige a la página de inicio
+                return redirect('inicio')
             else:
                 messages.error(request, "Error en el registro. Inténtalo de nuevo.")
     else:
@@ -83,39 +93,78 @@ def mi_cuenta(request):
         'registro_form': registro_form,
     })
 
-# Vista para restablecer contraseña
+# Vista para solicitar el restablecimiento de la contraseña
+def password_reset_request(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        try:
+            user = User.objects.get(email=email)
+            subject = "Restablecimiento de Contraseña"
+            email_template_name = "password_reset_email.html"
+            context = {
+                "email": user.email,
+                "domain": request.get_host(),
+                "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                "token": default_token_generator.make_token(user),
+            }
+            email_content = render_to_string(email_template_name, context)
+            send_mail(subject, email_content, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=False)
+            messages.success(request, "Se ha enviado un enlace para restablecer la contraseña a tu correo electrónico.")
+        except User.DoesNotExist:
+            messages.error(request, "No existe un usuario con ese correo electrónico.")
+    return render(request, "password_reset_form.html")
+
+
+# Vista para confirmar el restablecimiento de la contraseña
+def password_reset_confirm(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            new_password = request.POST.get('new_password')
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, 'Tu contraseña ha sido restablecida exitosamente.')
+            return redirect('mi_cuenta')
+        return render(request, 'password_reset_confirm.html')
+    else:
+        messages.error(request, 'El enlace para restablecer la contraseña es inválido.')
+        return redirect('mi_cuenta')
+
+# Vista para restablecer contraseña (opcional, si deseas incluir esta vista)
 @login_required
 def reset_password(request):
     if request.method == 'POST':
         form = ResetPasswordForm(request.POST)
         if form.is_valid():
             new_password = form.cleaned_data.get('new_password')
-            
-            # Actualizar la contraseña del usuario actual
-            request.user.password = make_password(new_password)
+            request.user.set_password(new_password)
             request.user.save()
             messages.success(request, 'Contraseña actualizada con éxito.')
-            return redirect('perfil')  # Redirigir al perfil después de la actualización
+            return redirect('perfil')
     else:
         form = ResetPasswordForm()
 
     return render(request, 'reset_password.html', {'form': form})
 
-# Vista para editar perfil (accesible solo si está autenticado)
+# Vista para editar perfil
 @login_required
 def editar_perfil(request):
     if request.method == 'POST':
         usuario = request.user
-        form = CambiarUsuarioForm(request.POST, instance=usuario)  # Usar el nuevo formulario
-
+        form = CambiarUsuarioForm(request.POST, instance=usuario)
         if form.is_valid():
-            form.save()  # Guarda el nuevo nombre de usuario y email
+            form.save()
             messages.success(request, "Perfil actualizado con éxito.")
-            return redirect('perfil')  # Redirigir a la página del perfil
+            return redirect('perfil')
     else:
-        form = CambiarUsuarioForm(instance=request.user)  # Cargar el formulario con el usuario actual
+        form = CambiarUsuarioForm(instance=request.user)
 
     return render(request, 'perfil.html', {
         'form': form,
-        'usuario': request.user  # Pasamos el usuario autenticado al template
+        'usuario': request.user
     })

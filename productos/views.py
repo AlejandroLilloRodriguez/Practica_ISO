@@ -2,6 +2,7 @@ from django.shortcuts import render
 from buscador.models import ProductoTablaAlcampo, ProductoTablaCarrefour, ProductoTablaEroski
 # Create your views here.
 
+
 def mostrar_productos(request):
     # Obtener todos los productos de las diferentes tablas
     productos_alcampo = ProductoTablaAlcampo.objects.all()

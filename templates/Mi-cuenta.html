@@ -161,9 +161,8 @@
                 <button type="submit" name="login">Iniciar Sesión</button>
                 <p class="message" id="login-message"></p>
             
-                <p class="toggle-message">
-                    <a href="{% url 'reset_password' %}">¿Olvidaste tu contraseña?</a>
-                </p>
+                <a href="{% url 'usuarios_reset_password' %}" class="btn">¿Olvidaste tu contraseña?</a>
+
             </form>
 
             <!-- Formulario de Registrarse -->
