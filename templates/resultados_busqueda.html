@@ -4,25 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados de Búsqueda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        td img {
+            width: 100px;
+            height: auto;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn-agregar {
+            background-color: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn-agregar:hover {
+            background-color: #218838;
+        }
+
+        .volver-btn {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+        }
+
+        .volver-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <h1>Resultados de Búsqueda para "{{ query }}"</h1>
 
     {% if resultados %}
-        <ul>
-            {% for producto in resultados %}
-                <li>
-                    <h2>{{ producto.nombre }}</h2>
-                    <p>Precio: {{ producto.precio }}</p>
-                    <p>Precio por kg: {{ producto.precio_por_kg }}</p>
-                    <img src="{{ producto.link_imagen }}" alt="{{ producto.nombre }}" width="100">
-                </li>
-            {% endfor %}
-        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre del Producto</th>
+                    <th>Precio</th>
+                    <th>Precio por kg</th>
+                    <th>Imagen</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in resultados %}
+                <tr>
+                    <td>{{ producto.nombre }}</td>
+                    <td>{{ producto.precio }}€</td>
+                    <td>{% if producto.precio_por_kg %}{{ producto.precio_por_kg }}€/kg{% else %}N/A{% endif %}</td>
+                    <td>
+                        <img src="{{ producto.link_imagen }}" alt="{{ producto.nombre }}">
+                    </td>
+                    <td>
+                        <form method="POST" action="{% url 'carrito' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="producto_nombre" value="{{ producto.nombre }}">
+                            <input type="hidden" name="producto_precio" value="{{ producto.precio }}">
+                            <input type="hidden" name="producto_precio_por_kg" value="{{ producto.precio_por_kg }}">
+                            <input type="hidden" name="producto_imagen" value="{{ producto.link_imagen }}">
+                            <input type="hidden" name="action" value="agregar">
+                            <button type="submit" class="btn-agregar">Añadir al Carrito</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <p>No se encontraron productos que coincidan con tu búsqueda.</p>
     {% endif %}
-    
-    <a href="/">Volver a la búsqueda</a>  <!-- Enlace para volver a la página de búsqueda -->
+
+    <a href="/" class="volver-btn">Volver a la búsqueda</a>
 </body>
 </html>

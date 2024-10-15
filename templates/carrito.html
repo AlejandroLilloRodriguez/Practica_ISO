@@ -72,6 +72,14 @@
             font-weight: bold;
             text-align: center;
         }
+
+        .producto-imagen {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px; /* Para esquinas redondeadas */
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        }
     </style>
 </head>
 <body>
@@ -96,7 +104,7 @@
                 <td>{{ item.precio|floatformat:2 }}€</td>
                 <td>{{ item.precio_por_kg }}</td>
                 <td>
-                    <img src="{{ item.imagen }}" alt="{{ item.nombre }}">
+                    <img src="{{ item.imagen }}" alt="{{ item.nombre }}" class="producto-imagen">
                 </td>
                 <td>
                     <form method="POST" action="{% url 'carrito' %}">                        
