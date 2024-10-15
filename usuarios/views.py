@@ -210,38 +210,3 @@ def password_reset_confirm(request, uidb64, token):
         messages.error(request, "El enlace para restablecer la contraseña no es válido o ha expirado.")
     
     return render(request, "password_reset_confirm.html")
-
-@login_required
-def password_reset_confirm(request, uidb64=None, token=None):
-    try:
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-
-    if user is not None and default_token_generator.check_token(user, token):
-        if request.method == 'POST':
-            new_password = request.POST.get('new_password')
-            confirm_password = request.POST.get('confirm_password')
-
-            if new_password == confirm_password:
-                user.set_password(new_password)
-                user.save()
-
-                # Mantener la sesión activa después del cambio de contraseña
-                update_session_auth_hash(request, user)
-
-                # Añadir mensaje de éxito
-                messages.success(request, "Tu contraseña ha sido cambiada con éxito.")
-
-                # Redirigir a cuenta.html
-                return redirect('cuenta')  # Asegúrate de que 'cuenta' está definida en tu urls.py
-            else:
-                # Error de contraseña no coincidente
-                messages.error(request, "Las contraseñas no coinciden.")
-        else:
-            messages.error(request, "Error al cambiar la contraseña.")
-    else:
-        messages.error(request, "El enlace de restablecimiento de contraseña no es válido o ha expirado.")
-
-    return redirect('mi_cuenta')  # Redirigir a Mi Cuenta en caso de error
