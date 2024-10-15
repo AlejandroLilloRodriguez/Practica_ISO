@@ -7,104 +7,154 @@
     <style>
         /* Estilos generales */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        .container {
+
+        .profile-container {
             background-color: #fff;
+            width: 450px;
+            max-width: 100%;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            max-width: 600px;
-            margin: auto;
-        }
-        h1 {
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
-            color: #333;
-            margin-bottom: 20px;
+            position: relative;
         }
+
+        .profile-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
         label {
             display: block;
-            margin-top: 15px;
+            text-align: left;
+            margin: 15px 0 5px;
             font-weight: bold;
-            color: #555;
+            color: #333;
         }
+
         input {
             width: 100%;
             padding: 12px;
-            margin-top: 5px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
             box-sizing: border-box;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s ease;
+            font-size: 14px;
         }
+
         input:focus {
             border-color: #478ac9;
             outline: none;
         }
-        button {
+
+        button[type="submit"] {
+            width: 100%;
             background-color: #478ac9;
             color: white;
             padding: 12px;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
+            border-radius: 8px;
             font-size: 16px;
-            transition: background-color 0.3s;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
         }
-        button:hover {
+
+        button[type="submit"]:hover {
             background-color: #367bb7;
         }
+
+        .logout-btn {
+            background-color: #dc3545;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
         .link {
-            text-align: center;
-            margin-top: 15px;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
         }
+
         .link a {
-            color: #478ac9;
+            color: #666;
             text-decoration: none;
-            font-weight: bold;
         }
+
         .link a:hover {
             text-decoration: underline;
         }
+
         .message {
-            color: green;
-            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
             margin: 10px 0;
         }
-        .error {
-            color: red;
-            text-align: center;
-            margin: 10px 0;
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
         }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
         .back-btn {
             display: inline-block;
-            background-color: #4CAF50;
-            color: white;
+            background-color: transparent;
+            color: #478ac9;
+            border: 2px solid #478ac9;
             padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             text-decoration: none;
             font-size: 16px;
             cursor: pointer;
-            margin-bottom: 20px; /* Espacio entre el botón y el contenedor */
-            transition: background-color 0.3s;
-            text-align: center;
-            width: 100%; /* Hacer que el botón ocupe el ancho completo */
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            width: auto;
         }
+
         .back-btn:hover {
-            background-color: #45a049;
+            background-color: #478ac9;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .profile-container {
+                width: 90%;
+            }
+
+            .profile-header h1 {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+
+    <div class="profile-container">
         <a href="{% url 'inicio' %}" class="back-btn">Volver al inicio</a>
-        <h1>Perfil de {{ usuario.username }}</h1>
+
+        <div class="profile-header">
+            <h1>Perfil de {{ usuario.username }}</h1>
+        </div>
 
         {% if messages %}
             {% for message in messages %}
@@ -114,23 +164,24 @@
 
         <form method="POST">
             {% csrf_token %}
-            <label for="{{ form.username.id_for_label }}">Username:</label>
+            <label for="{{ form.username.id_for_label }}">Nombre de usuario:</label>
             <input type="text" name="username" id="{{ form.username.id_for_label }}" value="{{ form.username.value|default:'' }}" required>
 
-            <label for="{{ form.email.id_for_label }}">Email address:</label>
+            <label for="{{ form.email.id_for_label }}">Correo electrónico:</label>
             <input type="email" name="email" id="{{ form.email.id_for_label }}" value="{{ form.email.value|default:'' }}" required>
+
+            <div class="link">
+                <a href="{% url 'reset_password' %}">Restablecer Contraseña</a>
+            </div>
 
             <button type="submit">Guardar cambios</button>
         </form>
 
         <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+            <button type="submit" class="logout-btn">Cerrar sesión</button>
         </form>
-
-        <div class="link">
-            <a href="{% url 'reset_password' %}">Restablecer Contraseña</a>
-        </div>
     </div>
+
 </body>
 </html>

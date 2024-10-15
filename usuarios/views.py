@@ -15,6 +15,13 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.utils.encoding import force_bytes
 from .forms import ResetPasswordForm
+from django.contrib.sessions.models import Session
+from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth import update_session_auth_hash  # Para mantener la sesión activa
+
+
 
 
 email_template_name = "password_reset_email.html"
@@ -168,3 +175,73 @@ def editar_perfil(request):
         'form': form,
         'usuario': request.user
     })
+
+User = get_user_model()
+
+def password_reset_confirm(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == "POST":
+            new_password = request.POST.get("new_password")
+            confirm_password = request.POST.get("confirm_password")
+            
+            if new_password == confirm_password:
+                user.set_password(new_password)
+                user.save()
+
+                # Cerrar todas las sesiones del usuario
+                all_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+                for session in all_sessions:
+                    session_data = session.get_decoded()
+                    if str(user.pk) == str(session_data.get('_auth_user_id')):
+                        session.delete()
+
+                # Enviar mensaje de éxito
+                messages.success(request, "Tu contraseña ha sido restablecida exitosamente y se ha cerrado la sesión en todos los dispositivos.")
+                return redirect("mi_cuenta")
+            else:
+                messages.error(request, "Las contraseñas no coinciden. Intenta de nuevo.")
+    else:
+        messages.error(request, "El enlace para restablecer la contraseña no es válido o ha expirado.")
+    
+    return render(request, "password_reset_confirm.html")
+
+@login_required
+def password_reset_confirm(request, uidb64=None, token=None):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+
+            if new_password == confirm_password:
+                user.set_password(new_password)
+                user.save()
+
+                # Mantener la sesión activa después del cambio de contraseña
+                update_session_auth_hash(request, user)
+
+                # Añadir mensaje de éxito
+                messages.success(request, "Tu contraseña ha sido cambiada con éxito.")
+
+                # Redirigir a cuenta.html
+                return redirect('cuenta')  # Asegúrate de que 'cuenta' está definida en tu urls.py
+            else:
+                # Error de contraseña no coincidente
+                messages.error(request, "Las contraseñas no coinciden.")
+        else:
+            messages.error(request, "Error al cambiar la contraseña.")
+    else:
+        messages.error(request, "El enlace de restablecimiento de contraseña no es válido o ha expirado.")
+
+    return redirect('mi_cuenta')  # Redirigir a Mi Cuenta en caso de error
