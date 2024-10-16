@@ -41,6 +41,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='inicio'), name='logout'),
     path('reset-password/', views.password_reset_request, name='usuarios_reset_password'),  # Cambia el nombre aquí
     path('reset-password-confirm/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),  # Agrega esta línea
+    path('filtrarxsupermercado/', include('filtrarxsupermercado.urls')),
 
 
 

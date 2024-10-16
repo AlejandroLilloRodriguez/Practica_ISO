@@ -86,22 +86,28 @@
           <div class="u-repeater u-repeater-1">
             <div class="u-align-left u-container-align-left u-container-style u-list-item u-repeater-item">
               <div class="u-container-layout u-similar-container u-valign-top u-container-layout-1">
-                <img class="u-expanded-width u-image u-image-default u-image-1" alt="" data-image-width="2500" data-image-height="2311" src="{% static 'images/eroski-1.svg' %}" data-href="RESULTADOS-BÚSQUEDA.html">
-                <h4 class="u-align-left u-text u-text-body-color u-text-1">EROSKI</h4>
+                  <a href="{% url 'productos_supermercado' supermercado='Eroski' %}">
+                      <img class="u-expanded-width u-image u-image-default u-image-1" alt="Eroski" data-image-width="2500" data-image-height="2311" src="{% static 'images/eroski-1.svg' %}">
+                  </a>
+                  <h4 class="u-align-left u-text u-text-body-color u-text-1">EROSKI</h4>
               </div>
-            </div>
-            <div class="u-align-left u-container-align-left u-container-style u-list-item u-repeater-item">
-              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-2">
-                <img class="u-expanded-width u-image u-image-default u-image-2" alt="" data-image-width="600" data-image-height="493" src="{% static 'images/c-icon-vector-logo-sign-600nw-2242697067.webp' %}" data-href="RESULTADOS-BÚSQUEDA.html">
+          </div>
+          <div class="u-align-left u-container-align-left u-container-style u-list-item u-repeater-item">
+            <div class="u-container-layout u-similar-container u-valign-top u-container-layout-2">
+                <a href="{% url 'productos_supermercado' supermercado='Carrefour' %}">
+                    <img class="u-expanded-width u-image u-image-default u-image-2" alt="Carrefour" data-image-width="600" data-image-height="493" src="{% static 'images/c-icon-vector-logo-sign-600nw-2242697067.webp' %}">
+                </a>
                 <h4 class="u-align-left u-text u-text-body-color u-text-2">CARREFOUR</h4>
-              </div>
             </div>
-            <div class="u-align-left u-container-align-left u-container-style u-list-item u-repeater-item">
-              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-3">
-                <img class="u-expanded-width u-image u-image-default u-image-3" alt="" data-image-width="512" data-image-height="512" src="{% static 'images/alcampo.png' %}" data-href="RESULTADOS-BÚSQUEDA.html">
-                <h4 class="u-align-left u-text u-text-body-color u-text-3">ALCAMPO</h4>
-              </div>
-            </div>
+        </div>
+        <div class="u-align-left u-container-align-left u-container-style u-list-item u-repeater-item">
+          <div class="u-container-layout u-similar-container u-valign-top u-container-layout-3">
+              <a href="{% url 'productos_supermercado' supermercado='Alcampo' %}">
+                  <img class="u-expanded-width u-image u-image-default u-image-3" alt="Alcampo" data-image-width="512" data-image-height="512" src="{% static 'images/alcampo.png' %}">
+              </a>
+              <h4 class="u-align-left u-text u-text-body-color u-text-3">ALCAMPO</h4>
+          </div>
+      </div>
             <div class="u-align-left u-container-align-left u-container-style u-list-item u-repeater-item">
               <div class="u-container-layout u-similar-container u-valign-top u-container-layout-4">
                 <img class="u-expanded-width u-image u-image-default u-image-4" alt="" data-image-width="400" data-image-height="400" src="{% static 'images/logo-Mercadona.png' %}" data-href="RESULTADOS-BÚSQUEDA.html">

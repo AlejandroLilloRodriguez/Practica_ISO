@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultados de Búsqueda</title>
+    <title>Resultados de Productos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -74,13 +74,23 @@
     </style>
 </head>
 <body>
-    <h1>Resultados de Búsqueda para "{{ query }}"</h1>
+    <h1>
+        {% if query %}
+            Resultados de Búsqueda para "{{ query }}"
+        {% elif supermercado %}
+            Productos disponibles en {{ supermercado }}
+        {% else %}
+            Productos
+        {% endif %}
+    </h1>
 
-    {% if resultados %}
+    {% if productos %}
         <table>
             <thead>
                 <tr>
-                    <th>supermercado</th>
+                    {% if not supermercado %}
+                        <th>Supermercado</th>
+                    {% endif %}
                     <th>Nombre del Producto</th>
                     <th>Precio</th>
                     <th>Precio por kg</th>
@@ -89,9 +99,11 @@
                 </tr>
             </thead>
             <tbody>
-                {% for producto in resultados %}
+                {% for producto in productos %}
                 <tr>
-                    <td>{{ producto.supermercado }}</td>
+                    {% if not supermercado %}
+                        <td>{{ producto.supermercado }}</td>
+                    {% endif %}
                     <td>{{ producto.nombre }}</td>
                     <td>{{ producto.precio }}€</td>
                     <td>{% if producto.precio_por_kg %}{{ producto.precio_por_kg }}€/kg{% else %}N/A{% endif %}</td>
@@ -115,9 +127,9 @@
             </tbody>
         </table>
     {% else %}
-        <p>No se encontraron productos que coincidan con tu búsqueda.</p>
+        <p>No se encontraron productos que coincidan con tu búsqueda o filtro.</p>
     {% endif %}
 
-    <a href="/" class="volver-btn">Volver a la búsqueda</a>
+    <a href="/" class="volver-btn">Volver a la página principal</a>
 </body>
 </html>
