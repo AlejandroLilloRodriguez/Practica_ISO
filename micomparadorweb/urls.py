@@ -34,13 +34,13 @@ urlpatterns = [
     path('', principal_views.inicio, name='inicio'),
     path('supermercados/', supermercados_views.supermercado, name='supermercados'),
     path('productos/', productos_views.mostrar_productos, name='productos'),
-path('reset-password/', usuario_views.password_reset_request, name='reset_password'),
+    path('reset-password/', usuario_views.password_reset_request, name='reset_password'),
     path('buscador/',buscar_views.buscador_productos, name='buscar_productos'),
     path('carrito/', carrito_views.manejar_carrito, name='carrito'),
     path('perfil/', include('perfil.urls')),
     path('logout/', auth_views.LogoutView.as_view(next_page='inicio'), name='logout'),
-        path('reset-password/', views.password_reset_request, name='usuarios_reset_password'),  # Cambia el nombre aquí
-            path('reset-password-confirm/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),  # Agrega esta línea
+    path('reset-password/', views.password_reset_request, name='usuarios_reset_password'),  # Cambia el nombre aquí
+    path('reset-password-confirm/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),  # Agrega esta línea
 
 
 
