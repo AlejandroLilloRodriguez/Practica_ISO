@@ -364,9 +364,9 @@ def analisis_supermercados(urls_alcampo, urls_carrefour, urls_eroski, palabra_fi
 
 urls_a_analizar_alcampo= [
     "https://www.compraonline.alcampo.es/categories/frescos/OC2112?source=navigation",
-    "https://www.compraonline.alcampo.es/categories/leche-huevos-l%C3%A1cteos-yogures-y-bebidas-vegetales/OC16?source=navigation",
-    "https://www.compraonline.alcampo.es/categories/alimentaci%C3%B3n/OCC10?source=navigation",
-    "https://www.compraonline.alcampo.es/categories/desayuno-y-merienda/OC10?source=navigation",
+    #"https://www.compraonline.alcampo.es/categories/leche-huevos-l%C3%A1cteos-yogures-y-bebidas-vegetales/OC16?source=navigation",
+    #"https://www.compraonline.alcampo.es/categories/alimentaci%C3%B3n/OCC10?source=navigation",
+    #"https://www.compraonline.alcampo.es/categories/desayuno-y-merienda/OC10?source=navigation",
     #"https://www.compraonline.alcampo.es/categories/congelados/OC200220183?source=navigation",
     #"https://www.compraonline.alcampo.es/categories/comida-preparada/OC20022018?source=navigation",
     #"https://www.compraonline.alcampo.es/categories/bebidas/OCC11?source=navigation",
@@ -389,8 +389,8 @@ urls_a_analizar_carrefour = [
     ]
 
 urls_a_analizar_eroski = ["https://supermercado.eroski.es/es/supermercado/2059806-alimentacion/2059988-aceite-vinagre-sal-harina-y-pan-rallado/",
-                          "https://supermercado.eroski.es/es/supermercado/2059806-alimentacion/2060067-aceitunas-y-encurtidos/",
-                          "https://supermercado.eroski.es/es/supermercado/2059806-alimentacion/2060015-conservas-de-pescado/",
+                          #"https://supermercado.eroski.es/es/supermercado/2059806-alimentacion/2060067-aceitunas-y-encurtidos/",
+                          #"https://supermercado.eroski.es/es/supermercado/2059806-alimentacion/2060015-conservas-de-pescado/",
                           ]
 
 # Pedir la palabra de búsqueda
@@ -429,7 +429,7 @@ def insertar_producto(db, producto):
         
         sql = f"""
         INSERT INTO {tabla} (nombre, precio, precio_por_kg, link_imagen, supermercado) 
-        VALUES (%s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s)
         """
         valores = (producto['nombre'], producto['precio'], producto.get('precio/kg', None), producto.get('imagen', None), producto['supermercado'])
         cursor.execute(sql, valores)
