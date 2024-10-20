@@ -30,18 +30,18 @@ def buscador_productos(request):
         filtrar_productos(ProductoTablaCarrefour.objects.all())
         filtrar_productos(ProductoTablaEroski.objects.all())
 
-        resultados = list(productos_encontrados)
+        productos = list(productos_encontrados)
 
-    print(f"Resultados encontrados: {resultados}") 
+    print(f"Resultados encontrados: {productos}") 
     
     if ordenar_por == 'precio':
         if direccion == 'asc':
-            resultados.sort(key=lambda producto: producto.precio)
+            productos.sort(key=lambda producto: producto.precio)
         else:
-            resultados.sort(key=lambda producto: producto.precio, reverse=True)
+            productos.sort(key=lambda producto: producto.precio, reverse=True)
     elif ordenar_por == 'precio_por_kg':
         if direccion == 'asc':
-            resultados.sort(key=lambda producto: producto.precio_por_kg)
+            productos.sort(key=lambda producto: producto.precio_por_kg)
         else:
-            resultados.sort(key=lambda producto: producto.precio_por_kg, reverse=True)
-    return render(request, 'resultados_busqueda.html', {'resultados': resultados, 'query': query})
+            productos.sort(key=lambda producto: producto.precio_por_kg, reverse=True)
+    return render(request, 'resultados_busqueda.html', {'productos': productos, 'query': query})
