@@ -84,7 +84,7 @@
         {% endif %}
     </h1>
 
-    {% if productos %}
+    {% if resultados %}
         <table>
             <thead>
                 <tr>
@@ -99,7 +99,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for producto in productos %}
+                {% for producto in resultados %}
                 <tr>
                     {% if not supermercado %}
                         <td>{{ producto.supermercado }}</td>
