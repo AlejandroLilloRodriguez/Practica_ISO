@@ -22,6 +22,7 @@ from supermercados import views as supermercados_views
 from productos import views as productos_views
 from buscador import views as buscar_views
 from carrito import views as carrito_views
+from filtrar_inicio import views as filtrar_inicio_views
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from usuarios import views
@@ -42,6 +43,7 @@ urlpatterns = [
     path('reset-password/', views.password_reset_request, name='usuarios_reset_password'),  # Cambia el nombre aquí
     path('reset-password-confirm/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),  # Agrega esta línea
     path('filtrarxsupermercado/', include('filtrarxsupermercado.urls')),
+    path('filtrar_inicio/', include('filtrar_inicio.urls')),
 
 
 
