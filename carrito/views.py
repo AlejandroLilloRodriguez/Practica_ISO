@@ -21,7 +21,7 @@ def limpiar_precio(precio_str):
         print(f"Error convirtiendo precio: {precio_str}")  # Para depuración
         return 0.0
     
-@login_required
+
 def manejar_carrito(request):
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -94,4 +94,4 @@ def manejar_carrito(request):
             print(f"Item no válido: {item}")
 
     # Redirige a la página donde se muestra el carrito con los productos añadidos
-    return render(request, 'carrito.html', {'carrito_items': carrito_items, 'total': total})
+    return render(request, 'carrito.html', {'carrito_items': carrito_items, 'total_precio': total})

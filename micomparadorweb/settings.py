@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'perfil',
     'filtrarxsupermercado',
     'filtrar_inicio',
+    'comprar'
 ]
 
 MIDDLEWARE = [

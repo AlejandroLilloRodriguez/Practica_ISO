@@ -27,6 +27,7 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from usuarios import views
 from perfil import views as perfil_views
+from comprar import views as comprar_views
 
 
 urlpatterns = [
@@ -44,6 +45,7 @@ urlpatterns = [
     path('reset-password-confirm/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),  # Agrega esta línea
     path('filtrarxsupermercado/', include('filtrarxsupermercado.urls')),
     path('filtrar_inicio/', include('filtrar_inicio.urls')),
+    path('comprar/', include('comprar.urls')),
 
 
 

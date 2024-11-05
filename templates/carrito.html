@@ -72,6 +72,37 @@
             background-color: #3772a6; /* Color al hacer hover */
         }
 
+        .botones {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 20px;
+        }
+
+        .btn-seguir, .btn-comprar {
+          text-decoration: none;
+          padding: 10px 20px;
+          color: white;
+          border-radius: 4px;
+          font-size: 16px;
+        }
+
+        .btn-seguir {
+          background-color: #478ac9;
+        }
+
+        .btn-comprar {
+          background-color: #28a745;
+        }
+
+        .btn-seguir:hover {
+          background-color: #3772a6;
+        }
+
+        .btn-comprar:hover {
+          background-color: #218838;
+        }
+
+
         .total {
             font-size: 18px;
             font-weight: bold;
@@ -183,7 +214,10 @@
             </table>
             <p>Total: {{ total_precio|floatformat:2 }}€</p>
 
-   	<a href="{% url 'inicio' %}">Seguir Comprando</a>
+            <div class="botones">
+              <a href="{% url 'inicio' %}" class="btn-seguir">Seguir Comprando</a>
+              <a href="{% url 'comprar' %}" class="btn-comprar">Comprar</a>
+          </div>
         </div>
     </section>
 
