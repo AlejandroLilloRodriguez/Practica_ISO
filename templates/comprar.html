@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago de Pedido</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <style>
+        /* Estilos específicos para este archivo */
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #478ac9, #367bb7);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            width: 400px;
+            max-width: 90%;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .form-container {
+            padding: 20px;
+        }
+
+        .total-header {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #478ac9;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #478ac9;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #367bb7;
+        }
+
+        .message {
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .message.success {
+            color: green;
+        }
+
+        .message.error {
+            color: red;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <!-- Muestra el total del pedido -->
+            <div class="total-header">
+                Tu pedido es de: {{ item.precio|floatformat:2 }}€
+            </div>
+
+            <!-- Formulario de Pago -->
+            <form id="payment-form" method="POST" action="">
+                {% csrf_token %}
+
+                <label for="account-number">Número de Cuenta:</label>
+                <input type="text" id="account-number" name="account_number" required placeholder="Ej. 1234 5678 9012 3456">
+
+                <label for="expiration-date">Fecha de Caducidad:</label>
+                <input type="text" id="expiration-date" name="expiration_date" required placeholder="MM/AA">
+
+                <label for="owner-name">Propietario de la Cuenta:</label>
+                <input type="text" id="owner-name" name="owner_name" required placeholder="Nombre del Titular">
+
+                <label for="cvv">CVV:</label>
+                <input type="number" id="cvv" name="cvv" required placeholder="123">
+
+                <button type="submit" name="pay">Realizar Pago</button>
+                <p class="message" id="payment-message"></p>
+            </form>
+
+            <!-- Mostrar mensajes de Django -->
+            {% if messages %}
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>
