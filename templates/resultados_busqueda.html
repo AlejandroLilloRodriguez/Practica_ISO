@@ -108,7 +108,7 @@
                     <td>{{ producto.precio }}€</td>
                     <td>{% if producto.precio_por_kg %}{{ producto.precio_por_kg }}€/kg{% else %}N/A{% endif %}</td>
                     <td>
-                        <img src="{{ producto.link_imagen }}" alt="{{ producto.nombre }}">
+                        <img src="{{ producto.link_imagen }}">
                     </td>
                     <td>
                         <form method="POST" action="{% url 'carrito' %}">
