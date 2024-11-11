@@ -8,7 +8,5 @@ def comprar(request):
     if not request.user.is_authenticated:
         return redirect('mi_compra')  # Redirigir al login si el usuario no está autenticado
 
-    # Lógica para el proceso de compra
-    # ...
-
-    return render(request, 'comprar.html')
+    total = request.session.get('total_precio', 0)
+    return render(request, 'comprar.html', {'total_precio': total})
