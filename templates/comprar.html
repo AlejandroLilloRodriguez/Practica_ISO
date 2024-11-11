@@ -6,75 +6,96 @@
     <title>Pago de Pedido</title>
     <link rel="stylesheet" href="../static/css/styles.css">
     <style>
-        /* Estilos específicos para este archivo */
-
+        /* Estilos generales */
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #478ac9, #367bb7);
+            background: linear-gradient(145deg, #6b9ac4, #478ac9);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: #fff;
         }
 
         .container {
             background-color: white;
-            width: 400px;
-            max-width: 90%;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            overflow: hidden;
+            width: 420px;
+            max-width: 95%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            position: relative;
+            z-index: 1;
         }
 
-        .form-container {
-            padding: 20px;
-        }
-
+        /* Cabecera del total del pedido */
         .total-header {
             text-align: center;
-            font-size: 18px;
-            margin-bottom: 15px;
+            font-size: 22px;
+            margin-bottom: 25px;
             font-weight: bold;
             color: #478ac9;
         }
 
+        /* Diseño de los campos de entrada */
         label {
             display: block;
-            margin-bottom: 5px;
-            margin-top: 15px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #444;
         }
 
         input[type="text"],
         input[type="number"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
+            margin: 10px 0 20px 0;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 16px;
             box-sizing: border-box;
+            transition: border-color 0.3s ease;
         }
 
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #478ac9;
+            outline: none;
+        }
+
+        /* Estilo del botón de pago */
         button {
             width: 100%;
-            padding: 12px;
-            margin-top: 20px;
+            padding: 14px 0;
             border: none;
-            border-radius: 5px;
+            border-radius: 30px;
             background-color: #478ac9;
             color: white;
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            text-transform: uppercase;
         }
 
         button:hover {
             background-color: #367bb7;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
         }
 
+        button:active {
+            background-color: #2c6491;
+            transform: translateY(0);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Mensajes de éxito o error */
         .message {
-            margin-top: 10px;
+            margin-top: 15px;
             font-size: 14px;
             text-align: center;
         }
@@ -87,50 +108,52 @@
             color: red;
         }
 
+        /* Diseño responsive */
         @media (max-width: 500px) {
             .container {
                 width: 100%;
                 height: 100%;
-                border-radius: 0;
+                border-radius: 10px;
+            }
+
+            .total-header {
+                font-size: 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="form-container">
-            <!-- Muestra el total del pedido -->
-            <div class="total-header">
-                Tu pedido es de: {{ item.precio|floatformat:2 }}€
-            </div>
-
-            <!-- Formulario de Pago -->
-            <form id="payment-form" method="POST" action="">
-                {% csrf_token %}
-
-                <label for="account-number">Número de Cuenta:</label>
-                <input type="text" id="account-number" name="account_number" required placeholder="Ej. 1234 5678 9012 3456">
-
-                <label for="expiration-date">Fecha de Caducidad:</label>
-                <input type="text" id="expiration-date" name="expiration_date" required placeholder="MM/AA">
-
-                <label for="owner-name">Propietario de la Cuenta:</label>
-                <input type="text" id="owner-name" name="owner_name" required placeholder="Nombre del Titular">
-
-                <label for="cvv">CVV:</label>
-                <input type="number" id="cvv" name="cvv" required placeholder="123">
-
-                <button type="submit" name="pay">Realizar Pago</button>
-                <p class="message" id="payment-message"></p>
-            </form>
-
-            <!-- Mostrar mensajes de Django -->
-            {% if messages %}
-            {% for message in messages %}
-            <div class="message {{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-            {% endif %}
+        <!-- Formulario de Pago -->
+        <div class="total-header">
+            Tu pedido es de: {{ item.precio|floatformat:2 }}€
         </div>
+
+        <form id="payment-form" method="POST" action="">
+            {% csrf_token %}
+
+            <label for="account-number">Número de Cuenta:</label>
+            <input type="text" id="account-number" name="account_number" required placeholder="Ej. 1234 5678 9012 3456">
+
+            <label for="expiration-date">Fecha de Caducidad:</label>
+            <input type="text" id="expiration-date" name="expiration_date" required placeholder="MM/AA">
+
+            <label for="owner-name">Propietario de la Cuenta:</label>
+            <input type="text" id="owner-name" name="owner_name" required placeholder="Nombre del Titular">
+
+            <label for="cvv">CVV:</label>
+            <input type="number" id="cvv" name="cvv" required placeholder="123">
+
+            <button type="submit" name="pay">Realizar Pago</button>
+            <p class="message" id="payment-message"></p>
+        </form>
+
+        <!-- Mostrar mensajes de Django -->
+        {% if messages %}
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
     </div>
 
 </body>
