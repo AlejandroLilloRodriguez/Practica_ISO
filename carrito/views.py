@@ -86,6 +86,7 @@ def manejar_carrito(request):
             item_cantidad = int(item['cantidad'])  # Asegúrate de que sea un entero
             item_total = item_precio * item_cantidad  # Calcular el total por item
             total += item_total  # Acumular el total
+            request.session['total_precio'] = total
 
             # Imprimir dentro del bucle para evitar errores
             print(f"Precio: {item['precio']}, Tipo: {type(item['precio'])}")
