@@ -43,6 +43,7 @@
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'carrito' %}" style="padding: 10px 20px;">.</a>
 </li></ul>
           </div>
+          
           <div class="u-custom-menu u-nav-container-collapse">
             <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
               <div class="u-inner-container-layout u-sidenav-overflow">
@@ -171,9 +172,118 @@
     
     
     
-    <footer class="u-align-center u-clearfix u-container-align-center u-footer u-grey-80 u-footer" id="sec-7b9a"><div class="u-clearfix u-sheet u-sheet-1">
-        <p class="u-small-text u-text u-text-variant u-text-1">Licencia para copiar productos de otros supermercados&nbsp; @Copyright </p>
-      </div></footer>
+    <footer class="footer">
+      <div class="footer-grid">
+          <!-- Logo y Enlaces -->
+          <div class="footer-logo-links">
+              <div class="footer-logo">
+              </div>
+              <div class="footer-links">
+                  <a href="#productos">Productos</a>
+                  <a href="#blog">Blog</a>
+                  <a href="#sobre-nosotros">Sobre Nosotros</a>
+              </div>
+          </div>
+          
+          <!-- Información sobre el Comparador -->
+          <div class="footer-info">
+              <h4>Comparador de Precios</h4>
+              <p>El comparador de precios de supermercado que te ayuda a ahorrar tiempo y dinero en tus compras. Con Mercastic puedes comparar artículos a nivel de categoría, producto, y filtrar los resultados por supermercado, marca, tamaño, y más. Mercastic es el mejor aliado para tu economía doméstica. Pruébalo hoy y empieza a ahorrar con Mercastic.</p>
+          </div>
+      </div>
+  
+      <!-- Derechos de autor y Política de Cookies -->
+      <div class="footer-legal">
+          <p>© 2024 Mercastic</p>
+          <a href="#cookies">Configuración de cookies</a> | 
+          <a href="#politica-cookies">Política de cookies</a>
+      </div>
+  </footer>
+  
+  
+  
+  
+  
+    
+    <style>
+    .footer {
+    background-color: #033334;
+    color: #B0BEC5;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
+}
 
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 40px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.footer-logo-links {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.footer-logo img {
+    width: 50px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+    font-size: 16px;
+}
+
+.footer-links a {
+    color: #B0BEC5;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+
+.footer-info {
+    font-size: 14px;
+}
+
+.footer-info h4 {
+    font-size: 18px;
+    color: #B0BEC5;
+    margin-bottom: 10px;
+}
+
+.footer-legal {
+    text-align: center;
+    width: 100%;
+    font-size: 14px;
+    padding-top: 20px;
+    border-top: 1px solid #424242;
+    margin-top: 20px;
+    color: #B0BEC5;
+}
+
+.footer-legal a {
+    color: #B0BEC5;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.footer-legal a:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+
+
+    </style>
+    
+    
   
 </body></html>
