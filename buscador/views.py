@@ -31,17 +31,6 @@ def buscador_productos(request):
         filtrar_productos(ProductoTablaEroski.objects.all())
 
         productos = list(productos_encontrados)
+        productos = sorted(productos, key=lambda x: x.precio)
 
-    print(f"Resultados encontrados: {productos}") 
-    
-    if ordenar_por == 'precio':
-        if direccion == 'asc':
-            productos.sort(key=lambda producto: producto.precio)
-        else:
-            productos.sort(key=lambda producto: producto.precio, reverse=True)
-    elif ordenar_por == 'precio_por_kg':
-        if direccion == 'asc':
-            productos.sort(key=lambda producto: producto.precio_por_kg)
-        else:
-            productos.sort(key=lambda producto: producto.precio_por_kg, reverse=True)
     return render(request, 'resultados_busqueda.html', {'productos': productos, 'query': query})
