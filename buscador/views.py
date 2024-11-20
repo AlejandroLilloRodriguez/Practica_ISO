@@ -5,10 +5,8 @@ from django.db.models import Q
 def buscador_productos(request):
     print("La vista buscar_productos se ha llamado")
     query= request.GET.get('s', '').strip()
-    ordenar_por = request.GET.get('ordenar_por', 'precio')
-    direccion = request.GET.get('direccion', 'asc')
     print(f"Consulta de búsqueda: {query}")
-    resultados = []
+    
 
     if query:
         # Dividir la búsqueda en palabras para buscar cada una por separado
