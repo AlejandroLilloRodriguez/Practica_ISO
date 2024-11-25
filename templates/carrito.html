@@ -175,6 +175,9 @@
             <!-- Código del carrito de compras -->
             {% load custom_filters %}
             <h1>Carrito de Compras</h1>
+            {% if not user.is_authenticated %}
+            <p class="nota">Nota: Tu carrito se guardará temporalmente. Inicia sesión para guardarlo permanentemente.</p>
+            {% endif %}
             <table>
                 <thead>
                     <tr>
@@ -201,6 +204,7 @@
                         <td>
                             <form method="POST" action="{% url 'carrito' %}">
                                 {% csrf_token %}
+                                <input type="hidden" name="producto_id" value="{{ producto_id }}"> 
                                 <input type="hidden" name="producto_supermercado" value="{{ item.supermercado }}">
                                 <input type="hidden" name="producto_nombre" value="{{ item.nombre }}">
                                 <input type="hidden" name="producto_precio" value="{{ item.precio }}">

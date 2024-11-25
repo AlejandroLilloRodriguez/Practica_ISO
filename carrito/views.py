@@ -1,98 +1,120 @@
-# carrito/views.py
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
-from .models import Producto
-from django.contrib.auth.decorators import login_required
+import uuid
+from django.db import connection
+from django.utils.timezone import now, timedelta
+from django.shortcuts import render
 import hashlib
+from django.middleware.csrf import CsrfViewMiddleware
+from django.middleware.csrf import get_token
+from django.http import HttpResponseForbidden, JsonResponse
+
+def limpiar_carritos_caducados():
+    """
+    Elimina los productos del carrito que tengan más de 1 hora de antigüedad.
+    """
+    limite_tiempo = now() - timedelta(hours=1)
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            DELETE FROM carrito
+            WHERE fecha_creacion < %s
+        """, [limite_tiempo])
 
 def generar_id_producto(producto):
-    # Usa el nombre y precio para generar un hash único para cada producto
+    """
+    Genera un hash único para identificar cada producto.
+    """
     data = f"{producto['nombre']}{producto['precio']}"
     return hashlib.md5(data.encode()).hexdigest()
 
 def limpiar_precio(precio_str):
-    # Eliminar símbolos de moneda y caracteres no deseados
-    precio_limpio = precio_str.replace('€', '').replace(',', '.').replace('\xa0', '').replace(' ', '').strip()
+    """
+    Limpia y convierte un precio a formato float.
+    """
     try:
-        # Convertir a float
-        return float(precio_limpio)
+        if isinstance(precio_str, (float, int)):
+            return float(precio_str)
+        return float(str(precio_str).replace('€', '').replace(',', '.').replace('\xa0', '').replace(' ', '').strip())
     except ValueError:
-        # Manejo de errores si el precio no se puede convertir
-        print(f"Error convirtiendo precio: {precio_str}")  # Para depuración
         return 0.0
-    
 
 def manejar_carrito(request):
+    # Verificar si la sesión está activa
+    if not request.session.session_key:
+        # Si la sesión está caducada, crear una nueva sesión
+        request.session.create()
+
+    # Asegurarse de que el token CSRF es válido
+    csrf_token = get_token(request)
+
+    # Identificar el carrito por cookie_id o usuario_id
+    cookie_id = request.COOKIES.get('carrito_id', str(uuid.uuid4()))
+    usuario_id = request.user.id if request.user.is_authenticated else None
+
     if request.method == 'POST':
         action = request.POST.get('action')
         producto_nombre = request.POST.get('producto_nombre')
-        producto_precio = request.POST.get('producto_precio')
-        producto_precio_por_kg = request.POST.get('producto_precio_por_kg')  # Añadido
-        producto_imagen = request.POST.get('producto_imagen')  # Añadido
-        producto_supermercado = request.POST.get('producto_supermercado')  # Añadido
-
-        # Limpiar el precio y convertirlo en float
-        producto_precio_float = limpiar_precio(producto_precio)
-
-        # Generar un ID único para el producto
-        producto_id = generar_id_producto({'nombre': producto_nombre, 'precio': producto_precio_float})
-
-        # Inicializar carrito en la sesión si no existe
-        if 'carrito' not in request.session:
-            request.session['carrito'] = {}
-        
-        carrito = request.session['carrito']
+        producto_precio = limpiar_precio(request.POST.get('producto_precio'))
+        producto_precio_por_kg = limpiar_precio(request.POST.get('producto_precio_por_kg'))
+        producto_imagen = request.POST.get('producto_imagen')
+        producto_supermercado = request.POST.get('producto_supermercado')
+        producto_id = generar_id_producto({'nombre': producto_nombre, 'precio': producto_precio})
 
         if action == 'agregar':
-            if producto_id in carrito:
-                carrito[producto_id]['cantidad'] += 1
+            if request.user.is_authenticated:
+                with connection.cursor() as cursor:
+                    cursor.execute("""
+                        INSERT INTO carrito (cookie_id, usuario_id, producto_id, nombre, precio, precio_por_kg,
+                                             supermercado, imagen, cantidad, fecha_creacion)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ON DUPLICATE KEY UPDATE cantidad = cantidad + 1
+                    """, [cookie_id, usuario_id, producto_id, producto_nombre, producto_precio, producto_precio_por_kg,
+                          producto_supermercado, producto_imagen, 1, now()])
             else:
-                # Añadir producto con cantidad 1
-                carrito[producto_id] = {
-                    'supermercado': producto_supermercado,
-                    'nombre': producto_nombre,
-                    'precio': producto_precio_float,  # Ya está limpio
-                    'cantidad': 1,
-                    'imagen': producto_imagen,
-                    'precio_por_kg': producto_precio_por_kg
-                }
-
-            print(f"Carrito actualizado: {carrito}")
+                carrito = request.session.get('carrito', {})
+                if producto_id in carrito:
+                    carrito[producto_id]['cantidad'] += 1
+                else:
+                    carrito[producto_id] = {
+                        'nombre': producto_nombre,
+                        'precio': producto_precio,
+                        'precio_por_kg': producto_precio_por_kg,
+                        'supermercado': producto_supermercado,
+                        'imagen': producto_imagen,
+                        'cantidad': 1,
+                    }
+                request.session['carrito'] = carrito
 
         elif action == 'eliminar':
-            if producto_id in carrito:
-                del carrito[producto_id]
-
-        elif action == 'modificar':
-            nueva_cantidad = int(request.POST.get('cantidad', 1))
-            if nueva_cantidad > 0:
-                carrito[producto_id]['cantidad'] = nueva_cantidad
+            if request.user.is_authenticated:
+                with connection.cursor() as cursor:
+                    cursor.execute("""
+                        DELETE FROM carrito WHERE usuario_id = %s AND producto_id = %s
+                    """, [usuario_id, producto_id])
             else:
-                del carrito[producto_id]
+                carrito = request.session.get('carrito', {})
+                if producto_id in carrito:
+                    del carrito[producto_id]
+                request.session['carrito'] = carrito
 
-        # Guardar los cambios en la sesión
-        request.session['carrito'] = carrito
+    # Obtener carrito para renderizar
+    if request.user.is_authenticated:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT producto_id, nombre, precio, precio_por_kg, supermercado, imagen, cantidad
+                FROM carrito WHERE usuario_id = %s
+            """, [usuario_id])
+            columns = [col[0] for col in cursor.description]
+            carrito_items = [
+                dict(zip(columns, row)) for row in cursor.fetchall()
+            ]
+            carrito_items = {item['producto_id']: item for item in carrito_items}
+    else:
+        carrito_items = request.session.get('carrito', {})
 
-    # Renderizar el carrito con los productos añadidos
-    carrito_items = request.session.get('carrito', {})
+    # Calcular total
+    total_precio = sum(item['precio'] * item['cantidad'] for item in carrito_items.values())
+    
 
-    # Calcular el total
-    total = 0
-    for item in carrito_items.values():
-        # Asegúrate de que 'precio' y 'cantidad' están en el item
-        if 'precio' in item and 'cantidad' in item:
-            # El precio ya está limpio, no es necesario limpiarlo de nuevo
-            item_precio = item['precio']  # Ya debería ser float
-            item_cantidad = int(item['cantidad'])  # Asegúrate de que sea un entero
-            item_total = item_precio * item_cantidad  # Calcular el total por item
-            total += item_total  # Acumular el total
-            request.session['total_precio'] = total
-
-            # Imprimir dentro del bucle para evitar errores
-            print(f"Precio: {item['precio']}, Tipo: {type(item['precio'])}")
-            print(f"Cantidad: {item['cantidad']}, Tipo: {type(item['cantidad'])}")
-        else:
-            print(f"Item no válido: {item}")
-
-    # Redirige a la página donde se muestra el carrito con los productos añadidos
-    return render(request, 'carrito.html', {'carrito_items': carrito_items, 'total_precio': total})
+    # Configurar respuesta
+    response = render(request, 'carrito.html', {'carrito_items': carrito_items, 'total_precio': total_precio})
+    response.set_cookie('carrito_id', cookie_id, max_age=3600, httponly=True, samesite='Lax')
+    return response
