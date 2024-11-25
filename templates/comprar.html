@@ -73,6 +73,25 @@
             background-color: #367bb7;
         }
 
+        .link-button {
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+            color: #478ac9;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .link-button:hover {
+            background-color: #e0e0e0;
+        }
+
         .message {
             margin-top: 10px;
             font-size: 14px;
@@ -121,10 +140,8 @@
                 <input type="number" id="cvv" name="cvv" required placeholder="123">
 
                 <button type="submit" name="pay">Realizar Pago</button>
-                <p class="message" id="payment-message"></p>
             </form>
-
-            <!-- Mostrar mensajes de Django -->
+            <a href="{% url 'inicio' %}" class="link-button">Volver a Inicio</a>
             {% if messages %}
             {% for message in messages %}
             <div class="message {{ message.tags }}">{{ message }}</div>
