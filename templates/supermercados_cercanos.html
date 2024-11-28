@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supermercados Cercanos</title>
+    <script>
+        function abrirOverpass() {
+            // Coordenadas fijas (por ejemplo, Nueva York)
+            const lat = 40.7128;
+            const lon = -74.0060;
+            const radio = 1500;
+
+            // Crear la consulta para Overpass
+            const query = `
+                [out:json];
+                node
+                  ["shop"="supermarket"]
+                  (around:${radio},${lat},${lon});
+                out body;
+            `;
+
+            // Codificar la consulta y crear la URL
+            const encodedQuery = encodeURIComponent(query);
+            const url = `https://overpass-turbo.eu/?Q=${encodedQuery}`;
+
+            // Abrir la URL en una nueva pestaña
+            window.open(url, "_blank");
+        }
+    </script>
+</head>
+<body>
+    <h1>Encuentra Supermercados Cercanos</h1>
+    <button onclick="abrirOverpass()">Ver Supermercados en Overpass</button>
+</body>
+</html>
