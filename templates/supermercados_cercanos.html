@@ -6,31 +6,66 @@
     <title>Supermercados Cercanos</title>
     <script>
         function abrirOverpass() {
-            // Coordenadas fijas (por ejemplo, Nueva York)
-            const lat = 40.4023;
-            const lon = -3.8646;
-            const radio = 3000;
+            // Obtener la dirección seleccionada del menú desplegable
+            const seleccion = document.getElementById("direccion").value;
 
-            // Crear la consulta para Overpass
-            const query = `
-                [out:json];
-                node
-                  ["shop"="supermarket"]
-                  (around:${radio},${lat},${lon});
-                out body;
-            `;
+            // Coordenadas predefinidas para las direcciones
+            const coordenadas = {
+                "direccion1": { lat: 40.4023, lon: -3.8646 }, // Av. de Montepríncipe, 28668 Alcorcón, Madrid
+                "direccion2": { lat: 40.5175, lon: -3.6697 }, // Calle de Alonso Quijano, 28050 Fuencarral, Madrid
+                "direccion3": { lat: 40.4168, lon: -3.7038 }, // Madrid Centro
+                "direccion4": { lat: 40.3000, lon: -3.4419 }, // Plaza constitución, 28500 Arganda del Rey, Madrid
+                "direccion5": { lat: 40.4818, lon: -3.3645 }, // Alcalá de Henares, Madrid
+                "direccion6": { lat: 40.3463, lon: -3.8286 }, // Alcorcón, Madrid
+                "direccion7": { lat: 40.5373, lon: -3.6378 }, // Alcobendas, Madrid
+                "direccion8": { lat: 40.3084, lon: -3.7325 }, // Leganés, Madrid
+                "direccion9": { lat: 40.3316, lon: -3.7652 }, // Getafe, Madrid
+                "direccion10": { lat: 40.4553, lon: -3.4695 }, // Torrejón de Ardoz, Madrid
+            };
 
-            // Codificar la consulta y crear la URL
-            const encodedQuery = encodeURIComponent(query);
-            const url = `https://overpass-turbo.eu/?Q=${encodedQuery}`;
+            // Verificar que se seleccionó una dirección válida
+            if (seleccion in coordenadas) {
+                const lat = coordenadas[seleccion].lat;
+                const lon = coordenadas[seleccion].lon;
+                const radio = 3000;
 
-            // Abrir la URL en una nueva pestaña
-            window.open(url, "_blank");
+                // Crear la consulta para Overpass
+                const query = `
+                    [out:json];
+                    node
+                      ["shop"="supermarket"]
+                      (around:${radio},${lat},${lon});
+                    out body;
+                `;
+
+                // Codificar la consulta y crear la URL
+                const encodedQuery = encodeURIComponent(query);
+                const url = `https://overpass-turbo.eu/?Q=${encodedQuery}`;
+
+                // Abrir la URL en una nueva pestaña
+                window.open(url, "_blank");
+            } else {
+                alert("Por favor, selecciona una dirección válida.");
+            }
         }
     </script>
 </head>
 <body>
     <h1>Encuentra Supermercados Cercanos</h1>
-    <button onclick="abrirOverpass()">Ver Supermercados en Overpass</button>
+    <label for="direccion">Selecciona una dirección:</label>
+    <select id="direccion">
+        <option value="" selected disabled>Elige una dirección</option>
+        <option value="direccion1">Av. de Montepríncipe, 28668 Alcorcón, Madrid</option>
+        <option value="direccion2">Calle de Alonso Quijano, 28050 Fuencarral, Madrid</option>
+        <option value="direccion3">Madrid Centro</option>
+        <option value="direccion4">Plaza constitución, 28500 Arganda del Rey, Madrid</option>
+        <option value="direccion5">Calle Mayor, Alcalá de Henares</option>
+        <option value="direccion6">Plaza España, Alcorcón</option>
+        <option value="direccion7">Plaza Mayor, Alcobendas</option>
+        <option value="direccion8">Plaza General Palacio, Getafe</option>
+        <option value="direccion9">Plaza Mayor, Leganés</option>
+        <option value="direccion10">Plaza Mayor, Torrejón de Ardoz</option>
+    </select>
+    <button onclick="abrirOverpass()">Buscar Supermercados</button>
 </body>
 </html>
