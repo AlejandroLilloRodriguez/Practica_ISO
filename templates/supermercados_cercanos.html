@@ -51,6 +51,7 @@
             </a>
         </div>
     </header>
+    <!--
     <script>
         function abrirOverpass() {
             // Obtener la dirección seleccionada del menú desplegable
@@ -96,8 +97,61 @@
             }
         }
     </script>
+    -->
+    <script>
+        async function buscarCoordenadas(event) {
+            event.preventDefault(); // Prevenir el envío normal del formulario
+
+            const direccionInput = document.getElementById("direccion").value;
+            if (!direccionInput) {
+                alert("Por favor, introduce una dirección.");
+                return;
+            }
+
+            try {
+                // Enviar la dirección al backend
+                const response = await fetch("{% url 'supermercados_cercanos' %}", {
+                    method: "POST",
+                    body: JSON.stringify({ direccion: direccionInput }),
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                    },
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Obtener las coordenadas del backend
+                    const lat = data.lat;
+                    const lon = data.lon;
+                    const radio = 3000;
+
+                    // Construir la consulta Overpass
+                    const query = `
+                        [out:json];
+                        node
+                          ["shop"="supermarket"]
+                          (around:${radio},${lat},${lon});
+                        out body;
+                    `;
+                    const encodedQuery = encodeURIComponent(query);
+                    const url = `https://overpass-turbo.eu/?Q=${encodedQuery}`;
+
+                    // Abrir la URL en una nueva pestaña
+                    window.open(url, "_blank");
+                } else {
+                    alert(data.message || "Hubo un error al obtener las coordenadas.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Error al conectar con el servidor.");
+            }
+        }
+    </script>
 </head>
 <body>
+    <!----
     <h1>Encuentra Supermercados Cercanos</h1>
     <label for="direccion">Selecciona una dirección:</label>
     <select id="direccion">
@@ -114,6 +168,13 @@
         <option value="direccion10">Plaza Mayor, Torrejón de Ardoz</option>
     </select>
     <button onclick="abrirOverpass()">Buscar Supermercados</button>
+-->
+    <form onsubmit="buscarCoordenadas(event)">
+        {% csrf_token %}
+        <label for="direccion">Introduce una dirección:</label>
+        <input type="text" id="direccion" name="direccion" placeholder="Ej: Calle Mayor, Madrid" required>
+        <button type="submit">Buscar Supermercados</button>
+    </form>
 </body>
 </html>
 
