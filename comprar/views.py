@@ -1,15 +1,13 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.decorators import login_required
 from django.db import connection
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
-from django.shortcuts import render, redirect
-
+from datetime import datetime, timedelta
 
 @login_required
 def comprar(request):
-    # Verificar que el usuario está autenticado
     usuario_id = request.user.id
     usuario_email = request.user.email
 
@@ -20,17 +18,20 @@ def comprar(request):
             FROM carrito WHERE usuario_id = %s
         """, [usuario_id])
         columns = [col[0] for col in cursor.description]
-        carrito_items = [
-            dict(zip(columns, row)) for row in cursor.fetchall()
-        ]
+        carrito_items = [dict(zip(columns, row)) for row in cursor.fetchall()]
         carrito_items = {item['producto_id']: item for item in carrito_items}
 
     # Calcular el total_precio
     total_precio = sum(item['precio'] * item['cantidad'] for item in carrito_items.values())
 
-    # Suponiendo que el pago es exitoso
     if request.method == 'POST':
-        # Aquí podrías agregar la lógica del pago y verificar que sea exitoso
+        # Recuperar la dirección de envío desde la sesión
+        direccion_envio = request.session.get('direccion')
+        ciudad_envio = request.session.get('ciudad')
+
+        # Calcular fechas
+        fecha_compra = datetime.now().strftime('%d/%m/%Y')
+        fecha_entrega = (datetime.now() + timedelta(days=5)).strftime('%d/%m/%Y')
 
         # Renderizar la plantilla HTML para el correo
         asunto = "Confirmación de tu compra en el Comparador de Supermercados"
@@ -38,31 +39,45 @@ def comprar(request):
             'username': request.user.username,
             'carrito_items': carrito_items.values(),
             'total_precio': total_precio,
+            'direccion_envio': f"{direccion_envio}, {ciudad_envio}",
+            'fecha_compra': fecha_compra,
+            'fecha_entrega': fecha_entrega,
         })
 
         # Crear el mensaje de correo
         try:
             email = EmailMultiAlternatives(
                 asunto,
-                '',  # Mensaje de texto plano, lo dejaremos vacío
+                '',  # Mensaje de texto plano
                 settings.DEFAULT_FROM_EMAIL,
                 [usuario_email]
             )
             email.attach_alternative(mensaje_html, "text/html")
             email.send()
 
-            # Mensaje de éxito en la interfaz
-            return render(request, 'comprar.html', {'total_precio': total_precio, 'mensaje_exito': 'Compra realizada con éxito. Se ha enviado un correo con los detalles de tu compra.'})
+            # Limpiar el carrito después de una compra exitosa
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM carrito WHERE usuario_id = %s", [usuario_id])
+
+            # Redirigir al usuario a la página de inicio después de un pago exitoso
+            return redirect('inicio')
+
         except Exception as e:
             # Mostrar mensaje de error en la interfaz si falla el envío del correo
-            return render(request, 'comprar.html', {'total_precio': total_precio, 'mensaje_error': 'Hubo un error al enviar el correo de confirmación. Tu compra se realizó correctamente.'})
+            return render(request, 'comprar.html', {
+                'total_precio': total_precio,
+                'mensaje_error': 'Hubo un error al enviar el correo de confirmación. Tu compra se realizó correctamente.'
+            })
 
     return render(request, 'comprar.html', {'total_precio': total_precio})
+
+
 
 def direccion_envio(request):
     if request.method == 'POST':
         # Guardar la dirección de envío en la sesión
-        request.session['direccion'] = request.POST
+        request.session['direccion'] = request.POST.get('address')
+        request.session['ciudad'] = request.POST.get('city')
         return redirect('datos_pago')
     return render(request, 'envio.html')
 
