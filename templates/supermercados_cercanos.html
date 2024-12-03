@@ -14,6 +14,14 @@
     <link id="u-theme-google-font" rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
     <meta name="theme-color" content="#478ac9">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 500px; /* Ajusta la altura del mapa según tus necesidades */
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="es">
@@ -99,55 +107,88 @@
     </script>
     -->
     <script>
-        async function buscarCoordenadas(event) {
-            event.preventDefault(); // Prevenir el envío normal del formulario
+            document.addEventListener("DOMContentLoaded", () => {
+            // Inicializar el mapa vacío al cargar la página
+            const map = L.map('map').setView([40.4168, -3.7038], 13); // Coordenadas iniciales (Madrid)
+            
+            // Agregar una capa base de OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
 
-            const direccionInput = document.getElementById("direccion").value;
-            if (!direccionInput) {
-                alert("Por favor, introduce una dirección.");
-                return;
-            }
+            // Función para buscar coordenadas y mostrar resultados en el mapa
+            async function buscarCoordenadas(event) {
+                event.preventDefault(); // Prevenir el envío normal del formulario
 
-            try {
-                // Enviar la dirección al backend
-                const response = await fetch("{% url 'supermercados_cercanos' %}", {
-                    method: "POST",
-                    body: JSON.stringify({ direccion: direccionInput }),
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
-                    },
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    // Obtener las coordenadas del backend
-                    const lat = data.lat;
-                    const lon = data.lon;
-                    const radio = 3000;
-
-                    // Construir la consulta Overpass
-                    const query = `
-                        [out:json];
-                        node
-                          ["shop"="supermarket"]
-                          (around:${radio},${lat},${lon});
-                        out body;
-                    `;
-                    const encodedQuery = encodeURIComponent(query);
-                    const url = `https://overpass-turbo.eu/?Q=${encodedQuery}`;
-
-                    // Abrir la URL en una nueva pestaña
-                    window.open(url, "_blank");
-                } else {
-                    alert(data.message || "Hubo un error al obtener las coordenadas.");
+                const direccionInput = document.getElementById("direccion").value;
+                if (!direccionInput) {
+                    alert("Por favor, introduce una dirección.");
+                    return;
                 }
-            } catch (error) {
-                console.error("Error:", error);
-                alert("Error al conectar con el servidor.");
+
+                try {
+                    // Enviar la dirección al backend
+                    const response = await fetch("{% url 'supermercados_cercanos' %}", {
+                        method: "POST",
+                        body: JSON.stringify({ direccion: direccionInput }),
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                        },
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Obtener las coordenadas del backend
+                        const lat = data.lat;
+                        const lon = data.lon;
+                        const radio = 3000;
+
+                        // Realizar la consulta a Overpass
+                        const query = `
+                            [out:json];
+                            node
+                            ["shop"="supermarket"]
+                            (around:${radio},${lat},${lon});
+                            out body;
+                        `;
+
+                        const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
+                        const overpassResponse = await fetch(url);
+                        const overpassData = await overpassResponse.json();
+
+                        // Limpiar los marcadores anteriores en el mapa
+                        map.eachLayer((layer) => {
+                            if (layer instanceof L.Marker) {
+                                map.removeLayer(layer);
+                            }
+                        });
+
+                        // Añadir los resultados al mapa
+                        overpassData.elements.forEach((element) => {
+                            if (element.lat && element.lon) {
+                                L.marker([element.lat, element.lon])
+                                    .addTo(map)
+                                    .bindPopup(`Supermercado: ${element.tags.name || 'Sin nombre'}`);
+                            }
+                        });
+
+                        // Centrar el mapa en las nuevas coordenadas
+                        map.setView([lat, lon], 13);
+                    } else {
+                        alert(data.message || "Hubo un error al obtener las coordenadas.");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Error al conectar con el servidor.");
+                }
             }
-        }
+
+            // Asocia la función al formulario
+            document.querySelector("form").addEventListener("submit", buscarCoordenadas);
+        });
+
     </script>
 </head>
 <body>
@@ -175,6 +216,8 @@
         <input type="text" id="direccion" name="direccion" placeholder="Ej: Calle Mayor, Madrid" required>
         <button type="submit">Buscar Supermercados</button>
     </form>
+    <div id="map"></div>
+
 </body>
 </html>
 
