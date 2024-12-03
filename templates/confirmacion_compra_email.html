@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h2 {
+            color: #478ac9;
+        }
+        p {
+            color: #333;
+        }
+        .detalle-compra {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+        .detalle-compra h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Gracias por tu compra, {{ username }}!</h2>
+        <p>Nos alegra informarte que tu compra ha sido procesada exitosamente.</p>
+        <div class="detalle-compra">
+            <h3>Detalles de tu compra:</h3>
+            <ul>
+                {% for item in carrito_items %}
+                <li>{{ item.nombre }} (Cantidad: {{ item.cantidad }}): {{ item.precio }} €</li>
+                {% endfor %}
+            </ul>
+            <p><strong>Total pagado:</strong> {{ total_precio }} €</p>
+        </div>
+        <p>Esperamos verte pronto nuevamente.</p>
+    </div>
+</body>
+</html>
