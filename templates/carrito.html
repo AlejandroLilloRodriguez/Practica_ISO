@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="keywords" content="">
     <meta name="description" content="">
-    <title>RESULTADOS BÚSQUEDA</title>
-
+    <title>RESULTADOS DE BÚSQUEDA</title>
+    
     {% load static %}
 
     <link rel="stylesheet" href="{% static 'css/nicepage.css' %}" media="screen">
@@ -19,6 +19,7 @@
     <!-- Estilos CSS personalizados para el carrito de compras -->
     <style>
         /* Estilos para la tabla del carrito de compras */
+        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -121,26 +122,39 @@
             transform: scale(1.05);
         }
 
-        /* Total destacado */
+        /* Total estilizado */
         .total {
-            font-size: 28px;
+            font-size: 20px;
             font-weight: bold;
-            text-align: center;
-            color: #444;
-            margin-top: 40px;
-            padding: 15px;
-            background: #f0f0f0;
-            border: 2px solid #36b1bf;
+            text-align: right;
+            color: #444444;
+            margin-top: 20px;
+            padding: 10px;
+            background: #f7f9fb;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
-        h1 {
+         h1 {
             font-size: 2.5rem;
             font-weight: bold;
             text-align: center;
             margin-bottom: 20px;
-            color: #478ac9;
+            background: linear-gradient(90deg, #478ac9, #36b1bf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Estilo para botones de cantidad */
@@ -172,8 +186,26 @@
             border-radius: 4px;
             padding: 5px;
         }
-    </style>
 
+        /* Botón para vaciar carrito */
+        .btn-vaciar {
+            background: #d9534f;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn-vaciar:hover {
+            background: #c9302c;
+            transform: scale(1.05);
+        }
+    </style>
+    
     <script type="application/ld+json">{
         "@context": "http://schema.org",
         "@type": "Organization",
@@ -181,33 +213,25 @@
         "logo": "images/carrito.png"
     }</script>
     <meta name="theme-color" content="#478ac9">
-    <meta property="og:title" content="RESULTADOS BÚSQUEDA">
+    <meta property="og:title" content="RESULTADOS DE BÚSQUEDA">
     <meta property="og:type" content="website">
     <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
-<body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="es">
+  <body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="es">
     <header class="u-clearfix u-custom-color-1 u-header u-header" id="sec-f9db">
         <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
             <nav class="u-menu u-menu-one-level u-offcanvas u-menu-1">
                 <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
                     <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
-                        <svg class="u-svg-link" viewBox="0 0 24 24">
-                            <use xlink:href="#menu-hamburger"></use>
-                        </svg>
-                        <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-                            <g>
-                                <rect y="1" width="16" height="2"></rect>
-                                <rect y="7" width="16" height="2"></rect>
-                                <rect y="13" width="16" height="2"></rect>
-                            </g>
-                        </svg>
+                        <svg class="u-svg-link" viewBox="0 0 24 24"><use xlink:href="#menu-hamburger"></use></svg>
+                        <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect></g></svg>
                     </a>
                 </div>
                 <div class="u-custom-menu u-nav-container">
                     <ul class="u-nav u-unstyled u-nav-1">
                         <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'inicio' %}" style="padding: 10px 20px;">INICIO</a></li>
                         <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'supermercados' %}" style="padding: 10px 20px;">SUPERMERCADOS</a></li>
-                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'mi_cuenta' %}" style="padding: 10px 20px;">.</a></li>
-                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'carrito' %}" style="padding: 10px 20px;">.</a></li>
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'mi_cuenta' %}" style="padding: 10px 20px;">Mi Cuenta</a></li>
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'carrito' %}" style="padding: 10px 20px;">Carrito</a></li>
                     </ul>
                 </div>
                 <div class="u-custom-menu u-nav-container-collapse">
@@ -217,8 +241,8 @@
                             <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2">
                                 <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'inicio' %}">INICIO</a></li>
                                 <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'supermercados' %}">SUPERMERCADOS</a></li>
-                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'mi_cuenta' %}">.</a></li>
-                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'carrito' %}">.</a></li>
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'mi_cuenta' %}">Mi Cuenta</a></li>
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'carrito' %}">Carrito</a></li>
                             </ul>
                         </div>
                     </div>
@@ -231,12 +255,8 @@
             <form action="#" class="u-border-1 u-border-grey-30 u-search u-search-left u-white u-search-1" data-search-token="no-license" data-href="{% url 'buscar_productos'%}">
                 <button class="u-search-button" type="submit">
                     <span class="u-search-icon u-spacing-10">
-                        <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966">
-                            <use xlink:href="#svg-0a99"></use>
-                        </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-0a99" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" class="u-svg-content">
-                            <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"></path>
-                        </svg>
+                        <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966"><use xlink:href="#svg-0a99"></use></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-0a99" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" class="u-svg-content"><path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"></path></svg>
                     </span>
                 </button>
                 <input class="u-search-input" type="search" name="search" value="" placeholder="Busca tu producto">
@@ -249,20 +269,25 @@
             </a>
         </div>
     </header>
-
+    
     <!-- Sección de resultados de búsqueda y carrito de compras -->
-    <section class="u-clearfix u-container-align-center u-white u-section-1">
+    <section class="u-clearfix u-container-align-center u-white u-section-1" id="sec-cded">
         <div class="u-clearfix u-sheet u-sheet-1">
+            <!-- Código del carrito de compras -->
+            {% load custom_filters %}
             <h1>Carrito de Compras</h1>
-
+            {% if not user.is_authenticated %}
+            <p class="nota">Nota: Tu carrito se guardará temporalmente. Inicia sesión para guardarlo permanentemente.</p>
+            {% endif %}
             <table>
                 <thead>
                     <tr>
                         <th>Supermercado</th>
-                        <th>Producto</th>
+                        <th>Nombre del Producto</th>
                         <th>Cantidad</th>
-                        <th>Precio Unitario</th>
-                        <th>Precio Total</th>
+                        <th>Precio</th>
+                        <th>Precio por kg</th>
+                        <th>Imagen</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -271,21 +296,22 @@
                     <tr>
                         <td>{{ item.supermercado }}</td>
                         <td>{{ item.nombre }}</td>
-                        <td>
-                            <div class="cantidad-control">
-                                <button data-action="decrement" data-producto-id="{{ producto_id }}">-</button>
-                                <input type="text" value="{{ item.cantidad }}" readonly>
-                                <button data-action="increment" data-producto-id="{{ producto_id }}">+</button>
-                            </div>
-                        </td>
+                        <td>{{ item.cantidad }}</td>
                         <td>{{ item.precio|floatformat:2 }}€</td>
-                        <td id="precio-total-{{ producto_id }}" data-precio-unitario="{{ item.precio }}">
-                            {{ item.precio|floatformat:2 }}€
+                        <td>{{ item.precio_por_kg }}</td>
+                        <td>
+                            <img src="{{ item.imagen }}" alt="{{ item.nombre }}" class="producto-imagen">
                         </td>
                         <td>
                             <form method="POST" action="{% url 'carrito' %}">
                                 {% csrf_token %}
-                                <input type="hidden" name="producto_id" value="{{ producto_id }}">
+                                <input type="hidden" name="producto_id" value="{{ producto_id }}"> 
+                                <input type="hidden" name="producto_supermercado" value="{{ item.supermercado }}">
+                                <input type="hidden" name="producto_nombre" value="{{ item.nombre }}">
+                                <input type="hidden" name="producto_precio" value="{{ item.precio }}">
+                                <input type="hidden" name="producto_precio_por_kg" value="{{ item.precio_por_kg }}">
+                                <input type="hidden" name="producto_imagen" value="{{ item.imagen }}">
+                                <input type="hidden" name="action" value="eliminar">
                                 <button type="submit">Eliminar</button>
                             </form>
                         </td>
@@ -293,21 +319,21 @@
                     {% endfor %}
                 </tbody>
             </table>
-
             <p class="total">Total: {{ total_precio|floatformat:2 }}€</p>
 
             <div class="botones">
                 <a href="{% url 'inicio' %}" class="btn-seguir">Seguir Comprando</a>
+                
                 {% if user.is_authenticated %}
                     <a href="{% url 'comprar' %}" class="btn-comprar">Pagar</a>
                 {% else %}
-                    <a href="{% url 'mi_cuenta' %}" class="btn-comprar">Inicia sesión para pagar</a>
+                    <a href="{% url 'mi_cuenta' %}" class="btn-comprar">Iniciar sesión para pagar</a>
                 {% endif %}
             </div>
         </div>
     </section>
 
-    <footer class="u-align-center u-clearfix u-container-align-center u-footer u-grey-80 u-footer" id="sec-7b9a" style="margin-top: 50px;">
+    <footer class="u-align-center u-clearfix u-container-align-center u-footer u-grey-80 u-footer" id="sec-7b9a" style="margin-top: 100px; position: relative; bottom: -50px;">
         <div class="u-clearfix u-sheet u-sheet-1">
             <p class="u-small-text u-text u-text-variant u-text-1">Licencia para copiar productos de otros supermercados&nbsp; @Copyright </p>
         </div>
@@ -320,24 +346,36 @@
                 button.addEventListener('click', (e) => {
                     const input = e.target.closest('.cantidad-control').querySelector('input');
                     let cantidad = parseInt(input.value, 10) || 0;
-
+    
                     if (e.target.dataset.action === 'increment') {
                         cantidad++;
                     } else if (e.target.dataset.action === 'decrement' && cantidad > 1) {
                         cantidad--;
                     }
-
+    
                     input.value = cantidad;
                     actualizarPrecioTotal(e.target.dataset.productoId, cantidad);
                 });
             });
-
+    
             // Función para actualizar el precio total dinámico
             const actualizarPrecioTotal = (productoId, cantidad) => {
                 const precioElemento = document.querySelector(`#precio-total-${productoId}`);
                 const precioUnitario = parseFloat(precioElemento.dataset.precioUnitario);
                 precioElemento.textContent = (precioUnitario * cantidad).toFixed(2) + '€';
             };
+    
+            // Función para vaciar el carrito
+            const vaciarCarrito = () => {
+                if (confirm('¿Estás seguro de que deseas vaciar el carrito?')) {
+                    // Aquí puedes realizar una llamada AJAX para vaciar el carrito en el backend
+                    alert('El carrito ha sido vaciado.');
+                    // Ejemplo de redirección o recarga
+                    location.reload();
+                }
+            };
+    
+            document.querySelector('.btn-vaciar').addEventListener('click', vaciarCarrito);
         });
     </script>
 </body>
