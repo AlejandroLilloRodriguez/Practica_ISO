@@ -4,6 +4,8 @@ from django.db import connection
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.shortcuts import render, redirect
+
 
 @login_required
 def comprar(request):
@@ -56,3 +58,16 @@ def comprar(request):
             return render(request, 'comprar.html', {'total_precio': total_precio, 'mensaje_error': 'Hubo un error al enviar el correo de confirmación. Tu compra se realizó correctamente.'})
 
     return render(request, 'comprar.html', {'total_precio': total_precio})
+
+def direccion_envio(request):
+    if request.method == 'POST':
+        # Guardar la dirección de envío en la sesión
+        request.session['direccion'] = request.POST
+        return redirect('datos_pago')
+    return render(request, 'envio.html')
+
+def datos_pago(request):
+    if request.method == 'POST':
+        # Procesar los datos de pago aquí
+        return redirect('inicio')  # Por ejemplo, redirigir al inicio si el pago es exitoso
+    return render(request, 'comprar.html')

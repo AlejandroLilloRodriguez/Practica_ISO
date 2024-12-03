@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html style="font-size: 16px;" lang="es"><head>
+<html style="font-size: 16px;" lang="es">
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <meta name="keywords" content="">
     <meta name="description" content="">
     <title>RESULTADOS BÚSQUEDA</title>
-        
+
     {% load static %}
 
     <link rel="stylesheet" href="{% static 'css/nicepage.css' %}" media="screen">
-<link rel="stylesheet" href="{% static 'css/RESULTADOS-BÚSQUEDA.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'css/RESULTADOS-BÚSQUEDA.css' %}" media="screen">
     <script class="u-script" type="text/javascript" src="{% static 'js/jquery.js' %}" defer=""></script>
     <script class="u-script" type="text/javascript" src="{% static 'js/nicepage.js' %}" defer=""></script>
     <meta name="generator" content="Nicepage 6.19.6, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
 
-        <!-- Estilos CSS personalizados para el carrito de compras -->
+    <!-- Estilos CSS personalizados para el carrito de compras -->
     <style>
         /* Estilos para la tabla del carrito de compras */
         table {
@@ -24,169 +25,244 @@
             margin: 20px 0;
             font-size: 16px;
             text-align: left;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
 
         table thead tr {
-            background-color: #478ac9; /* Color azul Nicepage */
+            background: linear-gradient(90deg, #478ac9, #36b1bf);
             color: #ffffff;
-            text-align: left;
+            font-weight: bold;
+            text-transform: uppercase;
         }
 
         table th, table td {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
+            padding: 16px 20px;
+            border-bottom: 1px solid #ddd;
         }
 
-        table tbody tr {
-            border-bottom: 1px solid #dddddd;
+        table tbody tr:nth-of-type(odd) {
+            background: #f7f9fb;
         }
 
-        table tbody tr:nth-of-type(even) {
-            background-color: #f3f3f3; /* Color de fila alterna */
+        table tbody tr:hover {
+            background: #eaf6ff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
-        table tbody tr:last-of-type {
-            border-bottom: 2px solid #478ac9;
+        table td {
+            vertical-align: middle;
         }
 
         .producto-imagen {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             object-fit: cover;
-            border-radius: 5px; /* Para esquinas redondeadas */
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
         }
 
-        /* Botones de acción */
+        /* Botones mejorados */
         button {
-            background-color: #478ac9; /* Color del tema */
-            color: white;
+            background: linear-gradient(90deg, #478ac9, #36b1bf);
+            color: #ffffff;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 15px;
             font-size: 14px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
 
         button:hover {
-            background-color: #3772a6; /* Color al hacer hover */
+            background: linear-gradient(90deg, #36b1bf, #478ac9);
+            transform: scale(1.05);
         }
 
+        /* Botones de acción (seguir comprando y pagar) */
         .botones {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 15px;
         }
 
         .btn-seguir, .btn-comprar {
-          text-decoration: none;
-          padding: 10px 20px;
-          color: white;
-          border-radius: 4px;
-          font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            padding: 12px 25px;
+            color: #ffffff;
+            border-radius: 25px;
+            font-size: 16px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
 
         .btn-seguir {
-          background-color: #478ac9;
+            background: linear-gradient(90deg, #478ac9, #36b1bf);
         }
 
         .btn-comprar {
-          background-color: #28a745;
+            background: linear-gradient(90deg, #28a745, #5edb8c);
         }
 
         .btn-seguir:hover {
-          background-color: #3772a6;
+            background: linear-gradient(90deg, #36b1bf, #478ac9);
+            transform: scale(1.05);
         }
 
         .btn-comprar:hover {
-          background-color: #218838;
+            background: linear-gradient(90deg, #5edb8c, #28a745);
+            transform: scale(1.05);
         }
 
-
+        /* Total destacado */
         .total {
-            font-size: 18px;
+            font-size: 28px;
             font-weight: bold;
+            text-align: center;
+            color: #444;
+            margin-top: 40px;
+            padding: 15px;
+            background: #f0f0f0;
+            border: 2px solid #36b1bf;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #478ac9;
+        }
+
+        /* Estilo para botones de cantidad */
+        .cantidad-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cantidad-control button {
+            background: #478ac9;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cantidad-control button:hover {
+            background: #36b1bf;
+        }
+
+        .cantidad-control input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
         }
     </style>
-    
+
     <script type="application/ld+json">{
-		"@context": "http://schema.org",
-		"@type": "Organization",
-		"name": "",
-		"logo": "images/carrito.png"
-}</script>
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": "",
+        "logo": "images/carrito.png"
+    }</script>
     <meta name="theme-color" content="#478ac9">
     <meta property="og:title" content="RESULTADOS BÚSQUEDA">
     <meta property="og:type" content="website">
-  <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
-  <body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="es"><header class="u-clearfix u-custom-color-1 u-header u-header" id="sec-f9db"><div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <nav class="u-menu u-menu-one-level u-offcanvas u-menu-1">
-          <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
-            <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
-              <svg class="u-svg-link" viewBox="0 0 24 24"><use xlink:href="#menu-hamburger"></use></svg>
-              <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
-</g></svg>
+    <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
+<body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="es">
+    <header class="u-clearfix u-custom-color-1 u-header u-header" id="sec-f9db">
+        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+            <nav class="u-menu u-menu-one-level u-offcanvas u-menu-1">
+                <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
+                    <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
+                        <svg class="u-svg-link" viewBox="0 0 24 24">
+                            <use xlink:href="#menu-hamburger"></use>
+                        </svg>
+                        <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <rect y="1" width="16" height="2"></rect>
+                                <rect y="7" width="16" height="2"></rect>
+                                <rect y="13" width="16" height="2"></rect>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+                <div class="u-custom-menu u-nav-container">
+                    <ul class="u-nav u-unstyled u-nav-1">
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'inicio' %}" style="padding: 10px 20px;">INICIO</a></li>
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'supermercados' %}" style="padding: 10px 20px;">SUPERMERCADOS</a></li>
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'mi_cuenta' %}" style="padding: 10px 20px;">.</a></li>
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'carrito' %}" style="padding: 10px 20px;">.</a></li>
+                    </ul>
+                </div>
+                <div class="u-custom-menu u-nav-container-collapse">
+                    <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
+                        <div class="u-inner-container-layout u-sidenav-overflow">
+                            <div class="u-menu-close"></div>
+                            <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2">
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'inicio' %}">INICIO</a></li>
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'supermercados' %}">SUPERMERCADOS</a></li>
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'mi_cuenta' %}">.</a></li>
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'carrito' %}">.</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
+                </div>
+            </nav>
+            <a href="{% url 'inicio' %}">
+                <img class="u-image u-image-default u-preserve-proportions u-image-1" src="{% static 'images/logo.jpeg' %}" alt="" data-image-width="1024" data-image-height="1024">
             </a>
-          </div>
-          <div class="u-custom-menu u-nav-container">
-            <ul class="u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'inicio' %}" style="padding: 10px 20px;">INICIO</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'supermercados' %}" style="padding: 10px 20px;">SUPERMERCADOS</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'mi_cuenta' %}" style="padding: 10px 20px;">.</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'carrito' %}" style="padding: 10px 20px;">.</a>
-</li></ul>
-          </div>
-          <div class="u-custom-menu u-nav-container-collapse">
-            <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
-              <div class="u-inner-container-layout u-sidenav-overflow">
-                <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'inicio' %}">INICIO</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'supermercados' %}">SUPERMERCADOS</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'mi_cuenta' %}">.</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'carrito' %}">.</a>
-</li></ul>
-              </div>
-            </div>
-            <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
-          </div>
-        </nav>
-        <a href="{% url 'inicio' %}">
-        <img class="u-image u-image-default u-preserve-proportions u-image-1" src="{% static 'images/logo.jpeg' %}" alt="" data-image-width="1024" data-image-height="1024">
-        </a>
-        <form action="#" class="u-border-1 u-border-grey-30 u-search u-search-left u-white u-search-1" data-search-token="no-license" data-href="{% url 'buscar_productos'%}">
-          <button class="u-search-button" type="submit">
-            <span class="u-search-icon u-spacing-10">
-              <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966"><use xlink:href="#svg-0a99"></use></svg>
-              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-0a99" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" class="u-svg-content"><path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"></path></svg>
-            </span>
-          </button>
-          <input class="u-search-input" type="search" name="search" value="" placeholder="Busca tu producto">
-        </form>
-        <a href="{% url 'carrito' %}" class="u-image u-logo u-image-2" data-image-width="512" data-image-height="512">
-          <img src="{% static 'images/carrito.png' %}" class="u-logo-image u-logo-image-1">
-        </a>
-        <a href="{% url 'mi_cuenta' %}" class="u-image u-logo u-image-3" data-image-width="512" data-image-height="512">
-          <img src="{% static 'images/login1.png' %}" class="u-logo-image u-logo-image-2">
-        </a>
-      </div></header>
-    
-       <!-- Sección de resultados de búsqueda y carrito de compras -->
-    <section class="u-clearfix u-container-align-center u-white u-section-1" id="sec-cded">
+            <form action="#" class="u-border-1 u-border-grey-30 u-search u-search-left u-white u-search-1" data-search-token="no-license" data-href="{% url 'buscar_productos'%}">
+                <button class="u-search-button" type="submit">
+                    <span class="u-search-icon u-spacing-10">
+                        <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966">
+                            <use xlink:href="#svg-0a99"></use>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-0a99" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" class="u-svg-content">
+                            <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"></path>
+                        </svg>
+                    </span>
+                </button>
+                <input class="u-search-input" type="search" name="search" value="" placeholder="Busca tu producto">
+            </form>
+            <a href="{% url 'carrito' %}" class="u-image u-logo u-image-2" data-image-width="512" data-image-height="512">
+                <img src="{% static 'images/carrito.png' %}" class="u-logo-image u-logo-image-1">
+            </a>
+            <a href="{% url 'mi_cuenta' %}" class="u-image u-logo u-image-3" data-image-width="512" data-image-height="512">
+                <img src="{% static 'images/login1.png' %}" class="u-logo-image u-logo-image-2">
+            </a>
+        </div>
+    </header>
+
+    <!-- Sección de resultados de búsqueda y carrito de compras -->
+    <section class="u-clearfix u-container-align-center u-white u-section-1">
         <div class="u-clearfix u-sheet u-sheet-1">
-            <!-- Código del carrito de compras -->
-            {% load custom_filters %}
             <h1>Carrito de Compras</h1>
-            {% if not user.is_authenticated %}
-            <p class="nota">Nota: Tu carrito se guardará temporalmente. Inicia sesión para guardarlo permanentemente.</p>
-            {% endif %}
+
             <table>
                 <thead>
                     <tr>
                         <th>Supermercado</th>
-                        <th>Nombre del Producto</th>
+                        <th>Producto</th>
                         <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Precio por kg</th>
-                        <th>Imagen</th>
+                        <th>Precio Unitario</th>
+                        <th>Precio Total</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -195,22 +271,21 @@
                     <tr>
                         <td>{{ item.supermercado }}</td>
                         <td>{{ item.nombre }}</td>
-                        <td>{{ item.cantidad }}</td>
-                        <td>{{ item.precio|floatformat:2 }}€</td>
-                        <td>{{ item.precio_por_kg }}</td>
                         <td>
-                            <img src="{{ item.imagen }}" alt="{{ item.nombre }}" class="producto-imagen">
+                            <div class="cantidad-control">
+                                <button data-action="decrement" data-producto-id="{{ producto_id }}">-</button>
+                                <input type="text" value="{{ item.cantidad }}" readonly>
+                                <button data-action="increment" data-producto-id="{{ producto_id }}">+</button>
+                            </div>
+                        </td>
+                        <td>{{ item.precio|floatformat:2 }}€</td>
+                        <td id="precio-total-{{ producto_id }}" data-precio-unitario="{{ item.precio }}">
+                            {{ item.precio|floatformat:2 }}€
                         </td>
                         <td>
                             <form method="POST" action="{% url 'carrito' %}">
                                 {% csrf_token %}
-                                <input type="hidden" name="producto_id" value="{{ producto_id }}"> 
-                                <input type="hidden" name="producto_supermercado" value="{{ item.supermercado }}">
-                                <input type="hidden" name="producto_nombre" value="{{ item.nombre }}">
-                                <input type="hidden" name="producto_precio" value="{{ item.precio }}">
-                                <input type="hidden" name="producto_precio_por_kg" value="{{ item.precio_por_kg }}">
-                                <input type="hidden" name="producto_imagen" value="{{ item.imagen }}">
-                                <input type="hidden" name="action" value="eliminar">
+                                <input type="hidden" name="producto_id" value="{{ producto_id }}">
                                 <button type="submit">Eliminar</button>
                             </form>
                         </td>
@@ -218,24 +293,52 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <p>Total: {{ total_precio|floatformat:2 }}€</p>
+
+            <p class="total">Total: {{ total_precio|floatformat:2 }}€</p>
 
             <div class="botones">
-              <a href="{% url 'inicio' %}" class="btn-seguir">Seguir Comprando</a>
-              
-              {% if user.is_authenticated %}
-                  <a href="{% url 'comprar' %}" class="btn-comprar">Pagar</a>
-              {% else %}
-                  <a href="{% url 'mi_cuenta' %}" class="btn-comprar">Iniciar sesión para pagar</a>
-              {% endif %}
-          </div>
+                <a href="{% url 'inicio' %}" class="btn-seguir">Seguir Comprando</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'comprar' %}" class="btn-comprar">Pagar</a>
+                {% else %}
+                    <a href="{% url 'mi_cuenta' %}" class="btn-comprar">Inicia sesión para pagar</a>
+                {% endif %}
+            </div>
         </div>
     </section>
 
-    
-    <footer class="u-align-center u-clearfix u-container-align-center u-footer u-grey-80 u-footer" id="sec-7b9a"><div class="u-clearfix u-sheet u-sheet-1">
-        <p class="u-small-text u-text u-text-variant u-text-1">Licencia para copiar productos de otros supermercados&nbsp; @Copyright </p>
-      </div></footer>
- 
-  
-</body></html>
+    <footer class="u-align-center u-clearfix u-container-align-center u-footer u-grey-80 u-footer" id="sec-7b9a" style="margin-top: 50px;">
+        <div class="u-clearfix u-sheet u-sheet-1">
+            <p class="u-small-text u-text u-text-variant u-text-1">Licencia para copiar productos de otros supermercados&nbsp; @Copyright </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Función para ajustar la cantidad
+            document.querySelectorAll('.cantidad-control button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const input = e.target.closest('.cantidad-control').querySelector('input');
+                    let cantidad = parseInt(input.value, 10) || 0;
+
+                    if (e.target.dataset.action === 'increment') {
+                        cantidad++;
+                    } else if (e.target.dataset.action === 'decrement' && cantidad > 1) {
+                        cantidad--;
+                    }
+
+                    input.value = cantidad;
+                    actualizarPrecioTotal(e.target.dataset.productoId, cantidad);
+                });
+            });
+
+            // Función para actualizar el precio total dinámico
+            const actualizarPrecioTotal = (productoId, cantidad) => {
+                const precioElemento = document.querySelector(`#precio-total-${productoId}`);
+                const precioUnitario = parseFloat(precioElemento.dataset.precioUnitario);
+                precioElemento.textContent = (precioUnitario * cantidad).toFixed(2) + '€';
+            };
+        });
+    </script>
+</body>
+</html>

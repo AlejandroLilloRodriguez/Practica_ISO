@@ -5,112 +5,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pago de Pedido</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Estilos específicos para este archivo */
+        /* Estilos mejorados */
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #478ac9, #367bb7);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
-            background-color: white;
-            width: 400px;
-            max-width: 90%;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
             overflow: hidden;
-        }
-
-        .form-container {
-            padding: 20px;
+            padding: 40px;
+            margin: 20px auto;
+            animation: fadeIn 0.8s ease-out;
         }
 
         .total-header {
             text-align: center;
-            font-size: 18px;
-            margin-bottom: 15px;
+            font-size: 28px;
             font-weight: bold;
-            color: #478ac9;
+            color: #f5576c;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #333;
+            border-bottom: 2px solid #f093fb;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
-            margin-top: 15px;
+            margin-bottom: 8px;
             font-weight: bold;
+            color: #555;
         }
 
         input[type="text"],
-        input[type="number"] {
+        input[type="number"],
+        select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #f093fb;
+            box-shadow: 0 0 10px rgba(240, 147, 251, 0.5);
         }
 
         button {
             width: 100%;
-            padding: 12px;
-            margin-top: 20px;
+            padding: 15px;
+            margin-top: 15px;
             border: none;
-            border-radius: 5px;
-            background-color: #478ac9;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
             color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         button:hover {
-            background-color: #367bb7;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .link-button {
-            text-decoration: none;
-            display: inline-block;
+            margin-top: 20px;
+            display: block;
             text-align: center;
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border-radius: 5px;
-            background-color: #f1f1f1;
-            color: #478ac9;
             font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            text-decoration: none;
+            color: #f5576c;
+            font-weight: bold;
+            padding: 10px;
         }
 
         .link-button:hover {
-            background-color: #e0e0e0;
+            color: #f093fb;
         }
 
-        .message {
-            margin-top: 10px;
-            font-size: 14px;
-            text-align: center;
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .message.success {
-            color: green;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .message.error {
-            color: red;
-        }
-
-        @media (max-width: 500px) {
+        @media (max-width: 600px) {
             .container {
-                width: 100%;
-                height: 100%;
-                border-radius: 0;
+                padding: 20px;
             }
         }
     </style>
@@ -118,38 +135,76 @@
 
 <body>
     <div class="container">
-        <div class="form-container">
-            <!-- Muestra el total del pedido -->
-            <div class="total-header">
-                Tu pedido es de: {{ total_precio|floatformat:2 }}€
-            </div>
-
-            <!-- Formulario de Pago -->
-            <form id="payment-form" method="POST" action="">
-                {% csrf_token %}
-
-                <label for="account-number">Número de Cuenta:</label>
-                <input type="text" id="account-number" name="account_number" required placeholder="Ej. 1234 5678 9012 3456">
-
-                <label for="expiration-date">Fecha de Caducidad:</label>
-                <input type="text" id="expiration-date" name="expiration_date" required placeholder="MM/AA">
-
-                <label for="owner-name">Propietario de la Cuenta:</label>
-                <input type="text" id="owner-name" name="owner_name" required placeholder="Nombre del Titular">
-
-                <label for="cvv">CVV:</label>
-                <input type="number" id="cvv" name="cvv" required placeholder="123">
-
-                <button type="submit" name="pay">Realizar Pago</button>
-            </form>
-            <a href="{% url 'inicio' %}" class="link-button">Volver a Inicio</a>
-            {% if messages %}
-            {% for message in messages %}
-            <div class="message {{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-            {% endif %}
+        <!-- Muestra el total del pedido -->
+        <div class="total-header">
+            Tu pedido es de: {{ total_precio|floatformat:2 }}€
         </div>
+
+        <!-- Formulario de Dirección -->
+        <h2>Dirección de Envío</h2>
+        <form id="address-form" method="POST">
+            {% csrf_token %}
+            <label for="city"><i class="fas fa-city"></i> Ciudad:</label>
+            <select id="city" name="city" required>
+                <option value="">Selecciona tu ciudad</option>
+                <option value="Madrid">Madrid</option>
+                <option value="Barcelona">Barcelona</option>
+                <option value="Valencia">Valencia</option>
+                <option value="Sevilla">Sevilla</option>
+                <option value="Zaragoza">Zaragoza</option>
+                <option value="Málaga">Málaga</option>
+                <option value="Murcia">Murcia</option>
+                <option value="Palma">Palma</option>
+                <option value="Bilbao">Bilbao</option>
+                <option value="Alicante">Alicante</option>
+                <option value="Córdoba">Córdoba</option>
+                <option value="Valladolid">Valladolid</option>
+                <option value="Vigo">Vigo</option>
+                <option value="Gijón">Gijón</option>
+                <option value="L'Hospitalet de Llobregat">L'Hospitalet de Llobregat</option>
+                <option value="Vitoria-Gasteiz">Vitoria-Gasteiz</option>
+                <option value="Granada">Granada</option>
+                <option value="Elche">Elche</option>
+                <option value="Oviedo">Oviedo</option>
+                <option value="Badalona">Badalona</option>
+                <option value="Cartagena">Cartagena</option>
+                <!-- Añade más ciudades si es necesario -->
+            </select>
+
+            <label for="address"><i class="fas fa-map-marker-alt"></i> Dirección de Envío:</label>
+            <input type="text" id="address" name="address" required placeholder="Calle, Número, Piso, Código Postal">
+        </form>
+
+        <!-- Formulario de Pago -->
+        <h2>Datos de Pago</h2>
+        <form id="payment-form" method="POST" action="">
+            {% csrf_token %}
+            <label for="account-number"><i class="fas fa-credit-card"></i> Número de Tarjeta:</label>
+            <input type="text" id="account-number" name="account_number" required placeholder="Ej. 1234 5678 9012 3456">
+
+            <label for="expiration-date"><i class="fas fa-calendar-alt"></i> Fecha de Caducidad:</label>
+            <input type="text" id="expiration-date" name="expiration_date" required placeholder="MM/AA">
+
+            <label for="owner-name"><i class="fas fa-user"></i> Propietario de la Tarjeta:</label>
+            <input type="text" id="owner-name" name="owner_name" required placeholder="Nombre del Titular">
+
+            <label for="cvv"><i class="fas fa-lock"></i> CVV:</label>
+            <input type="number" id="cvv" name="cvv" required placeholder="123">
+
+            <div class="button-group">
+                <button type="submit" name="pay">Realizar Pago</button>
+                <a href="{% url 'inicio' %}" class="link-button">Volver a Inicio</a>
+            </div>
+        </form>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
     </div>
+
+    
     <script>
         document.getElementById('payment-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Evita que el formulario se envíe directamente
@@ -158,77 +213,70 @@
             const expirationDate = document.getElementById('expiration-date').value;
             const cvv = document.getElementById('cvv').value;
 
-         
             if (!isValidCardNumber(cardNumber)) {
                 alert("El número de tarjeta no es válido.");
                 return;
             }
 
-            
             if (!isValidExpirationDate(expirationDate)) {
                 alert("La fecha de caducidad no es válida o está en el pasado.");
                 return;
             }
 
-    
             if (!/^\d{3,4}$/.test(cvv)) {
                 alert("El CVV debe contener 3 o 4 dígitos.");
                 return;
             }
+            // Simular un procesamiento exitoso del pago
+        setTimeout(() => {
+            alert("Pago exitoso. Te hemos enviado un correo de confirmación.");
+            window.location.href = "{% url 'inicio' %}"; // Redirigir al inicio
+        }, 1000); // Simulación de un pequeño retraso en el procesamiento
+    });
 
-            alert("La tarjeta es válida. Procesando pago...");
-            this.submit(); 
-        });
+    function isValidCardNumber(cardNumber) {
+        if (!/^\d{13,19}$/.test(cardNumber)) {
+            return false;
+        }
 
-        function isValidCardNumber(cardNumber) {
-            if (!/^\d{13,19}$/.test(cardNumber)) {
-                return false;
-            }
+        let sum = 0;
+        let shouldDouble = false;
 
-            
-            let sum = 0;
-            let shouldDouble = false;
+        for (let i = cardNumber.length - 1; i >= 0; i--) {
+            let digit = parseInt(cardNumber.charAt(i), 10);
 
-            for (let i = cardNumber.length - 1; i >= 0; i--) {
-                let digit = parseInt(cardNumber.charAt(i), 10);
-
-                if (shouldDouble) {
-                    digit *= 2;
-                    if (digit > 9) {
-                        digit -= 9;
-                    }
+            if (shouldDouble) {
+                digit *= 2;
+                if (digit > 9) {
+                    digit -= 9;
                 }
-
-                sum += digit;
-                shouldDouble = !shouldDouble;
             }
 
-            return sum % 10 === 0;
+            sum += digit;
+            shouldDouble = !shouldDouble;
         }
 
-        function isValidExpirationDate(expirationDate) {
-            
-            if (!/^\d{2}\/\d{2}$/.test(expirationDate)) {
-                return false;
-            }
+        return sum % 10 === 0;
+    }
 
-            const [month, year] = expirationDate.split('/').map(Number);
-            if (month < 1 || month > 12) {
-                return false;
-            }
-
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear() % 100;
-            const currentMonth = currentDate.getMonth() + 1;
-
-            
-            if (year < currentYear || (year === currentYear && month < currentMonth)) {
-                return false;
-            }
-
-            return true;
+    function isValidExpirationDate(expirationDate) {
+        if (!/^\d{2}\/\d{2}$/.test(expirationDate)) {
+            return false;
         }
-    </script>
-</body>
 
-</html>
+        const [month, year] = expirationDate.split('/').map(Number);
+        if (month < 1 || month > 12) {
+            return false;
+        }
+
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear() % 100;
+        const currentMonth = currentDate.getMonth() + 1;
+
+        if (year < currentYear || (year === currentYear && month < currentMonth)) {
+            return false;
+        }
+
+        return true;
+    }
+</script>

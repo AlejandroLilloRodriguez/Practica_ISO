@@ -118,3 +118,5 @@ def manejar_carrito(request):
     response = render(request, 'carrito.html', {'carrito_items': carrito_items, 'total_precio': total_precio})
     response.set_cookie('carrito_id', cookie_id, max_age=3600, httponly=True, samesite='Lax')
     return response
+
+    

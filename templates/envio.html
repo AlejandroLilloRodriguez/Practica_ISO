@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dirección de Envío</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <style>
+        /* Estilos específicos para este archivo */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #478ac9, #367bb7);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            width: 400px;
+            max-width: 90%;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .form-container {
+            padding: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #478ac9;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #367bb7;
+        }
+
+        .link-button {
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+            color: #478ac9;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .link-button:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Dirección de Envío</h2>
+            <form method="POST" action="{% url 'direccion_pago' %}">
+                {% csrf_token %}
+                <label for="address">Dirección de Envío:</label>
+                <input type="text" id="address" name="address" required placeholder="Calle, Número, Piso, Código Postal">
+
+                <label for="city">Ciudad:</label>
+                <input type="text" id="city" name="city" required placeholder="Ciudad">
+
+                <label for="country">País:</label>
+                <input type="text" id="country" name="country" required placeholder="País">
+
+                <button type="submit">Continuar al Pago</button>
+            </form>
+            <a href="{% url 'inicio' %}" class="link-button">Volver al Inicio</a>
+        </div>
+    </div>
+</body>
+</html>
