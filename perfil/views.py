@@ -5,18 +5,23 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 
-
 # Definir el formulario para cambiar el usuario y el email
 class CambiarPerfilForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email']  # Añadimos el campo email también
+        fields = ['username', 'email']
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        if User.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError("Este nombre de usuario ya está en uso.")
         return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("Este email ya está en uso.")
+        return email
 
 @login_required
 def perfil(request):
@@ -25,9 +30,17 @@ def perfil(request):
     if request.method == 'POST':
         form = CambiarPerfilForm(request.POST, instance=user)
         if form.is_valid():
-            form.save()  # Guarda los cambios del perfil
+            # Guardar los cambios del perfil
+            user = form.save(commit=False)  # No guardar inmediatamente
+            user.email = form.cleaned_data['email']  # Asegurarse de que el correo sea el correcto
+            user.username = form.cleaned_data['username']
+            user.save()  # Guardar el usuario actualizado en la base de datos
+            
             messages.success(request, 'Perfil actualizado con éxito.')
             return redirect('perfil')  # Redirige a la misma página del perfil
+        else:
+            # Mostrar mensaje de error en caso de no validarse el formulario
+            messages.error(request, 'Introduzca otros datos.')
     else:
         form = CambiarPerfilForm(instance=user)
 
@@ -36,6 +49,7 @@ def perfil(request):
         'usuario': user  # Asegúrate de pasar el usuario al template
     })
 
+# Formulario para restablecer contraseña
 class ResetPasswordForm(forms.Form):
     new_password = forms.CharField(widget=forms.PasswordInput, required=True, label="Nueva contraseña")
     confirm_password = forms.CharField(widget=forms.PasswordInput, required=True, label="Confirmar nueva contraseña")
