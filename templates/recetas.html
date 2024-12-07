@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recetas</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .recipes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .recipe-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .recipe-card:hover {
+            transform: scale(1.05);
+        }
+        .recipe-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .recipe-card .recipe-info {
+            padding: 15px;
+        }
+        .recipe-card h3 {
+            margin: 10px 0;
+            color: #478ac9;
+        }
+        .recipe-card p {
+            color: #777;
+            font-size: 14px;
+        }
+        .recipe-card button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            border: none;
+            background-color: #478ac9;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .recipe-card button:hover {
+            background-color: #367bb7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Nuestras Recetas</h1>
+        <div class="recipes">
+            <!-- Receta 1 -->
+            <div class="recipe-card">
+                <img src="https://via.placeholder.com/300x200" alt="Imagen de la receta">
+                <div class="recipe-info">
+                    <h3>Paella Valenciana</h3>
+                    <p>La receta tradicional con mariscos y azafrán.</p>
+                    <button onclick="alert('Detalles de Paella Valenciana')">Ver Detalles</button>
+                </div>
+            </div>
+            <!-- Receta 2 -->
+            <div class="recipe-card">
+                <img src="https://via.placeholder.com/300x200" alt="Imagen de la receta">
+                <div class="recipe-info">
+                    <h3>Tacos al Pastor</h3>
+                    <p>Una delicia mexicana con carne adobada.</p>
+                    <button onclick="alert('Detalles de Tacos al Pastor')">Ver Detalles</button>
+                </div>
+            </div>
+            <!-- Receta 3 -->
+            <div class="recipe-card">
+                <img src="https://via.placeholder.com/300x200" alt="Imagen de la receta">
+                <div class="recipe-info">
+                    <h3>Sushi Variado</h3>
+                    <p>Plato japonés con pescado fresco y arroz.</p>
+                    <button onclick="alert('Detalles de Sushi Variado')">Ver Detalles</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

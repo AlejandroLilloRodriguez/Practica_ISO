@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'filtrar_inicio',
     'comprar',
     'localizacion',
+    'recetas',
 ]
 
 MIDDLEWARE = [

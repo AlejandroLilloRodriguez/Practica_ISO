@@ -47,6 +47,7 @@ urlpatterns = [
     path('filtrar_inicio/', include('filtrar_inicio.urls')),
     path('comprar/', include('comprar.urls')),
     path('localizacion/', include('localizacion.urls')),
+    path('recetas/', include('recetas.urls')),
 
 
     
