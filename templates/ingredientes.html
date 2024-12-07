@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ receta.nombre }}</title>
+    <style>
+        .ingrediente {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ receta.nombre }}</h1>
+    <p>{{ receta.descripcion }}</p>
+
+    <h2>Ingredientes:</h2>
+    <ul>
+        {% for ingrediente in ingredientes %}
+            <li class="ingrediente">
+                {{ ingrediente.nombre }} - {{ ingrediente.supermercado }} ({{ ingrediente.precio }})
+            </li>
+        {% empty %}
+            <p>No hay ingredientes disponibles.</p>
+        {% endfor %}
+    </ul>
+</body>
+</html>

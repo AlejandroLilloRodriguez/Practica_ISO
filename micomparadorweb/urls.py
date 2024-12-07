@@ -48,6 +48,8 @@ urlpatterns = [
     path('comprar/', include('comprar.urls')),
     path('localizacion/', include('localizacion.urls')),
     path('recetas/', include('recetas.urls')),
+    path('ingredientes/', include('ingredientes.urls')),
+    
 
 
     
