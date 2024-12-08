@@ -251,34 +251,91 @@
     
 </head>
 
-<body>
-    <div class="container">
-        <h1 class="title">Nuestras Recetas</h1>
-        <div class="recipes">
-            <!-- Receta 1 -->
-            <div class="recipe-card">
-                <img src="{% static 'images/pollo_empanado.jpeg' %}" alt="Imagen de Pollo Empanado">
-                <div class="recipe-info">
-                    <h3><a href="{% url 'ingredientes' receta_id=1 %}">Pollo Empanado</a></h3>
-                </div>
+<div class="container">
+    <h1 class="title">Nuestras Recetas</h1>
+    <div class="recipes">
+        <!-- Receta 1 -->
+        <div class="recipe-card">
+            <img src="{% static 'images/pollo_empanado.jpeg' %}" alt="Imagen de Pollo Empanado">
+            <div class="recipe-info">
+                <h3><a href="{% url 'ingredientes' receta_id=1 %}">Pollo Empanado</a></h3>
             </div>
-            
-            <!-- Receta 2 -->
-            <div class="recipe-card">
-                <img src="{% static 'images/salmon.webp' %}" alt="Imagen de Salmón al Horno">
-                <div class="recipe-info">
-                    <h3><a href="{% url 'ingredientes' receta_id=2 %}">Salmón al Horno</a></h3>
-                </div>
+        </div>
+
+        <!-- Receta 2 -->
+        <div class="recipe-card">
+            <img src="{% static 'images/salmon.webp' %}" alt="Imagen de Salmón al Horno">
+            <div class="recipe-info">
+                <h3><a href="{% url 'ingredientes' receta_id=2 %}">Salmón al Horno</a></h3>
             </div>
-            <!-- Receta 3 -->
-            <div class="recipe-card">
-                <img src="{% static 'images/ensalada.jpg' %}" alt="Imagen de Ensalada Fresca y Vinagreta de Frutas">
-                <div class="recipe-info">
-                    <h3><a href="{% url 'ingredientes' receta_id=3 %}">Ensalada Fresca y Vinagreta de Frutas</a></h3>
-                </div>
+        </div>
+
+        <!-- Receta 3 -->
+        <div class="recipe-card">
+            <img src="{% static 'images/ensalada.jpg' %}" alt="Imagen de Ensalada Fresca y Vinagreta de Frutas">
+            <div class="recipe-info">
+                <h3><a href="{% url 'ingredientes' receta_id=3 %}">Ensalada Fresca y Vinagreta de Frutas</a></h3>
+            </div>
+        </div>
+
+        <!-- Nueva Receta 1: Paella Valenciana -->
+        <div class="recipe-card">
+            <img src="{% static 'images/paella_valenciana.jpg' %}" alt="Imagen de Paella Valenciana">
+            <div class="recipe-info">
+                <h3><a href="{% url 'ingredientes' receta_id=5 %}">Paella Valenciana</a></h3>
+            </div>
+        </div>
+
+        <!-- Nueva Receta 2: Pizza Margarita -->
+        <div class="recipe-card">
+            <img src="{% static 'images/pizza-margarita.jpg' %}" alt="Imagen de Pizza Margarita">
+            <div class="recipe-info">
+                <h3><a href="{% url 'ingredientes' receta_id=6 %}">Pizza Margarita</a></h3>
+            </div>
+        </div>
+
+        <!-- Nueva Receta 3: Enchiladas de Pollo -->
+        <div class="recipe-card">
+            <img src="{% static 'images/enchiladas-pollo.jpg' %}" alt="Imagen de Enchiladas de Pollo">
+            <div class="recipe-info">
+                <h3><a href="{% url 'ingredientes' receta_id=7 %}">Enchiladas de Pollo</a></h3>
+            </div>
+        </div>
+
+        <!-- Nueva Receta 4: Lasaña de Carne -->
+        <div class="recipe-card">
+            <img src="{% static 'images/lasagna.jpg' %}" alt="Imagen de Lasaña de Carne">
+            <div class="recipe-info">
+                <h3><a href="{% url 'ingredientes' receta_id=8 %}">Lasaña de Carne</a></h3>
+            </div>
+        </div>
+
+        <!-- Nueva Receta 5: Tarta de Manzana -->
+        <div class="recipe-card">
+            <img src="{% static 'images/tarta-manzana.jpg' %}" alt="Imagen de Tarta de Manzana">
+            <div class="recipe-info">
+                <h3><a href="{% url 'ingredientes' receta_id=9 %}">Tarta de Manzana</a></h3>
+            </div>
+        </div>
+
+        <!-- Nueva Receta 6: Chili con Carne -->
+        <div class="recipe-card">
+            <img src="{% static 'images/chilli.avif' %}" alt="Imagen de Chili con Carne">
+            <div class="recipe-info">
+                <h3><a href="{% url 'ingredientes' receta_id=10 %}">Chili con Carne</a></h3>
+            </div>
+        </div>
+
+        <!-- Nueva Receta 7: Gazpacho Andaluz -->
+        <div class="recipe-card">
+            <img src="{% static 'images/gazpacho.jpg' %}" alt="Imagen de Gazpacho Andaluz">
+            <div class="recipe-info">
+                <h3><a href="{% url 'ingredientes' receta_id=11 %}">Gazpacho Andaluz</a></h3>
             </div>
         </div>
     </div>
+</div>
+
 </body>
 
 </html>
