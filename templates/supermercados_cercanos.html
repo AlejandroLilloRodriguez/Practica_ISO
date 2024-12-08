@@ -318,13 +318,7 @@
     </select>
     <button onclick="abrirOverpass()">Buscar Supermercados</button>
 -->
-    <form onsubmit="buscarCoordenadas(event)">
-        {% csrf_token %}
-        <label for="direccion">Introduce una dirección:</label>
-        <input type="text" id="direccion" name="direccion" placeholder="Ej: Calle Mayor, Madrid" required>
-        <button type="submit">Buscar Supermercados</button>
-    </form>
-    <div id="map"></div>
+    
 
 </body>
 </html>
