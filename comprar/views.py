@@ -6,10 +6,11 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from datetime import datetime, timedelta
 
+
+
 @login_required
 def comprar(request):
     usuario_id = request.user.id
-    usuario_email = request.user.email
 
     # Obtener los items del carrito
     with connection.cursor() as cursor:
@@ -33,43 +34,17 @@ def comprar(request):
         fecha_compra = datetime.now().strftime('%d/%m/%Y')
         fecha_entrega = (datetime.now() + timedelta(days=5)).strftime('%d/%m/%Y')
 
-        # Renderizar la plantilla HTML para el correo
-        asunto = "Confirmación de tu compra en el Comparador de Supermercados"
-        mensaje_html = render_to_string('confirmacion_compra_email.html', {
-            'username': request.user.username,
-            'carrito_items': carrito_items.values(),
-            'total_precio': total_precio,
-            'direccion_envio': f"{direccion_envio}, {ciudad_envio}",
-            'fecha_compra': fecha_compra,
-            'fecha_entrega': fecha_entrega,
-        })
+        # Limpiar el carrito después de una compra exitosa
+        with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM carrito WHERE usuario_id = %s", [usuario_id])
 
-        # Crear el mensaje de correo
-        try:
-            email = EmailMultiAlternatives(
-                asunto,
-                '',  # Mensaje de texto plano
-                settings.DEFAULT_FROM_EMAIL,
-                [usuario_email]
-            )
-            email.attach_alternative(mensaje_html, "text/html")
-            email.send()
-
-            # Limpiar el carrito después de una compra exitosa
-            with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM carrito WHERE usuario_id = %s", [usuario_id])
-
-            # Redirigir al usuario a la página de inicio después de un pago exitoso
-            return redirect('inicio')
-
-        except Exception as e:
-            # Mostrar mensaje de error en la interfaz si falla el envío del correo
-            return render(request, 'comprar.html', {
-                'total_precio': total_precio,
-                'mensaje_error': 'Hubo un error al enviar el correo de confirmación. Tu compra se realizó correctamente.'
-            })
+        # Redirigir a una página de confirmación
+        return redirect('compra_exitosa')
 
     return render(request, 'comprar.html', {'total_precio': total_precio})
+
+def compra_exitosa(request):
+    return render(request, 'compra_exitosa.html')
 
 
 

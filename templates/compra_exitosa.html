@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido Realizado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
+            padding: 50px;
+        }
+        .message-box {
+            background: #ffffff;
+            border: 2px solid #36b1bf;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            max-width: 600px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #36b1bf;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2rem;
+            color: #555;
+        }
+        a {
+            text-decoration: none;
+            color: #ffffff;
+            background: #36b1bf;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        a:hover {
+            background: #478ac9;
+        }
+    </style>
+</head>
+<body>
+    <div class="message-box">
+        <h1>¡Pedido Realizado con Éxito!</h1>
+        <p>Tu pedido ha sido procesado correctamente. Recibirás un correo con los detalles de tu compra.</p>
+        <p>Gracias por utilizar nuestro servicio.</p>
+        <a href="{% url 'inicio' %}">Volver al Inicio</a>
+    </div>
+</body>
+</html>
