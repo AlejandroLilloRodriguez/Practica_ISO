@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html style="font-size: 16px;" lang="es"><head>
+<html style="font-size: 16px;" lang="es">
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <meta name="keywords" content="COMIENZA A COMPARAR PRODUCTOS​">
@@ -7,63 +8,137 @@
     <title>INICIO</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/nicepage.css' %}" media="screen">
-<link rel="stylesheet" href="{% static 'css/index.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" media="screen">
     <script class="u-script" type="text/javascript" src="{% static 'js/jquery.js' %}" defer=""></script>
     <script class="u-script" type="text/javascript" src="{% static 'js/nicepage.js' %}" defer=""></script>
     <meta name="generator" content="Nicepage 6.19.6, nicepage.com">
-    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
     <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
-    
-    
-    
-    
     <script type="application/ld+json">{
-		"@context": "http://schema.org",
-		"@type": "Organization",
-		"name": "",
-		"logo": "images/carrito.png"
-}</script>
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": "",
+        "logo": "images/carrito.png"
+    }</script>
     <meta name="theme-color" content="#478ac9">
     <meta property="og:title" content="INICIO">
     <meta property="og:type" content="website">
-  <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
-  <body data-home-page="INICIO.html" data-home-page-title="INICIO" data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="es"><header class="u-clearfix u-custom-color-1 u-header u-header" id="sec-f9db"><div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <nav class="u-menu u-menu-one-level u-offcanvas u-menu-1">
-          <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
-            <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'inicio' %}">
-              <svg class="u-svg-link" viewBox="0 0 24 24"><use xlink:href="#menu-hamburger"></use></svg>
-              <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
-</g></svg>
+    <meta data-intl-tel-input-cdn-path="intlTelInput/">
+    <style>
+        /* Nuevo diseño para el menú superior */
+        .navbar {
+            background: linear-gradient(90deg, #478ac9, #34a853);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        .navbar-logo img {
+            width: 50px;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar-menu a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Estilo para la barra de búsqueda */
+        .navbar-search {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 5px 10px;
+            width: 300px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-search input {
+            border: none;
+            outline: none;
+            flex-grow: 1;
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 20px;
+        }
+
+        .navbar-search button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #478ac9;
+        }
+
+        /* Iconos del menú superior */
+        .navbar-icons img {
+            width: 30px;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+
+        /* Adaptaciones para móviles */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+            }
+
+            .navbar-menu {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .navbar-search {
+                width: 100%;
+            }
+        }
+
+        /* Compensar contenido bajo la barra fija */
+        .main-content {
+            margin-top: 80px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menú superior actualizado -->
+    <header class="navbar">
+        <div class="navbar-logo">
+            <a href="{% url 'inicio' %}">
+                <img src="{% static 'images/logo.jpeg' %}" alt="Logo">
             </a>
-          </div>
-          <div class="u-custom-menu u-nav-container">
-            <ul class="u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'inicio' %}" style="padding: 10px 20px;">INICIO</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'supermercados' %}" style="padding: 10px 10px;">SUPERMERCADOS</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'supermercados_cercanos' %}" style="padding: 10px 20px;">LOCALIZACIÓN</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'recetas' %}" style="padding: 10px 20px;">RECETAS</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'mi_cuenta' %}" style="padding: 10px 20px;">.</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'carrito' %}" style="padding: 10px 20px;">.</a>
-</li></ul>
-          </div>
-          
-          <div class="u-custom-menu u-nav-container-collapse">
-            <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
-              <div class="u-inner-container-layout u-sidenav-overflow">
-                <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'inicio' %}">INICIO</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'supermercados' %}">SUPERMERCADOS</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'mi_cuenta' %}">.</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'carrito' %}">.</a>
-</li></ul>
-              </div>
-            </div>
-            <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
-          </div>
+        </div>
+        <nav class="navbar-menu">
+            <a href="{% url 'inicio' %}">INICIO</a>
+            <a href="{% url 'supermercados' %}">SUPERMERCADOS</a>
+            <a href="{% url 'supermercados_cercanos' %}">LOCALIZACIÓN</a>
+            <a href="{% url 'recetas' %}">RECETAS</a>
         </nav>
-        <a href="{% url 'inicio' %}">
-        <img class="u-image u-image-default u-preserve-proportions u-image-1" src="{% static 'images/logo.jpeg' %}" alt="" data-image-width="1024" data-image-height="1024">
-        </a>
-        <form action="#" class="u-border-1 u-border-grey-30 u-search u-search-left u-white u-search-1" data-search-token="no-license" data-href="{% url 'buscar_productos'%}">
+         <form action="#" class="u-border-1 u-border-grey-30 u-search u-search-left u-white u-search-1" data-search-token="no-license" data-href="{% url 'buscar_productos'%}">
           <button class="u-search-button" type="submit">
             <span class="u-search-icon u-spacing-10">
               <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966"><use xlink:href="#svg-0a99"></use></svg>
@@ -71,18 +146,35 @@
             </span>
           </button>
           <input class="u-search-input" type="search" name="search" value="" placeholder="Busca tu producto">
+
         </form>
-        <a href="{% url 'carrito' %}" class="u-image u-logo u-image-2" data-image-width="512" data-image-height="512">
-          <img src="{% static 'images/carrito.png' %}" class="u-logo-image u-logo-image-1">
-        </a>
-        <a href="{% url 'mi_cuenta' %}" class="u-image u-logo u-image-3" data-image-width="512" data-image-height="512">
-          <img src="{% static 'images/login1.png' %}" class="u-logo-image u-logo-image-2">
-        </a>
-      </div></header>
-    <section class="u-align-center u-clearfix u-container-align-center u-gradient u-section-1" id="sec-fd22">
-      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <h1 class="u-align-center u-custom-font u-font-montserrat u-text u-text-black u-text-default u-text-1">COMIENZA A COMPARAR PRODUCTOS </h1>
-      </div>
+
+        <div class="navbar-icons">
+            <a href="{% url 'carrito' %}">
+                <img src="{% static 'images/carrito.png' %}" alt="Carrito">
+            </a>
+            <a href="{% url 'mi_cuenta' %}">
+                <img src="{% static 'images/login1.png' %}" alt="Cuenta">
+            </a>
+        </div>
+    </header>
+
+    <!-- Inicio de tu contenido original -->
+    <main class="main-content">
+        <section class="u-align-center u-clearfix u-container-align-center u-gradient u-section-1" id="sec-fd22">
+            <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+                <h1 class="u-align-center u-custom-font u-font-montserrat u-text u-text-black u-text-default u-text-1">COMIENZA A COMPARAR PRODUCTOS</h1>
+            </div>
+        </section>
+        <!-- Aquí puedes añadir más secciones -->
+    </main>
+
+            <!-- Información sobre el comparador -->
+            <div class="footer-info">
+                <h4>Comparador de Precios</h4>
+                <p>El comparador de precios de supermercado que te ayuda a ahorrar tiempo y dinero en tus compras. Puedes comparar artículos a nivel de categoría, producto, y filtrar los resultados por supermercado, marca, tamaño, y más. El mejor aliado para tu economía doméstica. Pruébalo hoy y empieza a ahorrar.</p>
+            </div>
+        </div>
     </section>
     <section class="u-clearfix u-section-2" id="sec-4849">
       <div class="u-clearfix u-sheet u-sheet-1">
