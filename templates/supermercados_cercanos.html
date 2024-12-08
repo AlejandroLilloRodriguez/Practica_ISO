@@ -12,235 +12,211 @@
     <script class="u-script" type="text/javascript" src="{% static 'js/nicepage.js' %}" defer=""></script>
     <meta name="generator" content="Nicepage 6.19.6, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
-    <meta name="theme-color" content="#478ac9">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <style>
-        #map {
-            height: 500px; /* Ajusta la altura del mapa según tus necesidades */
-            width: 100%;
-        }
-    </style>
+    href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+<meta name="theme-color" content="#478ac9">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+    #map {
+        height: 500px; /* Ajusta la altura del mapa según tus necesidades */
+        width: 100%;
+    }
+</style>
 </head>
 
 <body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="es">
-    <header class="u-clearfix u-custom-color-1 u-header u-header" id="sec-f9db">
-        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-            <nav class="u-menu u-menu-one-level u-offcanvas u-menu-1">
-                <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
-                    <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'inicio' %}">
-                        <svg class="u-svg-link" viewBox="0 0 24 24"><use xlink:href="#menu-hamburger"></use></svg>
-                        <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-                            <g>
-                                <rect y="1" width="16" height="2"></rect>
-                                <rect y="7" width="16" height="2"></rect>
-                                <rect y="13" width="16" height="2"></rect>
-                            </g>
-                        </svg>
-                    </a>
-                </div>
-                <div class="u-custom-menu u-nav-container">
-                    <ul class="u-nav u-unstyled u-nav-1">
-                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'inicio' %}" style="padding: 10px 20px;">INICIO</a></li>
-                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'supermercados' %}" style="padding: 10px 20px;">SUPERMERCADOS</a></li>
-                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'supermercados_cercanos' %}" style="padding: 10px 20px;">LOCALIZACIÓN</a></li>
-                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'mi_cuenta' %}" style="padding: 10px 20px;">.</a></li>
-                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'carrito' %}" style="padding: 10px 20px;">.</a></li>
-                    </ul>
-                </div>
-                <div class="u-custom-menu u-nav-container-collapse">
-                    <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
-                      <div class="u-inner-container-layout u-sidenav-overflow">
-                        <div class="u-menu-close"></div>
-                        <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'inicio' %}">INICIO</a>
-        </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'supermercados' %}">SUPERMERCADOS</a>
-        </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'mi_cuenta' %}">.</a>
-        </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'carrito' %}">.</a>
-        </li></ul>
-                      </div>
-                    </div>
-                    <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
-                  </div>
-                </nav>
-                <a href="{% url 'inicio' %}">
-                <img class="u-image u-image-default u-preserve-proportions u-image-1" src="{% static 'images/logo.jpeg' %}" alt="" data-image-width="1024" data-image-height="1024">
+<header class="u-clearfix u-custom-color-1 u-header u-header" id="sec-f9db">
+    <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <nav class="u-menu u-menu-one-level u-offcanvas u-menu-1">
+            <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
+                <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
+                    <svg class="u-svg-link" viewBox="0 0 24 24">
+                        <use xlink:href="#menu-hamburger"></use>
+                    </svg>
+                    <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px"
+                        y="0px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <rect y="1" width="16" height="2"></rect>
+                            <rect y="7" width="16" height="2"></rect>
+                            <rect y="13" width="16" height="2"></rect>
+                        </g>
+                    </svg>
                 </a>
-                <form action="#" class="u-border-1 u-border-grey-30 u-search u-search-left u-white u-search-1" data-search-token="no-license" data-href="{% url 'buscar_productos'%}">
-                  <button class="u-search-button" type="submit">
-                    <span class="u-search-icon u-spacing-10">
-                      <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966"><use xlink:href="#svg-0a99"></use></svg>
-                      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-0a99" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" class="u-svg-content"><path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"></path></svg>
-                    </span>
-                  </button>
-                  <input class="u-search-input" type="search" name="search" value="" placeholder="Busca tu producto">
-                </form>
-                <a href="{% url 'carrito' %}" class="u-image u-logo u-image-2" data-image-width="512" data-image-height="512">
-                  <img src="{% static 'images/carrito.png' %}" class="u-logo-image u-logo-image-1">
-                </a>
-                <a href="{% url 'mi_cuenta' %}" class="u-image u-logo u-image-3" data-image-width="512" data-image-height="512">
-                  <img src="{% static 'images/login1.png' %}" class="u-logo-image u-logo-image-2">
-                </a>
-              </div></header>
-    
-    <!--
-    <script>
-        function abrirOverpass() {
-            // Obtener la dirección seleccionada del menú desplegable
-            const seleccion = document.getElementById("direccion").value;
+            </div>
+            <div class="u-custom-menu u-nav-container">
+                <ul class="u-nav u-unstyled u-nav-1">
+                    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'inicio' %}" style="padding: 10px 20px;">INICIO</a></li>
+                    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'supermercados' %}" style="padding: 10px 20px;">SUPERMERCADOS</a></li>
+                    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'mi_cuenta' %}" style="padding: 10px 20px;">MI CUENTA</a></li>
+                    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'carrito' %}" style="padding: 10px 20px;">CARRITO</a></li>
+                </ul>
+            </div>
+            <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
+        </nav>
+        <a href="{% url 'inicio' %}">
+            <img class="u-image u-image-default u-preserve-proportions u-image-1" src="{% static 'images/logo.jpeg' %}" alt="Logo" data-image-width="1024" data-image-height="1024">
+        </a>
+    </div>
+</header>
+<!--
+<script>
+    function abrirOverpass() {
+        // Obtener la dirección seleccionada del menú desplegable
+        const seleccion = document.getElementById("direccion").value;
 
-            // Coordenadas predefinidas para las direcciones
-            const coordenadas = {
-                "direccion1": { lat: 40.4023, lon: -3.8646 }, // Av. de Montepríncipe, 28668 Alcorcón, Madrid
-                "direccion2": { lat: 40.5175, lon: -3.6697 }, // Calle de Alonso Quijano, 28050 Fuencarral, Madrid
-                "direccion3": { lat: 40.4168, lon: -3.7038 }, // Madrid Centro
-                "direccion4": { lat: 40.3000, lon: -3.4419 }, // Plaza constitución, 28500 Arganda del Rey, Madrid
-                "direccion5": { lat: 40.4818, lon: -3.3645 }, // Alcalá de Henares, Madrid
-                "direccion6": { lat: 40.3463, lon: -3.8286 }, // Alcorcón, Madrid
-                "direccion7": { lat: 40.5373, lon: -3.6378 }, // Alcobendas, Madrid
-                "direccion8": { lat: 40.3084, lon: -3.7325 }, // Leganés, Madrid
-                "direccion9": { lat: 40.3316, lon: -3.7652 }, // Getafe, Madrid
-                "direccion10": { lat: 40.4553, lon: -3.4695 }, // Torrejón de Ardoz, Madrid
-            };
+        // Coordenadas predefinidas para las direcciones
+        const coordenadas = {
+            "direccion1": { lat: 40.4023, lon: -3.8646 }, // Av. de Montepríncipe, 28668 Alcorcón, Madrid
+            "direccion2": { lat: 40.5175, lon: -3.6697 }, // Calle de Alonso Quijano, 28050 Fuencarral, Madrid
+            "direccion3": { lat: 40.4168, lon: -3.7038 }, // Madrid Centro
+            "direccion4": { lat: 40.3000, lon: -3.4419 }, // Plaza constitución, 28500 Arganda del Rey, Madrid
+            "direccion5": { lat: 40.4818, lon: -3.3645 }, // Alcalá de Henares, Madrid
+            "direccion6": { lat: 40.3463, lon: -3.8286 }, // Alcorcón, Madrid
+            "direccion7": { lat: 40.5373, lon: -3.6378 }, // Alcobendas, Madrid
+            "direccion8": { lat: 40.3084, lon: -3.7325 }, // Leganés, Madrid
+            "direccion9": { lat: 40.3316, lon: -3.7652 }, // Getafe, Madrid
+            "direccion10": { lat: 40.4553, lon: -3.4695 }, // Torrejón de Ardoz, Madrid
+        };
 
-            // Verificar que se seleccionó una dirección válida
-            if (seleccion in coordenadas) {
-                const lat = coordenadas[seleccion].lat;
-                const lon = coordenadas[seleccion].lon;
-                const radio = 3000;
+        // Verificar que se seleccionó una dirección válida
+        if (seleccion in coordenadas) {
+            const lat = coordenadas[seleccion].lat;
+            const lon = coordenadas[seleccion].lon;
+            const radio = 3000;
 
-                // Crear la consulta para Overpass
-                const query = `
-                    [out:json];
-                    node
-                      ["shop"="supermarket"]
-                      (around:${radio},${lat},${lon});
-                    out body;
-                `;
+            // Crear la consulta para Overpass
+            const query = `
+                [out:json];
+                node
+                  ["shop"="supermarket"]
+                  (around:${radio},${lat},${lon});
+                out body;
+            `;
 
-                // Codificar la consulta y crear la URL
-                const encodedQuery = encodeURIComponent(query);
-                const url = `https://overpass-turbo.eu/?Q=${encodedQuery}`;
+            // Codificar la consulta y crear la URL
+            const encodedQuery = encodeURIComponent(query);
+            const url = `https://overpass-turbo.eu/?Q=${encodedQuery}`;
 
-                // Abrir la URL en una nueva pestaña
-                window.open(url, "_blank");
-            } else {
-                alert("Por favor, selecciona una dirección válida.");
-            }
+            // Abrir la URL en una nueva pestaña
+            window.open(url, "_blank");
+        } else {
+            alert("Por favor, selecciona una dirección válida.");
         }
-    </script>
-    -->
-    <script>
-            document.addEventListener("DOMContentLoaded", () => {
-            // Inicializar el mapa vacío al cargar la página
-            const map = L.map('map').setView([40.4168, -3.7038], 13); // Coordenadas iniciales (Madrid)
-            
-            // Agregar una capa base de OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
+    }
+</script>
+-->
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+        // Inicializar el mapa vacío al cargar la página
+        const map = L.map('map').setView([40.4168, -3.7038], 13); // Coordenadas iniciales (Madrid)
+        
+        // Agregar una capa base de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
-            // Función para buscar coordenadas y mostrar resultados en el mapa
-            async function buscarCoordenadas(event) {
-                event.preventDefault(); // Prevenir el envío normal del formulario
+        // Función para buscar coordenadas y mostrar resultados en el mapa
+        async function buscarCoordenadas(event) {
+            event.preventDefault(); // Prevenir el envío normal del formulario
 
-                const direccionInput = document.getElementById("direccion").value;
-                if (!direccionInput) {
-                    alert("Por favor, introduce una dirección.");
-                    return;
-                }
+            const direccionInput = document.getElementById("direccion").value;
+            if (!direccionInput) {
+                alert("Por favor, introduce una dirección.");
+                return;
+            }
 
-                try {
-                    // Enviar la dirección al backend
-                    const response = await fetch("{% url 'supermercados_cercanos' %}", {
-                        method: "POST",
-                        body: JSON.stringify({ direccion: direccionInput }),
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
-                        },
+            try {
+                // Enviar la dirección al backend
+                const response = await fetch("{% url 'supermercados_cercanos' %}", {
+                    method: "POST",
+                    body: JSON.stringify({ direccion: direccionInput }),
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                    },
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Obtener las coordenadas del backend
+                    const lat = data.lat;
+                    const lon = data.lon;
+                    const radio = 3000;
+
+                    // Realizar la consulta a Overpass
+                    const query = `
+                        [out:json];
+                        node
+                        ["shop"="supermarket"]
+                        (around:${radio},${lat},${lon});
+                        out body;
+                    `;
+
+                    const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
+                    const overpassResponse = await fetch(url);
+                    const overpassData = await overpassResponse.json();
+
+                    // Limpiar los marcadores anteriores en el mapa
+                    map.eachLayer((layer) => {
+                        if (layer instanceof L.Marker) {
+                            map.removeLayer(layer);
+                        }
                     });
 
-                    const data = await response.json();
+                    // Añadir los resultados al mapa
+                    overpassData.elements.forEach((element) => {
+                        if (element.lat && element.lon) {
+                            L.marker([element.lat, element.lon])
+                                .addTo(map)
+                                .bindPopup(`Supermercado: ${element.tags.name || 'Sin nombre'}`);
+                        }
+                    });
 
-                    if (data.success) {
-                        // Obtener las coordenadas del backend
-                        const lat = data.lat;
-                        const lon = data.lon;
-                        const radio = 3000;
-
-                        // Realizar la consulta a Overpass
-                        const query = `
-                            [out:json];
-                            node
-                            ["shop"="supermarket"]
-                            (around:${radio},${lat},${lon});
-                            out body;
-                        `;
-
-                        const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
-                        const overpassResponse = await fetch(url);
-                        const overpassData = await overpassResponse.json();
-
-                        // Limpiar los marcadores anteriores en el mapa
-                        map.eachLayer((layer) => {
-                            if (layer instanceof L.Marker) {
-                                map.removeLayer(layer);
-                            }
-                        });
-
-                        // Añadir los resultados al mapa
-                        overpassData.elements.forEach((element) => {
-                            if (element.lat && element.lon) {
-                                L.marker([element.lat, element.lon])
-                                    .addTo(map)
-                                    .bindPopup(`Supermercado: ${element.tags.name || 'Sin nombre'}`);
-                            }
-                        });
-
-                        // Centrar el mapa en las nuevas coordenadas
-                        map.setView([lat, lon], 13);
-                    } else {
-                        alert(data.message || "Hubo un error al obtener las coordenadas.");
-                    }
-                } catch (error) {
-                    console.error("Error:", error);
-                    alert("Error al conectar con el servidor.");
+                    // Centrar el mapa en las nuevas coordenadas
+                    map.setView([lat, lon], 13);
+                } else {
+                    alert(data.message || "Hubo un error al obtener las coordenadas.");
                 }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Error al conectar con el servidor.");
             }
+        }
 
-            // Asocia la función al formulario
-            document.querySelector("form").addEventListener("submit", buscarCoordenadas);
-        });
+        // Asocia la función al formulario
+        document.querySelector("form").addEventListener("submit", buscarCoordenadas);
+    });
 
-    </script>
+</script>
 </head>
 <body>
-    <!----
-    <h1>Encuentra Supermercados Cercanos</h1>
-    <label for="direccion">Selecciona una dirección:</label>
-    <select id="direccion">
-        <option value="" selected disabled>Elige una dirección</option>
-        <option value="direccion1">Av. de Montepríncipe, 28668 Alcorcón, Madrid</option>
-        <option value="direccion2">Calle de Alonso Quijano, 28050 Fuencarral, Madrid</option>
-        <option value="direccion3">Madrid Centro</option>
-        <option value="direccion4">Plaza constitución, 28500 Arganda del Rey, Madrid</option>
-        <option value="direccion5">Calle Mayor, Alcalá de Henares</option>
-        <option value="direccion6">Plaza España, Alcorcón</option>
-        <option value="direccion7">Plaza Mayor, Alcobendas</option>
-        <option value="direccion8">Plaza General Palacio, Getafe</option>
-        <option value="direccion9">Plaza Mayor, Leganés</option>
-        <option value="direccion10">Plaza Mayor, Torrejón de Ardoz</option>
-    </select>
-    <button onclick="abrirOverpass()">Buscar Supermercados</button>
+<!----
+<h1>Encuentra Supermercados Cercanos</h1>
+<label for="direccion">Selecciona una dirección:</label>
+<select id="direccion">
+    <option value="" selected disabled>Elige una dirección</option>
+    <option value="direccion1">Av. de Montepríncipe, 28668 Alcorcón, Madrid</option>
+    <option value="direccion2">Calle de Alonso Quijano, 28050 Fuencarral, Madrid</option>
+    <option value="direccion3">Madrid Centro</option>
+    <option value="direccion4">Plaza constitución, 28500 Arganda del Rey, Madrid</option>
+    <option value="direccion5">Calle Mayor, Alcalá de Henares</option>
+    <option value="direccion6">Plaza España, Alcorcón</option>
+    <option value="direccion7">Plaza Mayor, Alcobendas</option>
+    <option value="direccion8">Plaza General Palacio, Getafe</option>
+    <option value="direccion9">Plaza Mayor, Leganés</option>
+    <option value="direccion10">Plaza Mayor, Torrejón de Ardoz</option>
+</select>
+<button onclick="abrirOverpass()">Buscar Supermercados</button>
 -->
-    <form onsubmit="buscarCoordenadas(event)">
-        {% csrf_token %}
-        <label for="direccion">Introduce una dirección:</label>
-        <input type="text" id="direccion" name="direccion" placeholder="Ej: Calle Mayor, Madrid" required>
-        <button type="submit">Buscar Supermercados</button>
-    </form>
-    <div id="map"></div>
+<form onsubmit="buscarCoordenadas(event)">
+    {% csrf_token %}
+    <label for="direccion">Introduce una dirección:</label>
+    <input type="text" id="direccion" name="direccion" placeholder="Ej: Calle Mayor, Madrid" required>
+    <button type="submit">Buscar Supermercados</button>
+</form>
+<div id="map"></div>
 
 </body>
 </html>
