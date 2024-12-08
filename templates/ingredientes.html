@@ -5,24 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ receta.nombre }}</title>
     <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff5e6;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #fff;
+            border: 2px solid #f4c095;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #d35400;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #5d4037;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: #e67e22;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
         .ingrediente {
-            margin: 5px 0;
+            background: #fdf2e9;
+            margin: 10px 0;
+            padding: 15px;
+            border: 1px solid #f4c095;
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            align-items: center;
+            text-align: left;
+        }
+
+        .ingrediente span {
+            font-size: 1em;
+            color: #7f8c8d;
+        }
+
+        .ingrediente span:first-child {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .ingrediente .precio {
+            font-size: 0.95em;
+            color: #c0392b;
+            text-align: right;
+        }
+
+        .empty-message {
+            font-style: italic;
+            color: #bdc3c7;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>{{ receta.nombre }}</h1>
-    <p>{{ receta.descripcion }}</p>
+    <div class="container">
+        <h1>{{ receta.nombre }}</h1>
+        <p>{{ receta.descripcion }}</p>
 
-    <h2>Ingredientes:</h2>
-    <ul>
-        {% for ingrediente in ingredientes %}
-            <li class="ingrediente">
-                {{ ingrediente.nombre }} - {{ ingrediente.supermercado }} ({{ ingrediente.precio }})
-            </li>
-        {% empty %}
-            <p>No hay ingredientes disponibles.</p>
-        {% endfor %}
-    </ul>
+        <h2>Ingredientes:</h2>
+        <ul>
+            {% for ingrediente in ingredientes %}
+                <li class="ingrediente">
+                    <span>{{ ingrediente.nombre }}</span>
+                    <span>{{ ingrediente.supermercado }}</span>
+                    <span class="precio">{{ ingrediente.precio }} €</span>
+                </li>
+            {% empty %}
+                <p class="empty-message">No hay ingredientes disponibles.</p>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>

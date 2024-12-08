@@ -1,86 +1,175 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html style="font-size: 16px;" lang="es">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recetas</title>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>RECETAS</title>
+    
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/nicepage.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'css/RESULTADOS-BÚSQUEDA.css' %}" media="screen">
+    <script class="u-script" type="text/javascript" src="{% static 'js/jquery.js' %}" defer=""></script>
+    <script class="u-script" type="text/javascript" src="{% static 'js/nicepage.js' %}" defer=""></script>
+    <meta name="generator" content="Nicepage 6.19.6, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+         body {
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7;
+            background-color: #f4f4f4;
+            color: #333;
         }
-
         .container {
             max-width: 1200px;
             margin: auto;
             padding: 20px;
         }
-
         .title {
             text-align: center;
-            margin-bottom: 20px;
-            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            color: #478ac9;
         }
+        
 
         .recipes {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 25px;
             justify-content: center;
         }
 
         .recipe-card {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 12px;
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.8);
+            width: 320px;
             overflow: hidden;
-            text-align: center;
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .recipe-card:hover {
             transform: scale(1.05);
+            box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.2), -4px -4px 16px rgba(255, 255, 255, 0.8);
         }
 
         .recipe-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            border-bottom: 2px solid #478ac9;
         }
 
-        .recipe-card .recipe-info {
+        .recipe-info {
             padding: 15px;
+            text-align: center;
         }
 
-        .recipe-card h3 {
+        .recipe-info h3 {
             margin: 10px 0;
+            font-size: 1.5em;
             color: #478ac9;
         }
 
-        .recipe-card p {
-            color: #777;
-            font-size: 14px;
+        .recipe-info h3 a {
+            text-decoration: none;
+            color: #478ac9;
+            transition: color 0.3s;
         }
 
-        .recipe-card button {
-            margin-top: 10px;
-            padding: 10px 15px;
+        .recipe-info h3 a:hover {
+            color: #367bb7;
+        }
+
+        .recipe-info p {
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .recipe-info button {
+            margin-top: 15px;
+            padding: 12px 20px;
             border: none;
             background-color: #478ac9;
             color: #fff;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
+            font-size: 14px;
             transition: background-color 0.3s;
         }
 
-        .recipe-card button:hover {
+        .recipe-info button:hover {
             background-color: #367bb7;
         }
     </style>
+    </script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="RESULTADOS DE BÚSQUEDA">
+    <meta property="og:type" content="website">
+    <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
+  <body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="es">
+    <header class="u-clearfix u-custom-color-1 u-header u-header" id="sec-f9db">
+        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+            <nav class="u-menu u-menu-one-level u-offcanvas u-menu-1">
+                <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
+                    <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
+                        <svg class="u-svg-link" viewBox="0 0 24 24"><use xlink:href="#menu-hamburger"></use></svg>
+                        <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect></g></svg>
+                    </a>
+                </div>
+                <div class="u-custom-menu u-nav-container">
+                    <ul class="u-nav u-unstyled u-nav-1">
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'inicio' %}" style="padding: 10px 20px;">INICIO</a></li>
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'supermercados' %}" style="padding: 10px 20px;">SUPERMERCADOS</a></li>
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'supermercados_cercanos' %}" style="padding: 10px 20px;">LOCALIZACIÓN</a></li>
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'recetas' %}" style="padding: 10px 20px;">RECETAS</a></li>
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'mi_cuenta' %}" style="padding: 10px 20px;"></a></li>
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'carrito' %}" style="padding: 10px 20px;"></a></li>
+                    </ul>
+                </div>
+                <div class="u-custom-menu u-nav-container-collapse">
+                    <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
+                        <div class="u-inner-container-layout u-sidenav-overflow">
+                            <div class="u-menu-close"></div>
+                            <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2">
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'inicio' %}">INICIO</a></li>
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'supermercados' %}">SUPERMERCADOS</a></li>
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'recetas' %}">RECETAS</a></li>
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'mi_cuenta' %}">Mi Cuenta</a></li>
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'carrito' %}">Carrito</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
+                </div>
+            </nav>
+            <a href="{% url 'inicio' %}">
+                <img class="u-image u-image-default u-preserve-proportions u-image-1" src="{% static 'images/logo.jpeg' %}" alt="" data-image-width="1024" data-image-height="1024">
+            </a>
+            <form action="#" class="u-border-1 u-border-grey-30 u-search u-search-left u-white u-search-1" data-search-token="no-license" data-href="{% url 'buscar_productos'%}">
+                <button class="u-search-button" type="submit">
+                    <span class="u-search-icon u-spacing-10">
+                        <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966"><use xlink:href="#svg-0a99"></use></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-0a99" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" class="u-svg-content"><path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"></path></svg>
+                    </span>
+                </button>
+                <input class="u-search-input" type="search" name="search" value="" placeholder="Busca tu producto">
+            </form>
+            <a href="{% url 'carrito' %}" class="u-image u-logo u-image-2" data-image-width="512" data-image-height="512">
+                <img src="{% static 'images/carrito.png' %}" class="u-logo-image u-logo-image-1">
+            </a>
+            <a href="{% url 'mi_cuenta' %}" class="u-image u-logo u-image-3" data-image-width="512" data-image-height="512">
+                <img src="{% static 'images/login1.png' %}" class="u-logo-image u-logo-image-2">
+            </a>
+        </div>
+    </header>
+    
 </head>
 
 <body>
@@ -88,31 +177,26 @@
         <h1 class="title">Nuestras Recetas</h1>
         <div class="recipes">
             <!-- Receta 1 -->
-            <div class="recipes">
-    <!-- Receta 1 -->
-    <div class="recipe-card">
-        <img src="https://images.unsplash.com/photo-1587395778428-455f7b0e0b72?fit=crop&w=500&h=300&q=80" alt="Imagen de Paella Valenciana">
-        <div class="recipe-info">
-            <h3><a href="{% url 'ingredientes' receta_id=1 %}">Pollo Empanado</a></h3>
-            
-        </div>
-    </div>
-    <!-- Receta 2 -->
-    <div class="recipe-card">
-        <img src="https://images.unsplash.com/photo-1604909053314-067a180f7299?fit=crop&w=500&h=300&q=80" alt="Imagen de Tacos al Pastor">
-        <div class="recipe-info">
-            <h3><a href="{% url 'ingredientes' receta_id=2 %}">Salmón al Horno</a></h3>
-            
-        </div>
-    </div>
-    <!-- Receta 3 -->
-    <div class="recipe-card">
-        <img src="https://images.unsplash.com/photo-1572441719489-9b3e2215c36c?fit=crop&w=500&h=300&q=80" alt="Imagen de Sushi Variado">
-        <div class="recipe-info">
-            <h3><a href="{% url 'ingredientes' receta_id=3 %}">Ensalada Fresca y Vinagreta de Frutas</a></h3>
-        </div>
-    </div>
-</div>
+            <div class="recipe-card">
+                <img src="po" alt="Imagen de Pollo Empanado">
+                <div class="recipe-info">
+                    <h3><a href="{% url 'ingredientes' receta_id=1 %}">Pollo Empanado</a></h3>
+                </div>
+            </div>
+            <!-- Receta 2 -->
+            <div class="recipe-card">
+                <img src="https://images.unsplash.com/photo-1604909053314-067a180f7299?fit=crop&w=500&h=300&q=80" alt="Imagen de Salmón al Horno">
+                <div class="recipe-info">
+                    <h3><a href="{% url 'ingredientes' receta_id=2 %}">Salmón al Horno</a></h3>
+                </div>
+            </div>
+            <!-- Receta 3 -->
+            <div class="recipe-card">
+                <img src="https://images.unsplash.com/photo-1572441719489-9b3e2215c36c?fit=crop&w=500&h=300&q=80" alt="Imagen de Ensalada Fresca">
+                <div class="recipe-info">
+                    <h3><a href="{% url 'ingredientes' receta_id=3 %}">Ensalada Fresca y Vinagreta de Frutas</a></h3>
+                </div>
+            </div>
         </div>
     </div>
 </body>
