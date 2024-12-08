@@ -17,6 +17,13 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
         .navbar {
             background: linear-gradient(90deg, #478ac9, #34a853);
             position: fixed;
@@ -31,16 +38,7 @@
             color: white;
         }
 
-        .navbar-logo img {
-            width: 50px;
-        }
-
-        .navbar-menu {
-            display: flex;
-            gap: 20px;
-        }
-
-        .navbar-menu a {
+        .navbar a {
             text-decoration: none;
             color: white;
             font-size: 16px;
@@ -50,55 +48,102 @@
             transition: background-color 0.3s ease;
         }
 
-        .navbar-menu a:hover {
+        .navbar a:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* Estilo para la barra de búsqueda */
-        .navbar-search {
-            display: flex;
-            align-items: center;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 20px;
-            padding: 5px 10px;
-            width: 300px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar-search input {
-            border: none;
-            outline: none;
-            flex-grow: 1;
-            padding: 5px 10px;
-            font-size: 14px;
-            border-radius: 20px;
-        }
-
-        .navbar-search button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            color: #478ac9;
-        }
-
-        /* Iconos del menú superior */
-        .navbar-icons img {
-            width: 30px;
-            margin-left: 15px;
-            cursor: pointer;
-        }
-        /* Compensar contenido bajo la barra fija */
         .main-content {
             margin-top: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
         }
-        #map {
-            height: 500px; /* Ajusta la altura del mapa según tus necesidades */
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        form label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        form input {
             width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        form button {
+            background: #478ac9;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        form button:hover {
+            background: #34a853;
+        }
+
+        #map {
+            height: 500px;
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .navbar button {
+            background-color: white;
+            color: #478ac9;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
         }
     </style>
 </head>
+
+<body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="es">
+    <header class="navbar">
+        <div class="navbar-logo">
+            <a href="{% url 'inicio' %}">INICIO</a>
+
+        </div>
+        <div class="navbar-title">Supermercados Cercanos</div>
+    </header>
+
+    <div class="main-content">
+        <form onsubmit="buscarCoordenadas(event)">
+            {% csrf_token %}
+            <label for="direccion">Introduce una dirección:</label>
+            <input type="text" id="direccion" name="direccion" placeholder="Ej: Calle Mayor, Madrid" required>
+            <button type="submit">Buscar Supermercados</button>
+        </form>
+        <div id="map"></div>
+    </div>
+</body>
+</html>
 
 <body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="es">
     <header class="u-clearfix u-custom-color-1 u-header u-header" id="sec-f9db">
@@ -120,20 +165,7 @@
                         </svg>
                     </a>
                 </div>
-                <div class="u-custom-menu u-nav-container">
-                    <ul class="u-nav u-unstyled u-nav-1">
-                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'inicio' %}" style="padding: 10px 20px;">INICIO</a></li>
-                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'supermercados' %}" style="padding: 10px 20px;">SUPERMERCADOS</a></li>
-                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'mi_cuenta' %}" style="padding: 10px 20px;">MI CUENTA</a></li>
-                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="{% url 'carrito' %}" style="padding: 10px 20px;">CARRITO</a></li>
-                    </ul>
-                </div>
-                <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
-            </nav>
-            <a href="{% url 'inicio' %}">
-                <img class="u-image u-image-default u-preserve-proportions u-image-1" src="{% static 'images/logo.jpeg' %}" alt="Logo" data-image-width="1024" data-image-height="1024">
-            </a>
-        </div>
+                
     </header>
     <!--
     <script>
@@ -296,6 +328,3 @@
 
 </body>
 </html>
-
-
-
