@@ -5,50 +5,85 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
         }
         .container {
             width: 80%;
+            max-width: 600px;
             margin: 0 auto;
-            background-color: #f7f7f7;
-            padding: 20px;
+            background-color: #ffffff;
+            padding: 30px;
             border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         h2 {
             color: #478ac9;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
         p {
             color: #333;
+            font-size: 16px;
         }
         .detalle-compra {
-            background-color: #fff;
-            padding: 15px;
+            background-color: #fafafa;
+            padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
         }
         .detalle-compra h3 {
+            color: #478ac9;
             margin-top: 0;
+            font-size: 18px;
+        }
+        .detalle-compra ul {
+            padding-left: 20px;
+        }
+        .detalle-compra li {
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Gracias por tu compra, {{ username }}!</h2>
+        <h2>¡Gracias por tu compra, {{ username }}!</h2>
         <p>Nos alegra informarte que tu compra ha sido procesada exitosamente.</p>
+        
         <div class="detalle-compra">
             <h3>Detalles de tu compra:</h3>
             <ul>
                 {% for item in carrito_items %}
-                <li>{{ item.nombre }} (Cantidad: {{ item.cantidad }}): {{ item.precio }} €</li>
+                    <li>{{ item.nombre }} (Cantidad: {{ item.cantidad }}): {{ item.precio }} €</li>
                 {% endfor %}
             </ul>
-            <p><strong>Total pagado:</strong> {{ total_precio }} €</p>
+            
+            <p class="total"><strong>Total pagado:</strong> {{ total_precio }} €</p>
+            
             <ul> 
-                <li><strong>Fecha de compra:</strong> {{ fecha_compra }}</li>
                 <li><strong>Fecha de entrega estimada:</strong> {{ fecha_entrega }}</li>
             </ul>
         </div>
+
         <p>Esperamos verte pronto nuevamente.</p>
+
+        <div class="footer">
+            <p>Si tienes alguna pregunta, no dudes en ponerte en contacto con nosotros.</p>
+        </div>
     </div>
 </body>
 </html>
