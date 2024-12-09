@@ -20,6 +20,9 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth import update_session_auth_hash  # Para mantener la sesión activa
+from django.contrib.auth.views import LoginView
+from django.urls import reverse
+
 
 
 
@@ -210,3 +213,4 @@ def password_reset_confirm(request, uidb64, token):
         messages.error(request, "El enlace para restablecer la contraseña no es válido o ha expirado.")
     
     return render(request, "password_reset_confirm.html")
+

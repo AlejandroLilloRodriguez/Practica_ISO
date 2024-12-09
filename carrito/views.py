@@ -1,11 +1,10 @@
 import uuid
 from django.db import connection
 from django.utils.timezone import now, timedelta
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import hashlib
-from django.middleware.csrf import CsrfViewMiddleware
 from django.middleware.csrf import get_token
-from django.http import HttpResponseForbidden, JsonResponse
+
 
 def limpiar_carritos_caducados():
     """
@@ -95,6 +94,19 @@ def manejar_carrito(request):
                     del carrito[producto_id]
                 request.session['carrito'] = carrito
 
+    # Sincronizar carrito en la sesión con el carrito del usuario autenticado
+    if request.user.is_authenticated and 'carrito' in request.session:
+        for producto_id, item in request.session['carrito'].items():
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    INSERT INTO carrito (cookie_id, usuario_id, producto_id, nombre, precio, precio_por_kg,
+                                         supermercado, imagen, cantidad, fecha_creacion)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    ON DUPLICATE KEY UPDATE cantidad = cantidad + VALUES(cantidad)
+                """, [cookie_id, usuario_id, producto_id, item['nombre'], item['precio'], item['precio_por_kg'],
+                      item['supermercado'], item['imagen'], item['cantidad'], now()])
+        del request.session['carrito']
+
     # Obtener carrito para renderizar
     if request.user.is_authenticated:
         with connection.cursor() as cursor:
@@ -112,9 +124,9 @@ def manejar_carrito(request):
 
     # Calcular total
     total_precio = sum(item['precio'] * item['cantidad'] for item in carrito_items.values())
-    
 
     # Configurar respuesta
     response = render(request, 'carrito.html', {'carrito_items': carrito_items, 'total_precio': total_precio})
     response.set_cookie('carrito_id', cookie_id, max_age=3600, httponly=True, samesite='Lax')
     return response
+

@@ -176,6 +176,7 @@
             <!-- Formulario de Registrarse -->
             <form id="register-form" method="POST" action="{% url 'mi_cuenta' %}">
                 {% csrf_token %}
+                
                 <label for="register-username">Usuario:</label>
                 <input type="text" id="register-username" name="username" required>
 
